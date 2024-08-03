@@ -1,5 +1,3 @@
-package token
-
 class Token(
     private val charArray: CharArray,
     private val type: TokenType
