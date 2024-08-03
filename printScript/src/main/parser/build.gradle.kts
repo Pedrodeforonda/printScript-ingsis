@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":ast"))
-    implementation(project(":token"))
+    implementation(project(":src:main:ast"))
+    implementation(project(":src:main:token"))
     testImplementation(kotlin("test"))
 }
 
