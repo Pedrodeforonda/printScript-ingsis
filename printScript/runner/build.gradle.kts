@@ -11,6 +11,9 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation(project(":lexer"))
+    implementation(project(":parser"))
+    implementation(project(":interpreter"))
 }
 
 tasks.test {

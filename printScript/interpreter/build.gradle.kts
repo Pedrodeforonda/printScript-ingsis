@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.7.10"
 }
 
-group = "org.example"
+group = "org.printScript"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -10,10 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":ast"))
     testImplementation(kotlin("test"))
-    implementation(project(":src:main:lexer"))
-    implementation(project(":src:main:parser"))
-    implementation(project(":src:main:interpreter"))
 }
 
 tasks.test {
