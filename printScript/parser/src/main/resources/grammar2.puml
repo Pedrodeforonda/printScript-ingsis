@@ -1,0 +1,145 @@
+@startuml
+
+' Define the AST Module
+package "AST Module" {
+    interface Expr {
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Binary {
+        -left: Expr
+        -operator: Token
+        -right: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Grouping {
+        -expression: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Literal {
+        -value: Object
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Unary {
+        -operator: Token
+        -right: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Assignment {
+        -name: Token
+        -type: Token
+        -value: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class LetDeclaration {
+        -name: Token
+        -type: Token
+        -value: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class TypeDefinition {
+        -name: Token
+        -type: Token
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Sentence {
+        -expression: Expr
+        +accept(visitor: Visitor<R>): R
+    }
+
+    class Visitor<R> {
+        +visitBinaryExpr(expr: Binary): R
+        +visitGroupingExpr(expr: Grouping): R
+        +visitLiteralExpr(expr: Literal): R
+        +visitUnaryExpr(expr: Unary): R
+        +visitAssignmentExpr(expr: Assignment): R
+        +visitLetDeclarationExpr(expr: LetDeclaration): R
+        +visitTypeDefinitionExpr(expr: TypeDefinition): R
+        +visitSentenceExpr(expr: Sentence): R
+    }
+
+    Expr <|-- Binary
+    Expr <|-- Grouping
+    Expr <|-- Literal
+    Expr <|-- Unary
+    Expr <|-- Assignment
+    Expr <|-- LetDeclaration
+    Expr <|-- TypeDefinition
+    Expr <|-- Sentence
+}
+
+' Define the Parser Module
+package "Parser Module" {
+    interface Lexer {
+        +tokenize(): List<Token>
+    }
+
+    interface Parser {
+        +parse(tokens: List<Token>): List<ASTNode>
+    }
+
+    interface TokenImportanceStrategy {
+        +getImportance(tokenType: TokenType): Importance
+    }
+
+    class Token {
+        +type: TokenType
+        +value: String
+        +importance: Importance
+    }
+
+    enum TokenType {
+        KEYWORD
+        IDENTIFIER
+        LITERAL
+        OPERATOR
+        PUNCTUATION
+        WHITESPACE
+        COMMENT
+        UNKNOWN
+    }
+
+    enum Importance {
+        HIGH
+        MEDIUM
+        LOW
+    }
+
+    class TokenImportanceStrategyImpl {
+        +getImportance(tokenType: TokenType): Importance
+    }
+
+    class ParserImpl {
+        -importanceStrategy: TokenImportanceStrategy
+        +parse(tokens: List<Token>): List<ASTNode>
+    }
+
+    Lexer <|.. Token : "produces"
+    Parser <|.. Lexer : "depends on"
+    Parser <|.. Token : "uses"
+    Parser <|.. TokenImportanceStrategy : "uses"
+    TokenImportanceStrategy <|-- TokenImportanceStrategyImpl : "implements"
+    ParserImpl <|-- TokenImportanceStrategyImpl : "uses"
+}
+
+' Define Module Dependencies
+Expr <.. Binary : "implements"
+Expr <.. Grouping : "implements"
+Expr <.. Literal : "implements"
+Expr <.. Unary : "implements"
+Expr <.. Assignment : "implements"
+Expr <.. LetDeclaration : "implements"
+Expr <.. TypeDefinition : "implements"
+Expr <.. Sentence : "implements"
+Parser <|-- ParserImpl : "implements"
+Lexer <|-- Token : "produces"
+Parser <|-- TokenImportanceStrategy : "uses"
+ParserImpl <|-- TokenImportanceStrategyImpl : "uses"
+@enduml

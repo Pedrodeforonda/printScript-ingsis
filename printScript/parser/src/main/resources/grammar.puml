@@ -1,0 +1,34 @@
+@startuml
+interface Expr {
+    accept(visitor: Visitor<R>): R
+}
+class Binary {
+    left: Expr
+    operator: Token
+    right: Expr
+    accept(visitor: Visitor<R>): R
+}
+class Grouping {
+    expression: Expr
+    accept(visitor: Visitor<R>): R
+}
+class Literal {
+    value: Object
+    accept(visitor: Visitor<R>): R
+}
+class Unary {
+    operator: Token
+    right: Expr
+    accept(visitor: Visitor<R>): R
+}
+class Visitor<R> {
+    visitBinaryExpr(expr: Binary): R
+    visitGroupingExpr(expr: Grouping): R
+    visitLiteralExpr(expr: Literal): R
+    visitUnaryExpr(expr: Unary): R
+}
+Expr <|-- Binary
+Expr <|-- Grouping
+Expr <|-- Literal
+Expr <|-- Unary
+@enduml
