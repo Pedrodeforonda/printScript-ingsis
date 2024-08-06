@@ -45,6 +45,34 @@ class Lexer(private val text: String) {
                     goToNextPos()
                     return Token(charArrayOf(tokenChar), tokenType)
                 }
+                currentChar == '=' -> {
+                    val tokenType = TokenType.ASSIGNATION
+                    val tokenChar = currentChar!!
+                    goToNextPos()
+                    return Token(charArrayOf(tokenChar), tokenType)
+                }
+                currentChar == ';' -> {
+                    val tokenType = TokenType.SEMICOLON
+                    val tokenChar = currentChar!!
+                    goToNextPos()
+                    return Token(charArrayOf(tokenChar), tokenType)
+                }
+                currentChar!!.isLetter() -> {
+                    var result = ""
+                    while (currentChar != null && currentChar!!.isLetter()) {
+                        result += currentChar
+                        goToNextPos()
+                    }
+                    return when (result) {
+                        "let" -> Token(result.toCharArray(), TokenType.LET_KEYWORD)
+                        "string" -> Token(result.toCharArray(), TokenType.STRING_TYPE)
+                        "number" -> Token(result.toCharArray(), TokenType.NUMBER_TYPE)
+                        else -> Token(result.toCharArray(), TokenType.IDENTIFIER)
+                    }
+                }
+                else -> {
+                    throw Exception("Invalid character")
+                }
             }
         }
         return Token(charArrayOf(' '), TokenType.NULL_TYPE)
