@@ -4,7 +4,7 @@ import org.example.nodes.*
 
 class EvalVisitor: ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {
-        return expression.getName()
+        return (expression.getName() to expression.getType())
     }
 
     override fun visitLiteral(expression: Literal): Any {
@@ -16,15 +16,7 @@ class EvalVisitor: ExpressionVisitor {
     }
 
     override fun visitBinaryExp(expression: BinaryNode): Any {
-        val left = expression.getLeft().accept(this)
-        val right = expression.getRight().accept(this)
-        return when (expression.getOperator()) {
-            "+" -> left as Double + right as Double
-            "-" -> left as Double - right as Double
-             -> left as Double * right as Double
-            TokenType.SLASH -> left as Double / right as Double
-            else -> throw IllegalArgumentException("Invalid operator")
-        }
+        TODO("Not yet implemented")
     }
 
     override fun visitUnaryExp(expression: UnaryNode): Any {
@@ -32,6 +24,23 @@ class EvalVisitor: ExpressionVisitor {
     }
 
     override fun visitAssignment(expression: Assignment): Any {
+        val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
+        if (type == "number") {
+            val value: Int = expression.getValue().accept(this) as Int
+            return (name to value)
+        }
 
+        if (type == "string") {
+            val value: String = expression.getValue().accept(this) as String
+            return (name to value)
+        }
+    }
+
+    override fun visitCallExp(expression: CallNode): Any {
+        if (expression.getFunc() == "println") {
+            val arg = expression.getArguments()
+            println(arg)
+        }
+        return Unit
     }
 }

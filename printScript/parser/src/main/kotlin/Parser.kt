@@ -1,7 +1,5 @@
 import org.example.*
-import org.example.nodes.Assignment
-import org.example.nodes.Declaration
-import org.example.nodes.Node
+import org.example.nodes.*
 import org.example.visitors.PrinterVisitor
 
 class Parser {
@@ -34,11 +32,15 @@ class Parser {
                 }
 
                 TokenType.ASSIGNATION -> {
-                    ast = buildAssignation(tokens.subList(cursor, tokens.size), ast)
+                    ast = buildAssignation(tokens.subList(cursor, cursor + 2), ast)
                     cursor += 1
                 }
+                TokenType.CALL_FUNC -> {
+                    ast = buildCallFunc(tokens.subList(cursor, cursor + 2))
+                    cursor += 2
+                }
                 else -> {
-                    throw Exception("NOT IMPLEMENTED")
+                    throw Exception("Invalid token")
                 }
             }
         }
@@ -60,7 +62,7 @@ class Parser {
             throw Exception("Invalid assignation")
         }
         val declaration: Declaration = currentTree as Declaration
-        val node: Node = buildExpression(subList.subList(1, subList.size))
+        val node: Literal = Literal(subList[1].getCharArray().toString())
         return Assignment(declaration, node)
 
 
@@ -88,6 +90,14 @@ class Parser {
         return Declaration(name, type.toString(), declarationKeyWord)
     }
 
+    private fun buildCallFunc(subList: List<Token>) : Node {
+        val name = subList[0].getCharArray().toString()
+        if (!name.matches(Regex("[a-zA-Z]+"))) {
+            throw Exception("Invalid function name")
+        }
+        val arguments = subList[1].getCharArray().toString()
+        return CallNode(name, arguments)
+    }
 
     fun parse(tokens: List<Token>) : Node {
         val ast = tokToAST(tokens)

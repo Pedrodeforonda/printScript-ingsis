@@ -9,4 +9,5 @@ interface ExpressionVisitor {
     fun visitBinaryExp(expression: BinaryNode): Any
     fun visitUnaryExp(expression: UnaryNode): Any
     fun visitAssignment(expression: Assignment): Any
+    fun visitCallExp(expression: CallNode): Any
 }
