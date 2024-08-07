@@ -1,2 +1,4 @@
 printScript/.gradle
 printScript/.idea
+printScript/build
+printScript/**/build/
