@@ -34,6 +34,8 @@ class EvalVisitor: ExpressionVisitor {
             val value: String = expression.getValue().accept(this) as String
             return (name to value)
         }
+
+        return Unit
     }
 
     override fun visitCallExp(expression: CallNode): Any {

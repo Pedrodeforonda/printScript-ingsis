@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation(project(":ast"))
+    implementation(project(":token"))
     implementation(project(":lexer"))
     implementation(project(":parser"))
     implementation(project(":interpreter"))

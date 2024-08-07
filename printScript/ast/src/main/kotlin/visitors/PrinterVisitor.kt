@@ -28,4 +28,8 @@ class PrinterVisitor: ExpressionVisitor {
         return "Assignment"
     }
 
+    override fun visitCallExp(expression: CallNode): Any {
+        return "CallExpression"
+    }
+
 }
