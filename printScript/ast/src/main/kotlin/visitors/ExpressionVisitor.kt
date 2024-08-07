@@ -1,4 +1,6 @@
-package org.example
+package org.example.visitors
+
+import org.example.nodes.*
 
 interface ExpressionVisitor {
     fun visitDeclaration(expression: Declaration): Any

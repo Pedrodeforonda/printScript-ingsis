@@ -1,4 +1,7 @@
-package org.example
+package org.example.visitors
+
+import org.example.nodes.*
+import org.example.visitors.ExpressionVisitor
 
 class PrinterVisitor: ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {

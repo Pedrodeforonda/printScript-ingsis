@@ -1,4 +1,8 @@
 import org.example.*
+import org.example.nodes.Assignment
+import org.example.nodes.Declaration
+import org.example.nodes.Node
+import org.example.visitors.PrinterVisitor
 
 class Parser {
 
