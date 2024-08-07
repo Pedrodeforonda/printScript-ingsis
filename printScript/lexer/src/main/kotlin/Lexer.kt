@@ -16,7 +16,7 @@ class Lexer(private val text: String) {
     }
 
     private fun skipWhitespace() {
-        while (currentChar != null && currentChar!!.isWhitespace()) {
+        while (currentChar!!.isWhitespace()) {
             goToNextPos()
         }
     }
