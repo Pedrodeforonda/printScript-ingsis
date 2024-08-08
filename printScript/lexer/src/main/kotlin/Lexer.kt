@@ -16,7 +16,7 @@ class Lexer(private val text: String) {
     }
 
     private fun skipWhitespace() {
-        while (currentChar != null && currentChar!!.isWhitespace()) {
+        while (currentChar!!.isWhitespace()) {
             goToNextPos()
         }
     }
@@ -39,7 +39,7 @@ class Lexer(private val text: String) {
                 }
 
                 currentChar!!.isDigit() -> return Token(integer(), TokenType.NUMBER_TYPE)
-                currentChar in listOf('+', '-', '*', '/', '(', ')') -> {
+                currentChar in listOf('+', '-', '*', '/', '(', ')', '{', '}', '[', ']') -> {
                     val tokenType = TokenType.OPERATOR
                     val tokenChar = currentChar!!
                     goToNextPos()
@@ -47,6 +47,12 @@ class Lexer(private val text: String) {
                 }
                 currentChar == '=' -> {
                     val tokenType = TokenType.ASSIGNATION
+                    val tokenChar = currentChar!!
+                    goToNextPos()
+                    return Token(charArrayOf(tokenChar), tokenType)
+                }
+                currentChar == ':' -> {
+                    val tokenType = TokenType.TYPE_ASSIGNATION
                     val tokenChar = currentChar!!
                     goToNextPos()
                     return Token(charArrayOf(tokenChar), tokenType)
@@ -74,7 +80,21 @@ class Lexer(private val text: String) {
                     throw Exception("Invalid character")
                 }
             }
+
         }
         return Token(charArrayOf(' '), TokenType.NULL_TYPE)
+    }
+
+
+    fun tokenizeAll(): List<Token> {
+        val tokens = mutableListOf<Token>()
+        var token: Token
+        do {
+            token = getNextToken()
+            if (token.getType() != TokenType.NULL_TYPE) {
+                tokens.add(token)
+            }
+        } while (token.getType() != TokenType.NULL_TYPE)
+        return tokens
     }
 }
