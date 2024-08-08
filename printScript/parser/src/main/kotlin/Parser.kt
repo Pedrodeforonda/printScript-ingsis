@@ -1,108 +1,85 @@
+import nodes.Nud
 import org.example.*
 import org.example.nodes.*
-import org.example.visitors.PrinterVisitor
 
-class Parser {
+class Parser(val tokens: List<Token>) {
 
-    val priorityMap: Map<TokenType, Int> = mapOf(
-        TokenType.STRING_TYPE to 0,
-        TokenType.NUMBER_TYPE to 0,
-        TokenType.STRING_LITERAL to 0,
-        TokenType.TYPE_ASSIGNATION to 1,
-        TokenType.IDENTIFIER to 5,
-        TokenType.NUMBER_LITERAL to 0,
-        TokenType.ASSIGNATION to 10,
-        TokenType.OPERATOR to 5,
-        TokenType.COMPARE_OPERATOR to 5
-    )
+    val lookups = Lookups()
 
-    val types = listOf(TokenType.STRING_TYPE, TokenType.NUMBER_TYPE)
-    
-
-    private fun tokToAST(tokens: List<Token>) : Node {
-        var cursor: Int = 0
-        var ast: Node? = null;
-        while (cursor < tokens.size) {
-            val token: Token = tokens[cursor]
-            // TODO: refactor this to use the strategy pattern
-            when (token.getType()) {
-                TokenType.LET_KEYWORD -> {
-                    ast = buildDeclaration(tokens.subList(cursor, cursor + 3))
-                    cursor += 3
-                }
-
-                TokenType.ASSIGNATION -> {
-                    ast = buildAssignation(tokens.subList(cursor, cursor + 2), ast)
-                    cursor += 1
-                }
-                TokenType.CALL_FUNC -> {
-                    ast = buildCallFunc(tokens.subList(cursor, cursor + 2))
-                    cursor += 2
-                }
-                else -> {
-                    throw Exception("Invalid token")
-                }
-            }
-        }
-        return ast!!
-    }
-
-    private fun buildAssignation(subList: List<Token>, currentTree: Node?): Node {
-        if (currentTree == null) {
-            throw Exception("Invalid assignation")
-        }
-        //check if the current tree is a declaration
-        val printerVisitor = PrinterVisitor();
-        val astType: Any = currentTree.accept(printerVisitor);
-        //check if ast is a string
-        if(astType !is String) {
-            throw Exception("Unexpected error")
-        }
-        if(astType != "Declaration") {
-            throw Exception("Invalid assignation")
-        }
-        val declaration: Declaration = currentTree as Declaration
-        val node: Literal = Literal(subList[1].getCharArray().toString())
-        return Assignment(declaration, node)
-
-
-    }
-
-    private fun buildExpression(subList: List<Token>): Node {
-        TODO()
-    }
-
-    private fun buildDeclaration(subList: List<Token>) : Node {
-        val declarationKeyWord: DeclarationKeyWord = if(subList[0].getType() == TokenType.LET_KEYWORD) {
-            DeclarationKeyWord.LET_KEYWORD
-        } else {
-            throw Exception("Invalid declaration keyword")
-        }
-        val name: String = subList[1].getCharArray().toString()
-        if (!name.matches(Regex("[a-zA-Z]+"))) {
-            throw Exception("Invalid variable name")
-        }
-        val type: TokenType = subList[2].getType()
-        if (!types.contains(subList[2].getType())) {
-            throw Exception("Invalid type")
-        }
-
-        return Declaration(name, type.toString(), declarationKeyWord)
-    }
-
-    private fun buildCallFunc(subList: List<Token>) : Node {
-        val name = subList[0].getCharArray().toString()
-        if (!name.matches(Regex("[a-zA-Z]+"))) {
-            throw Exception("Invalid function name")
-        }
-        val arguments = subList[1].getCharArray().toString()
-        return CallNode(name, arguments)
-    }
-
-    fun parse(tokens: List<Token>) : Node {
-        val ast = tokToAST(tokens)
-        return ast
+    init {
+        lookups.createTokenLookups()
     }
 
 
+    private var cursor: Int = 0
+
+
+    private fun parseExpr(bp: Int): List<Node> {
+        val res: MutableList<Node> = mutableListOf()
+        val token = tokens[cursor]
+        var left = typeToNud(lookups.getNud(token.getType())).parse()
+
+        while (bp < (lookups.getBP(tokens[cursor].getType())?.let { BindingPowers().getBP(it) } ?: 0)) {
+            val led = lookups.getLed(tokens[cursor].getType())
+            left = led?.eval(this, tokens[cursor], left!!)
+            cursor++
+        }
+
+        if (tokens[cursor].getType() == TokenType.SEMICOLON) {
+            res.add(left!!)
+        }
+
+        return res
+    }
+
+    private fun parse(): List<Node> {
+        return parseExpr(  0)
+    }
+
+
+    fun advance(index: Int): Pair<Token, Int> {
+        val nextIndex = index + 1
+        return (tokens[nextIndex] to nextIndex)
+    }
+
+    fun currentToken(index: Int): Token {
+        return tokens[index]
+    }
+
+    fun previousToken(index: Int): Pair<Token, Int> {
+        return (tokens[index - 1] to index - 1)
+    }
+
+    fun currentTokenKind(index: Int): TokenType {
+        return tokens[index].getType()
+    }
+
+    fun hasToken(index: Int): Boolean {
+        return index < tokens.size
+    }
+
+    fun consume(expectedType: TokenType): Token {
+        val token = tokens[cursor]
+        if (token.getType() != expectedType) {
+            throw Exception("Expected token of type $expectedType but found ${token.getType()}")
+        }
+        cursor++
+        return token
+    }
+
+    fun typeToNud(token: NodeTypes): Nud {
+        return when (token) {
+            NodeTypes.LITERAL -> Literal(null, TokenType.STRING_TYPE)
+            else -> throw Exception("Invalid token type")
+        }
+    }
+
+    fun typeToLed(token: NodeTypes): Led {
+        return when (token) {
+            NodeTypes.ADDITION -> Addition(null, null, TokenType.PLUS)
+            NodeTypes.LOGICAL -> Logical(null, null, TokenType.AND)
+            NodeTypes.MULTIPLICATION -> Multiplication(null, null, TokenType.MULTIPLICATION)
+            else -> throw Exception("Invalid token type")
+        }
+    }
 }

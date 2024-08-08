@@ -1,7 +1,6 @@
 package org.example
 
 import org.example.nodes.Node
-import org.example.visitors.EvalVisitor
 
 class Interpreter {
 
