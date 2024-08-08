@@ -1,1 +1,2 @@
 let a: string = "Hello, World!";
+println(a);
