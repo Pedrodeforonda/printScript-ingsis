@@ -26,15 +26,11 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionV
 
     override fun visitAssignment(expression: Assignment): Any {
         val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
-        if (type == "NUMBER_TYPE") {
-            val value: Int = expression.getValue().accept(this) as Int
+        if (type == "NUMBER_TYPE" || type == "STRING_TYPE") {
+            val value = expression.getValue().accept(this)
             variableMap[name as String] = value
         }
 
-        if (type == "STRING_TYPE") {
-            val value: String = expression.getValue().accept(this) as String
-            variableMap[name as String] = value
-        }
 
         return Unit
     }

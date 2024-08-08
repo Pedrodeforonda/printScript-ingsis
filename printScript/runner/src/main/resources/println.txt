@@ -1,2 +1,2 @@
-let a: string = "hola";
+let a: number = "hola";
 println(a);
