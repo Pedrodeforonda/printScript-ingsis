@@ -1,2 +1,2 @@
-let a: string = "Hello, World!";
+let a: string = 9;
 println(a);

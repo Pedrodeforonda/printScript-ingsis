@@ -15,8 +15,9 @@ class Lexer(private val text: String) {
         currentChar = if (pos > text.length - 1) null else text[pos]
     }
 
-    private fun skipWhitespace() {
-        if (currentChar!!.isWhitespace() || currentChar!!.equals("\r") || currentChar!!.equals("\n")) {
+    private fun skip() {
+        if (currentChar!!.isWhitespace() || currentChar == '\r' || currentChar == '\n'
+            || currentChar == '(' || currentChar == ')') {
             goToNextPos()
         }
     }
@@ -45,13 +46,14 @@ class Lexer(private val text: String) {
     fun getNextToken(): Token {
         while (currentChar != null) {
             when {
-                currentChar!!.isWhitespace() || currentChar!!.equals("\r") || currentChar!!.equals("\n") -> {
-                    skipWhitespace()
+                currentChar!!.isWhitespace() || currentChar == '\r' || currentChar == '\n'
+                        || currentChar == '(' || currentChar == ')' -> {
+                    skip()
                     continue
                 }
 
                 currentChar!!.isDigit() -> return Token(integer(), TokenType.NUMBER_LITERAL)
-                currentChar in listOf('+', '-', '*', '/', '(', ')', '{', '}', '[', ']') -> {
+                currentChar in listOf('+', '-', '*', '/', '{', '}', '[', ']') -> {
                     val tokenType = TokenType.OPERATOR
                     val tokenChar = currentChar!!
                     goToNextPos()
@@ -85,6 +87,7 @@ class Lexer(private val text: String) {
                         "let" -> Token(result.toCharArray(), TokenType.LET_KEYWORD)
                         "string" -> Token(result.toCharArray(), TokenType.STRING_TYPE)
                         "number" -> Token(result.toCharArray(), TokenType.NUMBER_TYPE)
+                        "println" -> Token(result.toCharArray(), TokenType.CALL_FUNC)
                         else -> Token(result.toCharArray(), TokenType.IDENTIFIER)
                     }
                 }

@@ -1,33 +1,20 @@
-package org.example
-
-import Token
-import junit.framework.TestCase.assertEquals
+import org.example.Lexer
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.test.assertEquals
 
 class LexerTest {
 
-    @org.junit.Test
-    fun testTokenizeAll() {
-        val lexer = Lexer("tu string de entrada completo")
-        val actualTokens = lexer.tokenizeAll()
-        val expectedTokens = listOf<Token>(
-            Token(charArrayOf('t', 'u'), TokenType.IDENTIFIER),
-            Token(charArrayOf('s', 't', 'r', 'i', 'n', 'g'), TokenType.STRING_TYPE),
-            Token(charArrayOf('d', 'e'), TokenType.IDENTIFIER),
-            Token(charArrayOf('e', 'n', 't', 'r', 'a', 'd', 'a'), TokenType.IDENTIFIER),
-            Token(charArrayOf('c', 'o', 'm', 'p', 'l', 'e', 't', 'o'), TokenType.IDENTIFIER)
-        )
-
-        assertEquals(expectedTokens, actualTokens)
-    }
-
-    @org.junit.Test
+    @Test
     fun testTokenizeCodeLines() {
-        val lexer = Lexer("let a: number = 12;")
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneNumber.txt"))
+        val text: String = byteArr.toString(Charsets.UTF_8)
+        val lexer = Lexer(text)
         val actualTokens = lexer.tokenizeAll()
 
-        val expectedTokens = listOf<Token>(
+        val expectedTokens = listOf(
             Token(charArrayOf('l', 'e', 't'), TokenType.LET_KEYWORD),
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf(':'), TokenType.TYPE_ASSIGNATION),
@@ -40,14 +27,14 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
     }
 
-    @org.junit.Test
+    @Test
     fun testTokenizeCodeLine2() {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/main/resources/test1.txt"))
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneString.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text)
         val actualTokens = lexer.tokenizeAll()
 
-        val expectedTokens = listOf<Token>(
+        val expectedTokens = listOf(
             Token(charArrayOf('l', 'e', 't'), TokenType.LET_KEYWORD),
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf(':'), TokenType.TYPE_ASSIGNATION),
@@ -60,17 +47,35 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
     }
 
-    @org.junit.Test
+    @Test
     fun testTokenizeCodeLine3() {
-        val lexer = Lexer("a = a / b;")
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneOperation.txt"))
+        val text: String = byteArr.toString(Charsets.UTF_8)
+        val lexer = Lexer(text)
         val actualTokens = lexer.tokenizeAll()
 
-        val expectedTokens = listOf<Token>(
+        val expectedTokens = listOf(
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf('='), TokenType.ASSIGNATION),
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf('/'), TokenType.OPERATOR),
             Token(charArrayOf('b'), TokenType.IDENTIFIER),
+            Token(charArrayOf(';'), TokenType.SEMICOLON),
+        )
+
+        assertEquals(expectedTokens, actualTokens)
+    }
+
+    @Test
+    fun testTokenizeCodeLine4() {
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
+        val text: String = byteArr.toString(Charsets.UTF_8)
+        val lexer = Lexer(text)
+        val actualTokens = lexer.tokenizeAll()
+
+        val expectedTokens = listOf(
+            Token(charArrayOf('p', 'r', 'i', 'n', 't', 'l', 'n'), TokenType.CALL_FUNC),
+            Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf(';'), TokenType.SEMICOLON),
         )
 
