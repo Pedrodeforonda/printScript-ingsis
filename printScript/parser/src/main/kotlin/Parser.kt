@@ -1,6 +1,6 @@
 import org.example.*
 import org.example.nodes.*
-import org.example.visitors.PrinterVisitor
+import org.example.PrinterVisitor
 
 class Parser {
 
