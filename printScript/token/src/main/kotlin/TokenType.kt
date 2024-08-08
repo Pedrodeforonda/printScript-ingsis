@@ -10,4 +10,5 @@ enum class TokenType {
     SEMICOLON,
     OPERATOR,
     COMPARE_OPERATOR,
+    NULL_TYPE,
 }
