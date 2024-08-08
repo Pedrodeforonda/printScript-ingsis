@@ -1,5 +1,6 @@
 enum class TokenType {
     LET_KEYWORD,
+    CALL_FUNC,
     STRING_TYPE,
     NUMBER_TYPE,
     TYPE_ASSIGNATION,
