@@ -16,7 +16,7 @@ class Lexer(private val text: String) {
     }
 
     private fun skipWhitespace() {
-        while (currentChar!!.isWhitespace()) {
+        if (currentChar!!.isWhitespace() || currentChar!!.equals("\r") || currentChar!!.equals("\n")) {
             goToNextPos()
         }
     }
@@ -30,15 +30,27 @@ class Lexer(private val text: String) {
         return result.toCharArray()
     }
 
+    private fun string(): CharArray {
+        val quote = currentChar
+        goToNextPos()
+        var result = ""
+        while (currentChar != null && currentChar != quote) {
+            result += currentChar
+            goToNextPos()
+        }
+        goToNextPos()
+        return result.toCharArray()
+    }
+
     fun getNextToken(): Token {
         while (currentChar != null) {
             when {
-                currentChar!!.isWhitespace() -> {
+                currentChar!!.isWhitespace() || currentChar!!.equals("\r") || currentChar!!.equals("\n") -> {
                     skipWhitespace()
                     continue
                 }
 
-                currentChar!!.isDigit() -> return Token(integer(), TokenType.NUMBER_TYPE)
+                currentChar!!.isDigit() -> return Token(integer(), TokenType.NUMBER_LITERAL)
                 currentChar in listOf('+', '-', '*', '/', '(', ')', '{', '}', '[', ']') -> {
                     val tokenType = TokenType.OPERATOR
                     val tokenChar = currentChar!!
@@ -76,6 +88,7 @@ class Lexer(private val text: String) {
                         else -> Token(result.toCharArray(), TokenType.IDENTIFIER)
                     }
                 }
+                (currentChar == '\'') || (currentChar == '"') -> return Token(string(), TokenType.STRING_LITERAL)
                 else -> {
                     throw Exception("Invalid character")
                 }
