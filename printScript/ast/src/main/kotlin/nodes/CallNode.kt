@@ -1,6 +1,6 @@
 package org.example.nodes
 
-import org.example.visitors.ExpressionVisitor
+import org.example.ExpressionVisitor
 
 class CallNode(private val func: String, private val arguments: List<Node>) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

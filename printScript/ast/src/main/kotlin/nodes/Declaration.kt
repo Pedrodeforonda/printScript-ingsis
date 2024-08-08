@@ -1,7 +1,7 @@
 package org.example.nodes
 
 import org.example.DeclarationKeyWord
-import org.example.visitors.ExpressionVisitor
+import org.example.ExpressionVisitor
 
 class Declaration(private val name: String, private val type: String, private val declarationKeyWord: DeclarationKeyWord): Node {
     override fun accept(visitor: ExpressionVisitor): Any {

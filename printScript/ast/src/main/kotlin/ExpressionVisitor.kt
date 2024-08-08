@@ -1,4 +1,4 @@
-package org.example.visitors
+package org.example
 
 import org.example.nodes.*
 
