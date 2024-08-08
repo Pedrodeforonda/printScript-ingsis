@@ -19,7 +19,8 @@ class Parser {
     val types = listOf(TokenType.STRING_TYPE, TokenType.NUMBER_TYPE)
     
 
-    private fun tokToAST(tokens: List<Token>) : Node {
+    private fun tokToAST(tokens: List<Token>) : List<Node> {
+        var res = mutableListOf<Node>()
         var cursor: Int = 0
         var ast: Node? = null;
         while (cursor < tokens.size) {
@@ -27,24 +28,30 @@ class Parser {
             // TODO: refactor this to use the strategy pattern
             when (token.getType()) {
                 TokenType.LET_KEYWORD -> {
-                    ast = buildDeclaration(tokens.subList(cursor, cursor + 3))
-                    cursor += 3
+                    ast = buildDeclaration(tokens.subList(cursor, cursor + 4))
+                    cursor += 4
                 }
 
                 TokenType.ASSIGNATION -> {
                     ast = buildAssignation(tokens.subList(cursor, cursor + 2), ast)
-                    cursor += 1
+                    cursor += 2
                 }
                 TokenType.CALL_FUNC -> {
-                    ast = buildCallFunc(tokens.subList(cursor, cursor + 2))
+                    ast = buildCallFunc(tokens.subList(cursor, tokens.size))
                     cursor += 2
+                }
+
+                TokenType.SEMICOLON -> {
+                    res.add(ast!!)
+                    ast = null
+                    cursor += 1
                 }
                 else -> {
                     throw Exception("Invalid token")
                 }
             }
         }
-        return ast!!
+        return res
     }
 
     private fun buildAssignation(subList: List<Token>, currentTree: Node?): Node {
@@ -62,7 +69,7 @@ class Parser {
             throw Exception("Invalid assignation")
         }
         val declaration: Declaration = currentTree as Declaration
-        val node: Literal = Literal(subList[1].getCharArray().toString())
+        val node: Literal = Literal(subList[1].getCharArray().concatToString())
         return Assignment(declaration, node)
 
 
@@ -78,12 +85,16 @@ class Parser {
         } else {
             throw Exception("Invalid declaration keyword")
         }
-        val name: String = subList[1].getCharArray().toString()
+        val name: String = subList[1].getCharArray().concatToString()
         if (!name.matches(Regex("[a-zA-Z]+"))) {
             throw Exception("Invalid variable name")
         }
-        val type: TokenType = subList[2].getType()
-        if (!types.contains(subList[2].getType())) {
+        val assignationChar = subList[2].getType()
+        if (assignationChar != TokenType.TYPE_ASSIGNATION) {
+            throw Exception("Invalid assignation")
+        }
+        val type: TokenType = subList[3].getType()
+        if (!types.contains(subList[3].getType())) {
             throw Exception("Invalid type")
         }
 
@@ -91,15 +102,25 @@ class Parser {
     }
 
     private fun buildCallFunc(subList: List<Token>) : Node {
-        val name = subList[0].getCharArray().toString()
+        val name = subList[0].getCharArray().concatToString()
         if (!name.matches(Regex("[a-zA-Z]+"))) {
             throw Exception("Invalid function name")
         }
-        val arguments = subList[1].getCharArray().toString()
-        return CallNode(name, arguments)
+        val arguments = subList[1].getCharArray().concatToString()
+        val type = subList[1].getType()
+        if (type == TokenType.STRING_LITERAL) {
+            return CallNode(name, listOf(Literal(arguments)))
+        }
+        if(type == TokenType.NUMBER_LITERAL) {
+            return CallNode(name, listOf(Literal(arguments)))
+        }
+        if (type == TokenType.IDENTIFIER) {
+            return CallNode(name, listOf(Identifier(arguments)))
+        }
+        throw Exception("Invalid argument")
     }
 
-    fun parse(tokens: List<Token>) : Node {
+    fun parse(tokens: List<Token>) : List<Node> {
         val ast = tokToAST(tokens)
         return ast
     }

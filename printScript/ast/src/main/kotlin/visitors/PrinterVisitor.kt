@@ -32,4 +32,8 @@ class PrinterVisitor: ExpressionVisitor {
         return "CallExpression"
     }
 
+    override fun visitIdentifier(expression: Identifier): Any {
+        return "Identifier"
+    }
+
 }

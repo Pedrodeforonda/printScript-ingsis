@@ -2,9 +2,10 @@ package org.example.visitors
 
 import org.example.nodes.*
 
-class EvalVisitor: ExpressionVisitor {
+class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {
-        return (expression.getName() to expression.getType())
+        variableMap[expression.getName()] = expression.getType()
+        return Pair(expression.getName(), expression.getType())
     }
 
     override fun visitLiteral(expression: Literal): Any {
@@ -25,14 +26,14 @@ class EvalVisitor: ExpressionVisitor {
 
     override fun visitAssignment(expression: Assignment): Any {
         val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
-        if (type == "number") {
+        if (type == "NUMBER_TYPE") {
             val value: Int = expression.getValue().accept(this) as Int
-            return (name to value)
+            variableMap[name as String] = value
         }
 
-        if (type == "string") {
+        if (type == "STRING_TYPE") {
             val value: String = expression.getValue().accept(this) as String
-            return (name to value)
+            variableMap[name as String] = value
         }
 
         return Unit
@@ -41,8 +42,16 @@ class EvalVisitor: ExpressionVisitor {
     override fun visitCallExp(expression: CallNode): Any {
         if (expression.getFunc() == "println") {
             val arg = expression.getArguments()
-            println(arg)
+            if (arg.size != 1) {
+                throw Exception("Invalid number of arguments")
+            }
+            val value = arg[0].accept(this)
+            println(value)
         }
         return Unit
+    }
+
+    override fun visitIdentifier(expression: Identifier): Any {
+        return variableMap[expression.getValue()] ?: throw Exception("Variable not found")
     }
 }
