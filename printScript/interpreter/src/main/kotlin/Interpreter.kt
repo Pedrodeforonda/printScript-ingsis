@@ -4,18 +4,18 @@ import org.example.nodes.Node
 
 class Interpreter {
 
-    private val variableMap = mutableMapOf<String, Any>()
+    private var variableMap = mutableMapOf<String, Any>()
 
     fun interpret(expression: List<Node>): Any {
-        val evalVisitor = EvalVisitor(variableMap)
-        for(exp in expression){
-            exp.accept(evalVisitor)
-        }
+         val evalVisitor = EvalVisitor(variableMap)
+         for(exp in expression){
+             exp.accept(evalVisitor)
+         }
 
         return Unit
     }
 
-    fun getVariableMap(): MutableMap<String, Any> {
+    fun getVariableMap(): Map<String, Any> {
         return variableMap
     }
 }
