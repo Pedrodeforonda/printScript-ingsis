@@ -4,7 +4,7 @@ import ParseException
 import Parser
 import Token
 import nodes.CallNode
-import org.example.nodes.Node
+import nodes.Node
 
 class FunCallParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {

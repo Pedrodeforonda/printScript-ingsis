@@ -2,7 +2,7 @@ package parsers
 
 import Parser
 import Token
-import org.example.nodes.Node
+import nodes.Node
 
 interface Infix {
     fun parse(parser: Parser, left: Node, token: Token): Node

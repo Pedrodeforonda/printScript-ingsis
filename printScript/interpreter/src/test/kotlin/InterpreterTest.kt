@@ -1,11 +1,7 @@
 package org.example
 
 import DeclarationKeyWord
-import nodes.Assignation
-import nodes.CallNode
-import nodes.Declaration
-import nodes.Identifier
-import org.example.nodes.*
+import nodes.*
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

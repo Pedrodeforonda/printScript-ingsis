@@ -3,7 +3,7 @@ package parsers
 import Parser
 import Token
 import nodes.PrefixExpression
-import org.example.nodes.Node
+import nodes.Node
 
 class PrefixOperatorParser : Prefix {
 

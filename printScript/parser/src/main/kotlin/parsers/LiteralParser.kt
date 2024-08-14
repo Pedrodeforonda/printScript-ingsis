@@ -4,7 +4,7 @@ import ParseException
 import Parser
 import Token
 import nodes.Literal
-import org.example.nodes.Node
+import nodes.Node
 
 class LiteralParser: Prefix {
     override fun parse(parser: Parser, token: Token): Node {

@@ -18,7 +18,30 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionV
     }
 
     override fun visitBinaryExp(expression: BinaryNode): Any {
-        TODO("Not yet implemented")
+        val left = expression.getLeft().accept(this)
+        val right = expression.getRight().accept(this)
+        val operator = expression.getOperator()
+
+        if (left is Int && right is Int) {
+            return when (operator.getType()) {
+                TokenType.PLUS -> left + right
+                TokenType.MINUS -> left - right
+                TokenType.ASTERISK -> left * right
+                TokenType.SLASH -> left / right
+                else -> throw Exception("Invalid operator")
+            }
+        }
+        if (left is String && right is String && operator.getType() == TokenType.PLUS) {
+            return left + right
+        }
+        if (left is String && right is Int && operator.getType() == TokenType.PLUS) {
+            return left + right
+        }
+        if (left is Int && right is String && operator.getType() == TokenType.PLUS) {
+            return left.toString() + right
+        }
+
+        throw Exception("Invalid operation")
     }
 
     override fun visitUnaryExp(expression: UnaryNode): Any {
@@ -31,7 +54,6 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionV
             val value = expression.getValue().accept(this)
             variableMap[name as String] = value
         }
-
 
         return Unit
     }

@@ -1,4 +1,4 @@
-import org.example.nodes.Node
+import nodes.*
 import parsers.*
 
 class Parser(private val tokens: List<Token>) {

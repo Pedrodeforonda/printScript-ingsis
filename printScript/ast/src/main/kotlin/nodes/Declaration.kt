@@ -2,10 +2,8 @@ package nodes
 
 import DeclarationKeyWord
 import ExpressionVisitor
-import org.example.nodes.Node
 
-class Declaration(private val name: String, private val type: String, private val declarationKeyWord: DeclarationKeyWord):
-    Node {
+class Declaration(private val name: String, private val type: String, private val declarationKeyWord: DeclarationKeyWord): Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitDeclaration(this)
     }

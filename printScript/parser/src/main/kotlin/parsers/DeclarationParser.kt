@@ -6,7 +6,7 @@ import Token
 import TokenType
 import DeclarationKeyWord
 import nodes.Declaration
-import org.example.nodes.Node
+import nodes.Node
 
 class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
