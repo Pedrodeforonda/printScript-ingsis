@@ -1,13 +1,14 @@
-package org.example.tokenManagers
+package org.example
 
 import TokenManager
+import org.example.tokenManagers.*
 
 class ClassicTokenManagers {
     fun getManagers(): List<TokenManager> {
         return listOfManagers
     }
 
-    val listOfManagers = listOf(
+    private var listOfManagers = listOf(
         AssignationManager(),
         NumberManager(),
         OperatorManager(),
