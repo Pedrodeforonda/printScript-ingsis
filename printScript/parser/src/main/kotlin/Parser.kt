@@ -1,4 +1,4 @@
-import nodes.*
+import nodes.Node
 import parsers.*
 
 class Parser(private val tokens: List<Token>) {

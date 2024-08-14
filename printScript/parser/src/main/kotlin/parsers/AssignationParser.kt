@@ -6,7 +6,6 @@ import Token
 import nodes.Assignation
 import nodes.Node
 
-
 class AssignationParser: Infix {
     override fun parse(parser: Parser, left: Node, token: Token): Node {
         val right = parser.parseExpression()
