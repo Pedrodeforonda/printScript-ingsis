@@ -1,14 +1,14 @@
 package org.example.tokenManagers
 
 import Token
-import TokenManager
 import org.example.Lexer
+import org.example.TokenManager
 
-class OperatorManager: TokenManager{
-    override fun BuildToken(lexer: Lexer?): Token {
+class OperatorManager: TokenManager {
+    override fun buildToken(lexer: Lexer): Token {
         val operators : List<Char> = listOf('+', '-', '*', '/', '{', '}', '[', ']')
         for (operator in operators) {
-            if (lexer!!.getCurrentChar() == operator) {
+            if (lexer.getCurrentChar() == operator) {
                 val tokenType = TokenType.OPERATOR
                 val tokenChar = lexer.getCurrentChar()!!
                 lexer.goToNextPos()

@@ -1,12 +1,12 @@
 package org.example.tokenManagers
 
 import Token
-import TokenManager
 import org.example.Lexer
+import org.example.TokenManager
 
 class AssignationManager: TokenManager {
-    override fun BuildToken(lexer: Lexer?): Token {
-        if (lexer?.getCurrentChar() == '=') {
+    override fun buildToken(lexer: Lexer): Token {
+        if (lexer.getCurrentChar() == '=') {
             val tokenChar = lexer.getCurrentChar()!!
             val tokenType = TokenType.ASSIGNATION
             lexer.goToNextPos()

@@ -1,12 +1,11 @@
 package org.example.tokenManagers
 
 import Token
-import TokenManager
 import org.example.Lexer
+import org.example.TokenManager
 
 class NumberManager: TokenManager {
-    override fun BuildToken(lexer: Lexer): Token {
-
+    override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar()!!.isDigit()){
             var myresult = ""
             while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isDigit()) {

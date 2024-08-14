@@ -1,5 +1,7 @@
-import org.example.Lexer;
+package org.example
 
-public interface TokenManager {
-    Token BuildToken(Lexer lexer);
+import Token
+
+interface TokenManager {
+    fun buildToken(lexer: Lexer): Token
 }

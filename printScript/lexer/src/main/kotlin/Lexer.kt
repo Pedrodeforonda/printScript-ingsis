@@ -26,7 +26,7 @@ class Lexer(private val text: String, private val tokenManagers: ClassicTokenMan
             val tokens = mutableListOf<Token>()
             while (currentChar != null) {
                 for(manager in tokenManagers.getManagers()){
-                    val token = manager.BuildToken(this)
+                    val token = manager.buildToken(this)
                     if(token.getType() != TokenType.NULL_TYPE){
                         tokens.add(token)
                     }
