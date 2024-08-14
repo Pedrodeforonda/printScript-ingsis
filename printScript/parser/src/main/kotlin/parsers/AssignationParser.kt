@@ -4,7 +4,7 @@ import Parser
 import Precedence
 import Token
 import nodes.Assignation
-import org.example.nodes.Node
+import nodes.Node
 
 class AssignationParser: Infix {
     override fun parse(parser: Parser, left: Node, token: Token): Node {

@@ -1,7 +1,6 @@
 package nodes
 
 import ExpressionVisitor
-import org.example.nodes.Node
 
 class Assignation(private val declaration: Node, private val value: Node) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

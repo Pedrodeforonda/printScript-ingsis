@@ -1,6 +1,5 @@
 package nodes
 import ExpressionVisitor
-import org.example.nodes.Node
 
 class Literal(private val value: Any) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
