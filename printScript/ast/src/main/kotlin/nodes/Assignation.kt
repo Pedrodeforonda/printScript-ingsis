@@ -3,19 +3,24 @@ package nodes
 import ExpressionVisitor
 import org.example.nodes.Node
 
-class Identifier(private val value: String) : Node {
+class Assignation(private val declaration: Node, private val value: Node) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
-        return visitor.visitIdentifier(this);
+        return visitor.visitAssignment(this)
     }
 
-    fun getValue(): String {
+    fun getDeclaration(): Node {
+        return declaration
+    }
+
+    fun getValue(): Node {
         return value
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Identifier) return false
+        if (other !is Assignation) return false
 
+        if (declaration != other.declaration) return false
         if (value != other.value) return false
 
         return true

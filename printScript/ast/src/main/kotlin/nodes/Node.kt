@@ -1,6 +1,6 @@
 package org.example.nodes
 
-import org.example.ExpressionVisitor
+import ExpressionVisitor
 
 interface Node {
     fun accept(visitor: ExpressionVisitor): Any

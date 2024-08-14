@@ -1,6 +1,7 @@
 package org.example
 
-import org.example.nodes.*
+import ExpressionVisitor
+import nodes.*
 
 class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {
@@ -24,7 +25,7 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionV
         TODO("Not yet implemented")
     }
 
-    override fun visitAssignment(expression: Assignment): Any {
+    override fun visitAssignment(expression: Assignation): Any {
         val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
         if (type == "NUMBER_TYPE" || type == "STRING_TYPE") {
             val value = expression.getValue().accept(this)

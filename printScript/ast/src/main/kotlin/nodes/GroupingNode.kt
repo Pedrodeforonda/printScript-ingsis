@@ -1,6 +1,7 @@
-package org.example.nodes
+package nodes
 
-import org.example.ExpressionVisitor
+import ExpressionVisitor
+import org.example.nodes.Node
 
 class GroupingNode(private val node: Node) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

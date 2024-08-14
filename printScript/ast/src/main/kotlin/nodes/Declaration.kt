@@ -1,9 +1,11 @@
-package org.example.nodes
+package nodes
 
-import org.example.DeclarationKeyWord
-import org.example.ExpressionVisitor
+import DeclarationKeyWord
+import ExpressionVisitor
+import org.example.nodes.Node
 
-class Declaration(private val name: String, private val type: String, private val declarationKeyWord: DeclarationKeyWord): Node {
+class Declaration(private val name: String, private val type: String, private val declarationKeyWord: DeclarationKeyWord):
+    Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitDeclaration(this)
     }
@@ -18,5 +20,18 @@ class Declaration(private val name: String, private val type: String, private va
 
     fun getDeclarationKeyWord(): DeclarationKeyWord {
         return declarationKeyWord
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+
+        other as Declaration
+
+        if (name != other.name) return false
+        if (type != other.type) return false
+        if (declarationKeyWord != other.declarationKeyWord) return false
+
+        return true
     }
 }

@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":token"))
     testImplementation(kotlin("test"))
 }
 

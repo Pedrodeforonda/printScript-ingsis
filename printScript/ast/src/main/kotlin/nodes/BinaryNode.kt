@@ -1,8 +1,10 @@
-package org.example.nodes
+package nodes
 
-import org.example.ExpressionVisitor
+import Token
+import ExpressionVisitor
+import org.example.nodes.Node
 
-class BinaryNode(private val left: Node, private val operator: String, private val right: Node) : Node {
+class BinaryNode(private val left: Node, private val operator: Token, private val right: Node) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitBinaryExp(this)
     }
@@ -11,7 +13,7 @@ class BinaryNode(private val left: Node, private val operator: String, private v
         return left
     }
 
-    fun getOperator(): String {
+    fun getOperator(): Token {
         return operator
     }
 

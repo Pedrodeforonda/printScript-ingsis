@@ -1,6 +1,6 @@
-package org.example.nodes
-
-import org.example.ExpressionVisitor
+package nodes
+import ExpressionVisitor
+import org.example.nodes.Node
 
 class Literal(private val value: Any) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
@@ -9,5 +9,14 @@ class Literal(private val value: Any) : Node {
 
     fun getValue(): Any {
         return value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Literal) return false
+
+        if (value != other.value) return false
+
+        return true
     }
 }
