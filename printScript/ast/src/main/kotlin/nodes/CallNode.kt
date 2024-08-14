@@ -15,4 +15,14 @@ class CallNode(private val func: String, private val arguments: List<Node>) : No
         return arguments
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CallNode) return false
+
+        if (func != other.func) return false
+        if (arguments != other.arguments) return false
+
+        return true
+    }
+
 }
