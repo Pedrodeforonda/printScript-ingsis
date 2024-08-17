@@ -1,6 +1,6 @@
 package org.example
 
-import org.example.nodes.Node
+import nodes.Node
 
 class Interpreter {
 

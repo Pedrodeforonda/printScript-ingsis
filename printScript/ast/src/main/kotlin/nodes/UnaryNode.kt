@@ -1,6 +1,6 @@
-package org.example.nodes
+package nodes
 
-import org.example.ExpressionVisitor
+import ExpressionVisitor
 
 class UnaryNode(private val operator: String, private val right: Node) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

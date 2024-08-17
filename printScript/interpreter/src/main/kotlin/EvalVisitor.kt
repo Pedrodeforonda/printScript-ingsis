@@ -1,6 +1,7 @@
 package org.example
 
-import org.example.nodes.*
+import ExpressionVisitor
+import nodes.*
 
 class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {
@@ -17,22 +18,40 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>): ExpressionV
     }
 
     override fun visitBinaryExp(expression: BinaryNode): Any {
-        TODO("Not yet implemented")
+        val left = expression.getLeft().accept(this)
+        val right = expression.getRight().accept(this)
+        val operator = expression.getOperator()
+
+        if (left is Int && right is Int) {
+            return when (operator.getType()) {
+                TokenType.PLUS -> left + right
+                TokenType.MINUS -> left - right
+                TokenType.ASTERISK -> left * right
+                TokenType.SLASH -> left / right
+                else -> throw Exception("Invalid operator")
+            }
+        }
+        if (left is String && right is String && operator.getType() == TokenType.PLUS) {
+            return left + right
+        }
+        if (left is String && right is Int && operator.getType() == TokenType.PLUS) {
+            return left + right
+        }
+        if (left is Int && right is String && operator.getType() == TokenType.PLUS) {
+            return left.toString() + right
+        }
+
+        throw Exception("Invalid operation")
     }
 
     override fun visitUnaryExp(expression: UnaryNode): Any {
         TODO("Not yet implemented")
     }
 
-    override fun visitAssignment(expression: Assignment): Any {
+    override fun visitAssignment(expression: Assignation): Any {
         val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
-        if (type == "NUMBER_TYPE") {
-            val value: Int = expression.getValue().accept(this) as Int
-            variableMap[name as String] = value
-        }
-
-        if (type == "STRING_TYPE") {
-            val value: String = expression.getValue().accept(this) as String
+        if (type == "NUMBER_TYPE" || type == "STRING_TYPE") {
+            val value = expression.getValue().accept(this)
             variableMap[name as String] = value
         }
 

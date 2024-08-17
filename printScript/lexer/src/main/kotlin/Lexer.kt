@@ -54,7 +54,7 @@ class Lexer(private val text: String) {
 
                 currentChar!!.isDigit() -> return Token(integer(), TokenType.NUMBER_LITERAL)
                 currentChar in listOf('+', '-', '*', '/', '{', '}', '[', ']') -> {
-                    val tokenType = TokenType.OPERATOR
+                    val tokenType = TokenType.PLUS
                     val tokenChar = currentChar!!
                     goToNextPos()
                     return Token(charArrayOf(tokenChar), tokenType)

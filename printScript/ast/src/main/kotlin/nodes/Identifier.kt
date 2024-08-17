@@ -1,6 +1,6 @@
-package org.example.nodes
+package nodes
 
-import org.example.ExpressionVisitor
+import ExpressionVisitor
 
 class Identifier(private val value: String) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
@@ -9,5 +9,14 @@ class Identifier(private val value: String) : Node {
 
     fun getValue(): String {
         return value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Identifier) return false
+
+        if (value != other.value) return false
+
+        return true
     }
 }
