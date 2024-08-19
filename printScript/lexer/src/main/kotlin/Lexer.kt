@@ -31,6 +31,7 @@ class Lexer(private val text: String, private val tokenManagers: ClassicTokenMan
                     if(token.getType() != TokenType.NULL_TYPE){
                         tokens.add(token)
                         break
+
                     }
                 }
             }

@@ -1,6 +1,4 @@
-package org.example
-
-import org.example.nodes.*
+import nodes.*
 
 interface ExpressionVisitor {
     fun visitDeclaration(expression: Declaration): Any
@@ -8,7 +6,7 @@ interface ExpressionVisitor {
     fun visitGroupingExp(expression: GroupingNode): Any
     fun visitBinaryExp(expression: BinaryNode): Any
     fun visitUnaryExp(expression: UnaryNode): Any
-    fun visitAssignment(expression: Assignment): Any
+    fun visitAssignment(expression: Assignation): Any
     fun visitCallExp(expression: CallNode): Any
     fun visitIdentifier(expression: Identifier): Any
 }

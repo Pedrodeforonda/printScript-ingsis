@@ -1,5 +1,4 @@
-import org.example.nodes.*
-import org.example.ExpressionVisitor
+import nodes.*
 
 class PrinterVisitor: ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {
@@ -22,7 +21,7 @@ class PrinterVisitor: ExpressionVisitor {
         return "UnaryExpression"
     }
 
-    override fun visitAssignment(expression: Assignment): Any {
+    override fun visitAssignment(expression: Assignation): Any {
         return "Assignment"
     }
 
