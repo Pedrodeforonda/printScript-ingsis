@@ -1,9 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.7.10"
+    id("buildlogic.kotlin-common-conventions")
 }
-
-group = "org.printScript"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -12,9 +9,5 @@ repositories {
 dependencies {
     implementation(project(":token"))
     implementation(project(":ast"))
-    testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
