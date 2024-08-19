@@ -58,7 +58,7 @@ class LexerTest {
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
             Token(charArrayOf('='), TokenType.ASSIGNATION),
             Token(charArrayOf('a'), TokenType.IDENTIFIER),
-            Token(charArrayOf('/'), TokenType.OPERATOR),
+            Token(charArrayOf('/'), TokenType.SLASH),
             Token(charArrayOf('b'), TokenType.IDENTIFIER),
             Token(charArrayOf(';'), TokenType.SEMICOLON),
         )

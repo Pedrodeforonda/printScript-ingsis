@@ -6,6 +6,7 @@ import org.example.TokenManager
 
 class StringManager: TokenManager {
     override fun buildToken(lexer: Lexer): Token {
+        if (lexer.getCurrentChar() == null) return Token(charArrayOf(), TokenType.NULL_TYPE)
         if (lexer.getCurrentChar()!!.isLetter()) {
             var result = ""
             while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isLetter()) {

@@ -6,16 +6,18 @@ import org.example.TokenManager
 
 class OperatorManager: TokenManager {
     override fun buildToken(lexer: Lexer): Token {
-        val operators : List<Char> = listOf('+', '-', '*', '/', '{', '}', '[', ']')
-        for (operator in operators) {
-            if (lexer.getCurrentChar() == operator) {
-                val tokenType = TokenType.OPERATOR
-                val tokenChar = lexer.getCurrentChar()!!
-                lexer.goToNextPos()
-                return Token(charArrayOf(tokenChar), tokenType)
-            }
+        val currentChar = lexer.getCurrentChar()
+        val tokenType = when (currentChar) {
+            '+' -> TokenType.PLUS
+            '-' -> TokenType.MINUS
+            '*' -> TokenType.ASTERISK
+            '/' -> TokenType.SLASH
+            else -> TokenType.NULL_TYPE
+        }
+        if (tokenType != TokenType.NULL_TYPE) {
+            lexer.goToNextPos()
+            return Token(charArrayOf(currentChar!!), tokenType)
         }
         return Token(charArrayOf(), TokenType.NULL_TYPE)
     }
-
 }

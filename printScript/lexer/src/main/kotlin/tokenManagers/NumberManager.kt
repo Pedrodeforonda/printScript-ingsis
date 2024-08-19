@@ -6,6 +6,7 @@ import org.example.TokenManager
 
 class NumberManager: TokenManager {
     override fun buildToken(lexer: Lexer): Token {
+        if (lexer.getCurrentChar() == null) return Token(charArrayOf(),TokenType.NULL_TYPE)
         if (lexer.getCurrentChar()!!.isDigit()){
             var myresult = ""
             while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isDigit()) {
