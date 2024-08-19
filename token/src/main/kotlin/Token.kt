@@ -1,9 +1,9 @@
 class Token(
-    private val charArray: CharArray,
+    private val string: String,
     private val type: TokenType
 ) {
-    fun getCharArray(): CharArray {
-        return charArray
+    fun getCharArray(): String {
+        return string
     }
 
     fun getType(): TokenType {
@@ -14,14 +14,14 @@ class Token(
         if (this === other) return true
         if (other !is Token) return false
 
-        if (!charArray.contentEquals(other.charArray)) return false
+        if (string != other.string) return false
         if (type != other.type) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = charArray.contentHashCode()
+        var result = string.hashCode()
         result = 31 * result + type.hashCode()
         return result
     }

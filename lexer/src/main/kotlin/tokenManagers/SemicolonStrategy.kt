@@ -2,16 +2,16 @@ package org.example.tokenManagers
 
 import Token
 import org.example.Lexer
-import org.example.TokenManager
+import org.example.TokenStrategy
 
-class SemicolonManager : TokenManager {
+class SemicolonStrategy: TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar() == ';') {
             val tokenChar = lexer.getCurrentChar()!!
             val tokenType = TokenType.SEMICOLON
             lexer.goToNextPos()
-            return Token(charArrayOf(tokenChar), tokenType)
+            return Token(";", tokenType)
         }
-        return Token(charArrayOf(), TokenType.NULL_TYPE)
+        return Token("", TokenType.NULL_TYPE)
     }
 }

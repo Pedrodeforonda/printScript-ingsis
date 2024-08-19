@@ -2,7 +2,7 @@ package org.example
 
 import Token
 
-class Lexer(private val text: String, private val tokenManagers: ClassicTokenManagers) {
+class Lexer(private val text: String, private val tokenManagers: ClassicTokenStrategies) {
     private var pos = 0
     private var currentChar: Char? = null
 

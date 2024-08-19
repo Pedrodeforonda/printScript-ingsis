@@ -2,18 +2,19 @@ package org.example.tokenManagers
 
 import Token
 import org.example.Lexer
-import org.example.TokenManager
+import org.example.TokenStrategy
 
-class NumberManager : TokenManager {
+class NumberStrategy: TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar()!!.isDigit()) {
+        if (lexer.getCurrentChar() == null) return Token("",TokenType.NULL_TYPE)
+        if (lexer.getCurrentChar()!!.isDigit()){
             var myresult = ""
             while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isDigit()) {
                 myresult += lexer.getCurrentChar()
                 lexer.goToNextPos()
             }
-            return Token(myresult.toCharArray(), TokenType.NUMBER_LITERAL)
-        }
-        return Token(charArrayOf(), TokenType.NULL_TYPE)
+            return Token(myresult,TokenType.NUMBER_LITERAL)
+            }
+        return Token("",TokenType.NULL_TYPE)
     }
 }

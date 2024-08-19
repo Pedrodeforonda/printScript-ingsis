@@ -18,7 +18,7 @@
           </compositeBuild>
         </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="corretto-17 (2)" />
+        <option name="gradleJvm" value="graalvm-jdk-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -31,22 +31,6 @@
             <option value="$PROJECT_DIR$/parser" />
             <option value="$PROJECT_DIR$/runner" />
             <option value="$PROJECT_DIR$/token" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/printScript" />
-        <option name="gradleJvm" value="corretto-17 (2)" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/printScript" />
-            <option value="$PROJECT_DIR$/printScript/ast" />
-            <option value="$PROJECT_DIR$/printScript/interpreter" />
-            <option value="$PROJECT_DIR$/printScript/lexer" />
-            <option value="$PROJECT_DIR$/printScript/parser" />
-            <option value="$PROJECT_DIR$/printScript/runner" />
-            <option value="$PROJECT_DIR$/printScript/token" />
           </set>
         </option>
       </GradleProjectSettings>
