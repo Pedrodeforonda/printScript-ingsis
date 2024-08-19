@@ -3,7 +3,7 @@ package org.example
 import org.example.tokenManagers.*
 
 class ClassicTokenStrategies {
-    fun getManagers(): List<`TokenStrategy`> {
+    fun getManagers(): List<TokenStrategy> {
         return listOfManagers
     }
 

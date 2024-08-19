@@ -2,6 +2,6 @@ package org.example
 
 import Token
 
-interface `TokenStrategy` {
+interface TokenStrategy {
     fun buildToken(lexer: Lexer): Token
 }

@@ -2,9 +2,9 @@ package org.example.tokenManagers
 
 import Token
 import org.example.Lexer
-import org.example.`TokenStrategy`
+import org.example.TokenStrategy
 
-class StringLiteralStrategy: `TokenStrategy` {
+class StringLiteralStrategy: TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar() == '\'' || lexer.getCurrentChar() == '"') {
             var result = ""
@@ -16,6 +16,6 @@ class StringLiteralStrategy: `TokenStrategy` {
             lexer.goToNextPos()
             return Token(result, TokenType.STRING_LITERAL)
         }
-        return Token(charArrayOf(), TokenType.NULL_TYPE)
+        return Token("", TokenType.NULL_TYPE)
     }
 }
