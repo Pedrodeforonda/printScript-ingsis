@@ -6,7 +6,7 @@ import org.example.TokenManager
 
 class StringLiteralManager: TokenManager {
     override fun buildToken(lexer: Lexer): Token {
-        if (lexer?.getCurrentChar() == '\'' || lexer.getCurrentChar() == '"') {
+        if (lexer.getCurrentChar() == '\'' || lexer.getCurrentChar() == '"') {
             var result = ""
             lexer.goToNextPos()
             while (lexer.getCurrentChar() != null && (lexer.getCurrentChar() != '\'' && lexer.getCurrentChar() != '"')) {

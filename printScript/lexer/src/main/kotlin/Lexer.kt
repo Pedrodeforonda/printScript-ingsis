@@ -25,10 +25,12 @@ class Lexer(private val text: String, private val tokenManagers: ClassicTokenMan
      fun tokenizeAll(): List<Token> { //funcion + imp del lexer
             val tokens = mutableListOf<Token>()
             while (currentChar != null) {
+                skip()
                 for(manager in tokenManagers.getManagers()){
                     val token = manager.buildToken(this)
                     if(token.getType() != TokenType.NULL_TYPE){
                         tokens.add(token)
+                        break
                     }
                 }
             }
@@ -37,5 +39,10 @@ class Lexer(private val text: String, private val tokenManagers: ClassicTokenMan
         fun getCurrentChar(): Char? {
             return currentChar
         }
-
+        fun getPos(): Int {
+            return pos
+        }
+        fun getText(): String {
+            return text
+        }
 }

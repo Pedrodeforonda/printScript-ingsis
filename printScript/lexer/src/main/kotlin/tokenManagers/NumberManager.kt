@@ -12,9 +12,9 @@ class NumberManager: TokenManager {
                 myresult += lexer.getCurrentChar()
                 lexer.goToNextPos()
             }
-                return Token(myresult.toCharArray(),TokenType.NUMBER_TYPE)
+                return Token(myresult.toCharArray(),TokenType.NUMBER_LITERAL)
             }
-        return Token(charArrayOf(),TokenType.NUMBER_TYPE)
+        return Token(charArrayOf(),TokenType.NULL_TYPE)
     }
 
 }
