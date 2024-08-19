@@ -1,4 +1,4 @@
-import org.example.ClassicTokenManagers
+import org.example.ClassicTokenStrategies
 import org.example.Lexer
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -11,7 +11,7 @@ class LexerTest {
     fun testTokenizeCodeLines() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneNumber.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenManagers())
+        val lexer = Lexer(text, ClassicTokenStrategies())
         val actualTokens = lexer.tokenizeAll()
 
         val expectedTokens = listOf(
@@ -31,7 +31,7 @@ class LexerTest {
     fun testTokenizeCodeLine2() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneString.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenManagers())
+        val lexer = Lexer(text, ClassicTokenStrategies())
         val actualTokens = lexer.tokenizeAll()
 
         val expectedTokens = listOf(
@@ -51,7 +51,7 @@ class LexerTest {
     fun testTokenizeCodeLine3() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/assigneOperation.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenManagers())
+        val lexer = Lexer(text, ClassicTokenStrategies())
         val actualTokens = lexer.tokenizeAll()
 
         val expectedTokens = listOf(
@@ -70,7 +70,7 @@ class LexerTest {
     fun testTokenizeCodeLine4() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenManagers())
+        val lexer = Lexer(text, ClassicTokenStrategies())
         val actualTokens = lexer.tokenizeAll()
 
         val expectedTokens = listOf(

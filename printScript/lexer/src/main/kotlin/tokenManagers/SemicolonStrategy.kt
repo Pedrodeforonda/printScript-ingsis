@@ -2,13 +2,13 @@ package org.example.tokenManagers
 
 import Token
 import org.example.Lexer
-import org.example.TokenManager
+import org.example.`TokenStrategy`
 
-class AssignationManager: TokenManager {
+class SemicolonStrategy: `TokenStrategy` {
     override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == '=') {
+        if (lexer.getCurrentChar() == ';') {
             val tokenChar = lexer.getCurrentChar()!!
-            val tokenType = TokenType.ASSIGNATION
+            val tokenType = TokenType.SEMICOLON
             lexer.goToNextPos()
             return Token(charArrayOf(tokenChar), tokenType)
         }
