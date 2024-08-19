@@ -4,9 +4,40 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/buildSrc" name="buildSrc">
+                <projects>
+                  <project path="$PROJECT_DIR$/buildSrc" />
+                  <project path="$PROJECT_DIR$/buildSrc/ast" />
+                  <project path="$PROJECT_DIR$/buildSrc/token" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="corretto-17 (2)" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ast" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/buildSrc/ast" />
+            <option value="$PROJECT_DIR$/buildSrc/token" />
+            <option value="$PROJECT_DIR$/interpreter" />
+            <option value="$PROJECT_DIR$/lexer" />
+            <option value="$PROJECT_DIR$/parser" />
+            <option value="$PROJECT_DIR$/runner" />
+            <option value="$PROJECT_DIR$/token" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="distributionType" value="WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/printScript" />
-        <option name="gradleJvm" value="corretto-17" />
+        <option name="gradleJvm" value="corretto-17 (2)" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/printScript" />
