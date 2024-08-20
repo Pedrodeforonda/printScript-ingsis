@@ -1,2 +1,3 @@
 [{.gradle.kts,.kt,.kts,.main.kts}]
 ij_kotlin_imports_layout=*
+ktlint_standard_no-trailing-spaces=enabled

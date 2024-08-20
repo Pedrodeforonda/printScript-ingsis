@@ -52,7 +52,9 @@ ktlint {
 
     additionalEditorconfig.set(mapOf(
         "indent_size" to "4",
+        "indent_style" to "space",
         "max_line_length" to "120",
+        "insert_final_newline" to "true"
     ))
 
     filter{
@@ -62,4 +64,12 @@ ktlint {
 
 
 }
+
+tasks.named("check") {
+    dependsOn("ktlintCheck")
+}
+
+
+
+
 

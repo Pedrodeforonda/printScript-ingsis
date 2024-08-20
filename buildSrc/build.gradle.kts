@@ -15,4 +15,5 @@ repositories {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.1")
+    testImplementation("org.jacoco:org.jacoco.agent:0.8.12")
 }

@@ -1,0 +1,23 @@
+#!/bin/sh
+# Run ktlintFormat and ktlintCheck before committing
+
+# Run ktlintFormat to automatically format the code
+./gradlew ktlintFormat
+
+# Check if ktlintFormat made any changes
+if [ $? -ne 0 ]; then
+  echo "ktlintFormat made changes. Please add the formatted files before committing."
+  exit 1
+fi
+
+# Run ktlintCheck to check for any code style issues
+./gradlew ktlintCheck
+
+# Check if ktlintCheck failed
+if [ $? -ne 0 ]; then
+  echo "ktlintCheck failed. Please fix the issues before committing."
+  exit 1
+fi
+
+# If both checks pass, allow the commit
+exit 0
