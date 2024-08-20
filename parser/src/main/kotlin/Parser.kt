@@ -1,5 +1,13 @@
 import nodes.Node
-import parsers.*
+import parsers.AssignationParser
+import parsers.BinaryOperationParser
+import parsers.DeclarationParser
+import parsers.FunCallParser
+import parsers.IdentifierParser
+import parsers.Infix
+import parsers.LiteralParser
+import parsers.Prefix
+import parsers.PrefixOperatorParser
 
 class Parser(private val tokens: List<Token>) {
     private val prefixParsers = mutableMapOf<TokenType, Prefix>()
@@ -35,7 +43,7 @@ class Parser(private val tokens: List<Token>) {
         val prefixParser = prefixParsers[token.getType()] ?: throw ParseException(
             "Unexpected token: ${
                 token.getCharArray().concatToString()
-            }"
+            }",
         )
 
         val left = prefixParser.parse(this, token)
@@ -75,14 +83,14 @@ class Parser(private val tokens: List<Token>) {
     public fun consume(): Token {
         val token = currentToken
         currentToken = tokens.getOrNull(++currentIndex) ?: throw ParseException(
-            "Unexpected end of input"
+            "Unexpected end of input",
         )
         return token
     }
 
     fun lookAhead(offset: Int): Token {
         return tokens.getOrNull(currentIndex + offset + 1) ?: throw ParseException(
-            "Unexpected end of input"
+            "Unexpected end of input",
         )
     }
 

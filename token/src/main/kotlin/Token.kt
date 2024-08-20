@@ -1,6 +1,6 @@
 class Token(
     private val charArray: CharArray,
-    private val type: TokenType
+    private val type: TokenType,
 ) {
     fun getCharArray(): CharArray {
         return charArray

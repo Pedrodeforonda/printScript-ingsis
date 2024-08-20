@@ -40,13 +40,26 @@ tasks.named<Test>("test") {
 
 // Ktlint Configuration
 ktlint {
-    version.set("0.48.2") // Use the latest version
+    version.set("0.49.1") // Use the latest version
     android.set(true)
     outputToConsole.set(true)
     coloredOutput.set(true)
-    ignoreFailures.set(true)
+    ignoreFailures.set(false)
+
     reporters {
         reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
     }
+
+    additionalEditorconfig.set(mapOf(
+        "indent_size" to "4",
+        "max_line_length" to "120",
+    ))
+
+    filter{
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
+
+
 }
 

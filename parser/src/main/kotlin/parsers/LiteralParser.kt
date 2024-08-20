@@ -14,7 +14,7 @@ class LiteralParser : Prefix {
                 TokenType.NUMBER_LITERAL -> token.getCharArray().concatToString().toInt()
                 TokenType.STRING_TYPE -> token.getCharArray().concatToString()
                 else -> throw ParseException("Invalid literal type")
-            }
+            },
         )
     }
 }

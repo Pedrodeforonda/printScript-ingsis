@@ -6,7 +6,7 @@ import ExpressionVisitor
 class Declaration(
     private val name: String,
     private val type: String,
-    private val declarationKeyWord: DeclarationKeyWord
+    private val declarationKeyWord: DeclarationKeyWord,
 ) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitDeclaration(this)
