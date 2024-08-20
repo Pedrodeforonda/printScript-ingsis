@@ -11,7 +11,9 @@
 ## command to copy the pre-commit file to .git/hooks folder
 
 ```bash
-    cd /path/to/repo
-    cp hooks/pre-commit .git/hooks/
-    chmod +x .git/hooks/pre-commit
+ $  cd /path/to/repo
+ $  cp hooks/pre-commit .git/hooks/
+ $  cp hooks/pre-push .git/hooks/
+ $  chmod +x .git/hooks/pre-commit
+ $  chmod +x .git/hooks/pre-push
 ```
