@@ -1,8 +1,10 @@
 package org.example
 
 import org.example.tokenManagers.AssignationStrategy
+import org.example.tokenManagers.LeftParenStrategy
 import org.example.tokenManagers.NumberStrategy
 import org.example.tokenManagers.OperatorStrategy
+import org.example.tokenManagers.RightParenStrategy
 import org.example.tokenManagers.SemicolonStrategy
 import org.example.tokenManagers.StringLiteralStrategy
 import org.example.tokenManagers.StringStrategy
@@ -21,5 +23,7 @@ class ClassicTokenStrategies {
         StringStrategy(),
         StringLiteralStrategy(),
         TypeAssignationStrategy(),
+        LeftParenStrategy(),
+        RightParenStrategy(),
     )
 }

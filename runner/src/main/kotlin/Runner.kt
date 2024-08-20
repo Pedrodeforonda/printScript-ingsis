@@ -9,7 +9,7 @@ class Runner {
 
     fun run(path: String) {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get(path))
-        val lexer = Lexer(byteArr.toString(Charsets.UTF_8))
+        val lexer = Lexer(byteArr.toString(Charsets.UTF_8), ClassicTokenStrategies())
         val tokens: List<Token> = lexer.tokenizeAll()
         val parser = Parser(tokens)
         val ast = parser.parseExpressions()

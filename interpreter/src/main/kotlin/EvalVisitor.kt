@@ -1,9 +1,12 @@
 package org.example
 
 import ExpressionVisitor
+import nodes.Assignation
 import nodes.BinaryNode
+import nodes.CallNode
 import nodes.Declaration
 import nodes.GroupingNode
+import nodes.Identifier
 import nodes.Literal
 import nodes.UnaryNode
 
@@ -54,7 +57,7 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>) : Expression
 
     override fun visitAssignment(expression: Assignation): Any {
         val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
-        if (type == "NUMBER_TYPE" || type == "STRING_TYPE") {
+        if (type == "number" || type == "string") {
             val value = expression.getValue().accept(this)
             variableMap[name as String] = value
         }

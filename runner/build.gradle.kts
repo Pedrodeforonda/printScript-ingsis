@@ -7,7 +7,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":token"))
     implementation(project(":lexer"))
     implementation(project(":parser"))
-    implementation(project(":runner"))
+    implementation(project(":interpreter"))
 }
