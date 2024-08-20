@@ -19,7 +19,7 @@ class InterpreterTest {
     fun testAssignation() {
         val interpreter = Interpreter()
         val assignation = Assignation(
-            Declaration("name", "STRING_TYPE", DeclarationKeyWord.CONST_KEYWORD),
+            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
             Literal("Pedro"),
         )
         interpreter.interpret(listOf(assignation))
@@ -27,7 +27,7 @@ class InterpreterTest {
         assertEquals("Pedro", interpreter.getVariableMap()["name"])
 
         val assignation2 = Assignation(
-            Declaration("name", "NUMBER_TYPE", DeclarationKeyWord.LET_KEYWORD),
+            Declaration("name", "number", DeclarationKeyWord.LET_KEYWORD),
             Literal(10),
         )
         interpreter.interpret(listOf(assignation2))
@@ -39,7 +39,7 @@ class InterpreterTest {
     fun testPrintVariable() {
         val interpreter = Interpreter()
         val assignation = Assignation(
-            Declaration("name", "STRING_TYPE", DeclarationKeyWord.CONST_KEYWORD),
+            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
             Literal("Pedro"),
         )
         val callNode = CallNode("println", listOf(Identifier("name")))
@@ -52,7 +52,7 @@ class InterpreterTest {
         assertEquals("Pedro\n", outContent.toString())
 
         val assignation2 = Assignation(
-            Declaration("number", "NUMBER_TYPE", DeclarationKeyWord.LET_KEYWORD),
+            Declaration("number", "number", DeclarationKeyWord.LET_KEYWORD),
             Literal(10),
         )
         val callNode2 = CallNode("println", listOf(Identifier("number")))

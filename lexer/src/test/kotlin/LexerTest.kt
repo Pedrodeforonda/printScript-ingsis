@@ -81,7 +81,9 @@ class LexerTest {
 
         val expectedTokens = listOf(
             Token("println", TokenType.CALL_FUNC),
+            Token("(", TokenType.LEFT_PAREN),
             Token("a", TokenType.IDENTIFIER),
+            Token(")", TokenType.RIGHT_PAREN),
             Token(";", TokenType.SEMICOLON),
         )
 
