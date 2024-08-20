@@ -1,7 +1,11 @@
 package org.example
 
 import ExpressionVisitor
-import nodes.*
+import nodes.BinaryNode
+import nodes.Declaration
+import nodes.GroupingNode
+import nodes.Literal
+import nodes.UnaryNode
 
 class EvalVisitor(private var variableMap: MutableMap<String, Any>) : ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {

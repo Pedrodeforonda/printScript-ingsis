@@ -34,7 +34,7 @@ class DeclarationParser : Prefix {
         return Declaration(
             identifierToken.getCharArray().concatToString(),
             type.getCharArray().concatToString(),
-            letKeword
+            letKeword,
         )
     }
 }

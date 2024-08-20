@@ -4,7 +4,7 @@ import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
-class OperatorStrategy: TokenStrategy {
+class OperatorStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
         val currentChar = lexer.getCurrentChar()
         val tokenType = when (currentChar) {

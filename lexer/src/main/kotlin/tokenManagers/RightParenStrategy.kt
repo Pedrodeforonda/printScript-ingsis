@@ -4,7 +4,7 @@ import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
-class RightParenStrategy: TokenStrategy {
+class RightParenStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar() == ')') {
             val tokenType = TokenType.RIGHT_PAREN

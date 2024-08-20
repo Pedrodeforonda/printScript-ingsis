@@ -1,6 +1,12 @@
 package org.example
 
-import org.example.tokenManagers.*
+import org.example.tokenManagers.AssignationStrategy
+import org.example.tokenManagers.NumberStrategy
+import org.example.tokenManagers.OperatorStrategy
+import org.example.tokenManagers.SemicolonStrategy
+import org.example.tokenManagers.StringLiteralStrategy
+import org.example.tokenManagers.StringStrategy
+import org.example.tokenManagers.TypeAssignationStrategy
 
 class ClassicTokenStrategies {
     fun getManagers(): List<TokenStrategy> {
@@ -14,6 +20,6 @@ class ClassicTokenStrategies {
         SemicolonStrategy(),
         StringStrategy(),
         StringLiteralStrategy(),
-        TypeAssignationStrategy()
+        TypeAssignationStrategy(),
     )
 }

@@ -4,8 +4,8 @@ import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
-class TypeAssignationStrategy: TokenStrategy {
-override fun buildToken(lexer: Lexer): Token {
+class TypeAssignationStrategy : TokenStrategy {
+    override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar() == ':') {
             val tokenType = TokenType.TYPE_ASSIGNATION
             lexer.goToNextPos()

@@ -1,4 +1,11 @@
-import nodes.*
+import nodes.Assignation
+import nodes.BinaryNode
+import nodes.CallNode
+import nodes.Declaration
+import nodes.GroupingNode
+import nodes.Identifier
+import nodes.Literal
+import nodes.UnaryNode
 
 class PrinterVisitor : ExpressionVisitor {
     override fun visitDeclaration(expression: Declaration): Any {

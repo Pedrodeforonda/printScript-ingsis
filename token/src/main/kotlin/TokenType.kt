@@ -16,5 +16,5 @@ enum class TokenType {
     MINUS,
     SLASH,
     ASTERISK,
-    NULL_TYPE
+    NULL_TYPE,
 }

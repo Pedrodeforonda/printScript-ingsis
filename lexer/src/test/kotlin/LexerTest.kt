@@ -5,13 +5,12 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.assertEquals
 
-
 class LexerTest {
 
     @Test
     fun testTokenizeCodeLines() {
         val byteArr: ByteArray = Files.readAllBytes(
-            Paths.get("src/test/resources/assigneNumber.txt")
+            Paths.get("src/test/resources/assigneNumber.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
@@ -33,7 +32,7 @@ class LexerTest {
     @Test
     fun testTokenizeCodeLine2() {
         val byteArr: ByteArray = Files.readAllBytes(
-            Paths.get("src/test/resources/assigneString.txt")
+            Paths.get("src/test/resources/assigneString.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
@@ -55,7 +54,7 @@ class LexerTest {
     @Test
     fun testTokenizeCodeLine3() {
         val byteArr: ByteArray = Files.readAllBytes(
-            Paths.get("src/test/resources/assigneOperation.txt")
+            Paths.get("src/test/resources/assigneOperation.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())

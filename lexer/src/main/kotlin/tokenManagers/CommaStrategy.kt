@@ -4,7 +4,7 @@ import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
-class CommaStrategy: TokenStrategy {
+class CommaStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer): Token {
         if (lexer.getCurrentChar() == ',') {
             val tokenType = TokenType.COMMA

@@ -3,10 +3,15 @@ package org.example
 import DeclarationKeyWord
 import Token
 import TokenType
+import nodes.Assignation
+import nodes.BinaryNode
+import nodes.CallNode
+import nodes.Declaration
+import nodes.Identifier
+import nodes.Literal
+import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
-import nodes.*
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 class InterpreterTest {
 
@@ -15,7 +20,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val assignation = Assignation(
             Declaration("name", "STRING_TYPE", DeclarationKeyWord.CONST_KEYWORD),
-            Literal("Pedro")
+            Literal("Pedro"),
         )
         interpreter.interpret(listOf(assignation))
 
@@ -23,7 +28,7 @@ class InterpreterTest {
 
         val assignation2 = Assignation(
             Declaration("name", "NUMBER_TYPE", DeclarationKeyWord.LET_KEYWORD),
-            Literal(10)
+            Literal(10),
         )
         interpreter.interpret(listOf(assignation2))
 
@@ -35,7 +40,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val assignation = Assignation(
             Declaration("name", "STRING_TYPE", DeclarationKeyWord.CONST_KEYWORD),
-            Literal("Pedro")
+            Literal("Pedro"),
         )
         val callNode = CallNode("println", listOf(Identifier("name")))
 
@@ -48,7 +53,7 @@ class InterpreterTest {
 
         val assignation2 = Assignation(
             Declaration("number", "NUMBER_TYPE", DeclarationKeyWord.LET_KEYWORD),
-            Literal(10)
+            Literal(10),
         )
         val callNode2 = CallNode("println", listOf(Identifier("number")))
 
@@ -104,7 +109,7 @@ class InterpreterTest {
         val concatenation = BinaryNode(
             Literal("Hello"),
             Token("+".toCharArray(), TokenType.PLUS),
-            Literal(" World")
+            Literal(" World"),
         )
         val callNode = CallNode("println", listOf(concatenation))
 
@@ -122,7 +127,7 @@ class InterpreterTest {
         val concatenation = BinaryNode(
             Literal("Diego"),
             Token("+".toCharArray(), TokenType.PLUS),
-            Literal(10)
+            Literal(10),
         )
         val callNode = CallNode("println", listOf(concatenation))
 
@@ -136,7 +141,7 @@ class InterpreterTest {
         val concatenation2 = BinaryNode(
             Literal(10),
             Token("+".toCharArray(), TokenType.PLUS),
-            Literal("Diego")
+            Literal("Diego"),
         )
         val callNode2 = CallNode("println", listOf(concatenation2))
 
@@ -154,7 +159,7 @@ class InterpreterTest {
         val subtraction = BinaryNode(
             Literal(10),
             Token("-".toCharArray(), TokenType.MINUS),
-            Literal(5)
+            Literal(5),
         )
         val callNode = CallNode("println", listOf(subtraction))
 
@@ -172,7 +177,7 @@ class InterpreterTest {
         val multiplication = BinaryNode(
             Literal(10),
             Token("*".toCharArray(), TokenType.ASTERISK),
-            Literal(5)
+            Literal(5),
         )
         val callNode = CallNode("println", listOf(multiplication))
 
@@ -190,7 +195,7 @@ class InterpreterTest {
         val division = BinaryNode(
             Literal(10),
             Token("/".toCharArray(), TokenType.SLASH),
-            Literal(5)
+            Literal(5),
         )
         val callNode = CallNode("println", listOf(division))
 
