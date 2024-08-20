@@ -1,2 +1,4 @@
-let a: string = 1;
-println(a);
+let a: number = 12;
+let b: number = 4;
+a = a / b;
+println("Result: " + a);

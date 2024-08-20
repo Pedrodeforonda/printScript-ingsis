@@ -16,8 +16,7 @@ class Lexer(private val text: String, private val tokenManagers: ClassicTokenStr
     }
 
     private fun skip() {
-        if (currentChar!!.isWhitespace() || currentChar == '\r' || currentChar == '\n' ||
-            currentChar == '(' || currentChar == ')'
+        if (currentChar!!.isWhitespace() || currentChar == '\r' || currentChar == '\n'
         ) {
             goToNextPos()
         }

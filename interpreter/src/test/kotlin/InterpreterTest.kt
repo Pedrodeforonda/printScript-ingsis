@@ -92,7 +92,7 @@ class InterpreterTest {
     @Test
     fun testSum() {
         val interpreter = Interpreter()
-        val sum = BinaryNode(Literal(10), Token("+".toCharArray(), TokenType.PLUS), Literal(20))
+        val sum = BinaryNode(Literal(10), Token("+", TokenType.PLUS), Literal(20))
         val callNode = CallNode("println", listOf(sum))
 
         var outContent = ByteArrayOutputStream()
@@ -108,7 +108,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val concatenation = BinaryNode(
             Literal("Hello"),
-            Token("+".toCharArray(), TokenType.PLUS),
+            Token("+", TokenType.PLUS),
             Literal(" World"),
         )
         val callNode = CallNode("println", listOf(concatenation))
@@ -126,7 +126,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val concatenation = BinaryNode(
             Literal("Diego"),
-            Token("+".toCharArray(), TokenType.PLUS),
+            Token("+", TokenType.PLUS),
             Literal(10),
         )
         val callNode = CallNode("println", listOf(concatenation))
@@ -140,7 +140,7 @@ class InterpreterTest {
 
         val concatenation2 = BinaryNode(
             Literal(10),
-            Token("+".toCharArray(), TokenType.PLUS),
+            Token("+", TokenType.PLUS),
             Literal("Diego"),
         )
         val callNode2 = CallNode("println", listOf(concatenation2))
@@ -158,7 +158,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val subtraction = BinaryNode(
             Literal(10),
-            Token("-".toCharArray(), TokenType.MINUS),
+            Token("-", TokenType.MINUS),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(subtraction))
@@ -176,7 +176,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val multiplication = BinaryNode(
             Literal(10),
-            Token("*".toCharArray(), TokenType.ASTERISK),
+            Token("*", TokenType.ASTERISK),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(multiplication))
@@ -194,7 +194,7 @@ class InterpreterTest {
         val interpreter = Interpreter()
         val division = BinaryNode(
             Literal(10),
-            Token("/".toCharArray(), TokenType.SLASH),
+            Token("/", TokenType.SLASH),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(division))

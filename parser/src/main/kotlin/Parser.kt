@@ -42,16 +42,19 @@ class Parser(private val tokens: List<Token>) {
         val token = currentToken
         val prefixParser = prefixParsers[token.getType()] ?: throw ParseException(
             "Unexpected token: ${
-                token.getCharArray().concatToString()
+                token.getCharArray()
             }",
         )
 
-        val left = prefixParser.parse(this, token)
+        var left = prefixParser.parse(this, token)
 
         while (precedence < getPrecedence()) {
             val infixParser = infixParsers[currentToken.getType()] ?: break
+            if (infixParser is BinaryOperationParser) {
+                infixParser.updateToken(currentToken)
+            }
             consume()
-            return infixParser.parse(this, left, currentToken)
+            left = infixParser.parse(this, left, currentToken)
         }
 
         return left
@@ -80,7 +83,7 @@ class Parser(private val tokens: List<Token>) {
         return infixParser?.getPrecedence() ?: 0
     }
 
-    public fun consume(): Token {
+    fun consume(): Token {
         val token = currentToken
         currentToken = tokens.getOrNull(++currentIndex) ?: throw ParseException(
             "Unexpected end of input",
