@@ -4,21 +4,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <compositeConfiguration>
-          <compositeBuild compositeDefinitionSource="SCRIPT">
-            <builds>
-              <build path="$PROJECT_DIR$/buildSrc" name="buildSrc">
-                <projects>
-                  <project path="$PROJECT_DIR$/buildSrc" />
-                  <project path="$PROJECT_DIR$/buildSrc/ast" />
-                  <project path="$PROJECT_DIR$/buildSrc/token" />
-                </projects>
-              </build>
-            </builds>
-          </compositeBuild>
-        </compositeConfiguration>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="graalvm-jdk-21" />
+        <option name="gradleJvm" value="corretto-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -31,6 +21,24 @@
             <option value="$PROJECT_DIR$/parser" />
             <option value="$PROJECT_DIR$/runner" />
             <option value="$PROJECT_DIR$/token" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/printScript" />
+        <option name="gradleJvm" value="corretto-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/printScript" />
+            <option value="$PROJECT_DIR$/printScript/ast" />
+            <option value="$PROJECT_DIR$/printScript/interpreter" />
+            <option value="$PROJECT_DIR$/printScript/lexer" />
+            <option value="$PROJECT_DIR$/printScript/parser" />
+            <option value="$PROJECT_DIR$/printScript/runner" />
+            <option value="$PROJECT_DIR$/printScript/token" />
           </set>
         </option>
       </GradleProjectSettings>

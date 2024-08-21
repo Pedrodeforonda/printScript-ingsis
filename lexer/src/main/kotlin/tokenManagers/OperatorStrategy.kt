@@ -5,7 +5,7 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class OperatorStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
         val currentChar = lexer.getCurrentChar()
         val tokenType = when (currentChar) {
             '+' -> TokenType.PLUS
@@ -15,9 +15,8 @@ class OperatorStrategy : TokenStrategy {
             else -> TokenType.NULL_TYPE
         }
         if (tokenType != TokenType.NULL_TYPE) {
-            lexer.goToNextPos()
-            return Token(currentChar.toString(), tokenType)
+            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(currentChar.toString(), tokenType))
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }
