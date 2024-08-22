@@ -5,12 +5,11 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class RightParenStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == ')') {
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
+        if (lexer.getChar() == ')') {
             val tokenType = TokenType.RIGHT_PAREN
-            lexer.goToNextPos()
-            return Token(")", tokenType)
+            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(")", tokenType))
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }

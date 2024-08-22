@@ -5,22 +5,25 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class StringStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == null) return Token("", TokenType.NULL_TYPE)
-        if (lexer.getCurrentChar()!!.isLetter()) {
-            var result = ""
-            while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isLetter()) {
-                result += lexer.getCurrentChar()
-                lexer.goToNextPos()
-            }
-            return when (result) {
-                "let" -> Token(result, TokenType.LET_KEYWORD)
-                "string" -> Token(result, TokenType.STRING_TYPE)
-                "number" -> Token(result, TokenType.NUMBER_TYPE)
-                "println" -> Token(result, TokenType.CALL_FUNC)
-                else -> Token(result, TokenType.IDENTIFIER)
+    override fun buildToken(lexer: Lexer, result: String): Lexer { //el texto del lexer es to do
+        if (lexer.getChar() == null) return lexer
+        if (lexer.getChar()!!.isLetter()) {
+            var newResult = result
+            newResult += lexer.getChar()
+            val newLexer = lexer.goToNextPos() //crea un nuevo lexer en la pos +1
+            if (buildToken(newLexer, newResult) == newLexer) {
+                return when (newResult) {
+                    "let" -> Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(newResult, TokenType.LET_KEYWORD))
+                    "string" -> Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(newResult, TokenType.STRING_TYPE))
+                    "number" -> Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(newResult, TokenType.NUMBER_TYPE))
+                    "println" -> Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(newResult, TokenType.CALL_FUNC))
+                    else -> Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(newResult, TokenType.IDENTIFIER))
+                }
+            } else {
+                return buildToken(newLexer, newResult)
             }
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
+
 }
