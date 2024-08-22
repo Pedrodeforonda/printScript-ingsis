@@ -200,4 +200,51 @@ class InterpreterTest {
 
         assertEquals("2", outContent.toString().replace(System.lineSeparator(), ""))
     }
+
+    @Test
+    fun testPrintOperations() {
+        val sum = BinaryNode(
+            BinaryNode(Literal(10), Token("+", TokenType.PLUS), Literal(20)),
+            Token("+", TokenType.PLUS),
+            Literal(" "),
+        )
+        val sub = BinaryNode(
+            BinaryNode(Literal(10), Token("-", TokenType.MINUS), Literal(5)),
+            Token("+", TokenType.PLUS),
+            Literal(" "),
+        )
+        val mul = BinaryNode(
+            BinaryNode(Literal(10), Token("*", TokenType.ASTERISK), Literal(5)),
+            Token("+", TokenType.PLUS),
+            Literal(" "),
+        )
+        val div = BinaryNode(Literal(10), Token("/", TokenType.SLASH), Literal(5))
+
+        val callNode = CallNode("println", listOf(sum))
+        val callNode2 = CallNode("println", listOf(sub))
+        val callNode3 = CallNode("println", listOf(mul))
+        val callNode4 = CallNode("println", listOf(div))
+
+        val outContent = ByteArrayOutputStream()
+        System.setOut(PrintStream(outContent))
+
+        interpreter.interpret(listOf(callNode, callNode2, callNode3, callNode4))
+
+        assertEquals("30 5 50 2", outContent.toString().replace(System.lineSeparator(), ""))
+    }
+
+    @Test
+    fun testReAssignation() {
+        val stringAssignation = Assignation(
+            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
+            Literal("Pedro"),
+        )
+        val stringReAssignation = Assignation(
+            Identifier("name"),
+            Literal("el nene"),
+        )
+        interpreter.interpret(listOf(stringAssignation, stringReAssignation))
+
+        assertEquals("el nene", interpreter.getVariableMap()[Pair("name", "string")])
+    }
 }

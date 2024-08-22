@@ -1,97 +1,103 @@
 package org.example
 
+import DeclarationResult
 import ExpressionVisitor
+import FailureResult
+import IdentifierResult
+import LiteralResult
+import SuccessResult
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
-import nodes.GroupingNode
 import nodes.Identifier
 import nodes.Literal
-import nodes.UnaryNode
+import Result
 
 class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
 
-    override fun visitDeclaration(expression: Declaration): Any {
-        return Pair(expression.getName(), expression.getType())
+    override fun visitDeclaration(expression: Declaration): Result {
+        return DeclarationResult(expression.getName(), expression.getType())
     }
 
-    override fun visitLiteral(expression: Literal): Any {
-        return expression.getValue()
+    override fun visitLiteral(expression: Literal): Result {
+        return LiteralResult(expression.getValue())
     }
 
-    override fun visitGroupingExp(expression: GroupingNode): Any {
-        return expression.getNode().accept(this)
-    }
-
-    override fun visitBinaryExp(expression: BinaryNode): Any {
-        val left = expression.getLeft().accept(this)
-        val right = expression.getRight().accept(this)
+    override fun visitBinaryExp(expression: BinaryNode): Result {
         val operator = expression.getOperator()
+        val leftResult = expression.getLeft().accept(this)
+        val rightResult = expression.getRight().accept(this)
 
-        if (left is Int && right is Int) {
+        val left = if (leftResult is IdentifierResult) leftResult.value
+            else (leftResult as LiteralResult).value
+
+        val right = if (rightResult is IdentifierResult) rightResult.value
+            else (rightResult as LiteralResult).value
+
+        if (left is Number && right is Number) {
             return when (operator.getType()) {
-                TokenType.PLUS -> left + right
-                TokenType.MINUS -> left - right
-                TokenType.ASTERISK -> left * right
-                TokenType.SLASH -> left / right
+                TokenType.PLUS -> LiteralResult(left.toInt() + right.toInt())
+                TokenType.MINUS -> LiteralResult(left.toInt() - right.toInt())
+                TokenType.ASTERISK -> LiteralResult(left.toInt() * right.toInt())
+                TokenType.SLASH -> LiteralResult(left.toInt() / right.toInt())
                 else -> throw Exception("Invalid operator")
             }
         }
         if (left is String && right is String && operator.getType() == TokenType.PLUS) {
-            return left + right
+            return LiteralResult(left + right)
         }
-        if (left is String && right is Int && operator.getType() == TokenType.PLUS) {
-            return left + right
+        if (left is String && right is Number && operator.getType() == TokenType.PLUS) {
+            return LiteralResult(left + right)
         }
-        if (left is Int && right is String && operator.getType() == TokenType.PLUS) {
-            return left.toString() + right
+        if (left is Number && right is String && operator.getType() == TokenType.PLUS) {
+            return LiteralResult(left.toString() + right)
         }
 
-        throw Exception("Invalid operation")
+        return FailureResult("Invalid operation")
     }
 
-    override fun visitUnaryExp(expression: UnaryNode): Any {
-        TODO("Not yet implemented")
-    }
+    override fun visitAssignment(expression: Assignation): Result {
+        val left = expression.getDeclaration().accept(this) as Result
+        val (name, type) = if (left is DeclarationResult) Pair(left.name, left.type)
+            else (left as IdentifierResult).nameAndType
+        val right = expression.getValue().accept(this) as LiteralResult
 
-    override fun visitAssignment(expression: Assignation): Any {
-        val (name, type) = if (expression.getDeclaration() is Identifier) {
-            val identifierName = (expression.getDeclaration() as Identifier).getName()
-            val identifierType = variableMap.keys.find { it.first == identifierName }?.second
-            identifierName to identifierType
-        } else expression.getDeclaration().accept(this) as Pair<*, *>
-
-        val value = expression.getValue().accept(this)
-
-        if (type == "number" && value is Number) {
-            variableMap[Pair(name as String, type as String)] = value
+        if (type == "number" && right.value is Number) {
+            variableMap[Pair(name, type)] = right.value
+            return SuccessResult("Number type variable assigned")
         }
-        if (type == "string" && value is String) {
-            variableMap[Pair(name as String, type as String)] = value
+        if (type == "string" && right.value is String) {
+            variableMap[Pair(name, type)] = right.value
+            return SuccessResult("String type variable assigned")
         }
 
-        return Exception("Invalid type")
+        return FailureResult("Invalid assignment")
     }
 
-    override fun visitCallExp(expression: CallNode): Any {
+    override fun visitCallExp(expression: CallNode): Result {
         if (expression.getFunc() == "println") {
             val arg = expression.getArguments()
             if (arg.size != 1) {
-                throw Exception("Invalid number of arguments")
+                return FailureResult("Invalid number of arguments")
             }
-            val value = arg[0].accept(this)
-            println(value)
+            val result = arg[0].accept(this)
+            if (result is IdentifierResult) {
+                println(result.value)
+                return SuccessResult("Printed")
+            }
+            println((result as LiteralResult).value)
+            return SuccessResult("Printed")
         }
-        return Unit
+        return FailureResult("Invalid function")
     }
 
-    override fun visitIdentifier(expression: Identifier): Any {
+    override fun visitIdentifier(expression: Identifier): Result {
         for ((key, value) in variableMap) {
             if (key.first == expression.getName()) {
-                return value
+                return IdentifierResult(key, value)
             }
         }
-        throw Exception("Variable not found")
+        return FailureResult("Variable not found")
     }
 }
