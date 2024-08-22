@@ -13,32 +13,33 @@ import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
+
 class InterpreterTest {
+
+    private val interpreter = Interpreter()
 
     @Test
     fun testAssignation() {
-        val interpreter = Interpreter()
-        val assignation = Assignation(
+        val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
             Literal("Pedro"),
         )
-        interpreter.interpret(listOf(assignation))
+        interpreter.interpret(listOf(stringAssignation))
 
-        assertEquals("Pedro", interpreter.getVariableMap()["name"])
+        assertEquals("Pedro", interpreter.getVariableMap()[Pair("name", "string")])
 
-        val assignation2 = Assignation(
-            Declaration("name", "number", DeclarationKeyWord.LET_KEYWORD),
+        val numberAssignation = Assignation(
+            Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD),
             Literal(10),
         )
-        interpreter.interpret(listOf(assignation2))
+        interpreter.interpret(listOf(numberAssignation))
 
-        assertEquals(10, interpreter.getVariableMap()["name"])
+        assertEquals(10, interpreter.getVariableMap()[Pair("num", "number")])
     }
 
     @Test
     fun testPrintVariable() {
-        val interpreter = Interpreter()
-        val assignation = Assignation(
+        val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
             Literal("Pedro"),
         )
@@ -47,65 +48,62 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(assignation, callNode))
+        interpreter.interpret(listOf(stringAssignation, callNode))
 
-        assertEquals("Pedro\n", outContent.toString())
+        assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
-        val assignation2 = Assignation(
-            Declaration("number", "number", DeclarationKeyWord.LET_KEYWORD),
+        val numberAssignation = Assignation(
+            Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD),
             Literal(10),
         )
-        val callNode2 = CallNode("println", listOf(Identifier("number")))
+        val callNode2 = CallNode("println", listOf(Identifier("num")))
 
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(assignation2, callNode2))
+        interpreter.interpret(listOf(numberAssignation, callNode2))
 
-        assertEquals("10\n", outContent.toString())
+        assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testPrintLiteral() {
-        val interpreter = Interpreter()
-        val literal = Literal("Pedro")
-        val callNode = CallNode("println", listOf(literal))
+        val stringLiteral = Literal("Pedro")
+        val callNode = CallNode("println", listOf(stringLiteral))
 
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("Pedro\n", outContent.toString())
+        assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
-        val literal2 = Literal(10)
-        val callNode2 = CallNode("println", listOf(literal2))
+        val numberLiteral = Literal(10)
+        val callNode2 = CallNode("println", listOf(numberLiteral))
 
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode2))
 
-        assertEquals("10\n", outContent.toString())
+        assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testSum() {
-        val interpreter = Interpreter()
         val sum = BinaryNode(Literal(10), Token("+", TokenType.PLUS), Literal(20))
         val callNode = CallNode("println", listOf(sum))
 
-        var outContent = ByteArrayOutputStream()
+        val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("30\n", outContent.toString())
+        assertEquals("30", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testConcatenation() {
-        val interpreter = Interpreter()
         val concatenation = BinaryNode(
             Literal("Hello"),
             Token("+", TokenType.PLUS),
@@ -113,17 +111,16 @@ class InterpreterTest {
         )
         val callNode = CallNode("println", listOf(concatenation))
 
-        var outContent = ByteArrayOutputStream()
+        val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("Hello World\n", outContent.toString())
+        assertEquals("Hello World", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testMixedConcatenation() {
-        val interpreter = Interpreter()
         val concatenation = BinaryNode(
             Literal("Diego"),
             Token("+", TokenType.PLUS),
@@ -136,7 +133,7 @@ class InterpreterTest {
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("Diego10\n", outContent.toString())
+        assertEquals("Diego10", outContent.toString().replace(System.lineSeparator(), ""))
 
         val concatenation2 = BinaryNode(
             Literal(10),
@@ -150,12 +147,11 @@ class InterpreterTest {
 
         interpreter.interpret(listOf(callNode2))
 
-        assertEquals("10Diego\n", outContent.toString())
+        assertEquals("10Diego", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testSubtraction() {
-        val interpreter = Interpreter()
         val subtraction = BinaryNode(
             Literal(10),
             Token("-", TokenType.MINUS),
@@ -163,17 +159,16 @@ class InterpreterTest {
         )
         val callNode = CallNode("println", listOf(subtraction))
 
-        var outContent = ByteArrayOutputStream()
+        val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("5\n", outContent.toString())
+        assertEquals("5", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testMultiplication() {
-        val interpreter = Interpreter()
         val multiplication = BinaryNode(
             Literal(10),
             Token("*", TokenType.ASTERISK),
@@ -181,17 +176,16 @@ class InterpreterTest {
         )
         val callNode = CallNode("println", listOf(multiplication))
 
-        var outContent = ByteArrayOutputStream()
+        val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("50\n", outContent.toString())
+        assertEquals("50", outContent.toString().replace(System.lineSeparator(), ""))
     }
 
     @Test
     fun testDivision() {
-        val interpreter = Interpreter()
         val division = BinaryNode(
             Literal(10),
             Token("/", TokenType.SLASH),
@@ -199,11 +193,11 @@ class InterpreterTest {
         )
         val callNode = CallNode("println", listOf(division))
 
-        var outContent = ByteArrayOutputStream()
+        val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
         interpreter.interpret(listOf(callNode))
 
-        assertEquals("2\n", outContent.toString())
+        assertEquals("2", outContent.toString().replace(System.lineSeparator(), ""))
     }
 }

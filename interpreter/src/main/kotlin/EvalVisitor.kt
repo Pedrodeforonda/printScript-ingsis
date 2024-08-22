@@ -10,9 +10,9 @@ import nodes.Identifier
 import nodes.Literal
 import nodes.UnaryNode
 
-class EvalVisitor(private var variableMap: MutableMap<String, Any>) : ExpressionVisitor {
+class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
+
     override fun visitDeclaration(expression: Declaration): Any {
-        variableMap[expression.getName()] = expression.getType()
         return Pair(expression.getName(), expression.getType())
     }
 
@@ -56,13 +56,22 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>) : Expression
     }
 
     override fun visitAssignment(expression: Assignation): Any {
-        val (name, type) = expression.getDeclaration().accept(this) as Pair<*, *>
-        if (type == "number" || type == "string") {
-            val value = expression.getValue().accept(this)
-            variableMap[name as String] = value
+        val (name, type) = if (expression.getDeclaration() is Identifier) {
+            val identifierName = (expression.getDeclaration() as Identifier).getName()
+            val identifierType = variableMap.keys.find { it.first == identifierName }?.second
+            identifierName to identifierType
+        } else expression.getDeclaration().accept(this) as Pair<*, *>
+
+        val value = expression.getValue().accept(this)
+
+        if (type == "number" && value is Number) {
+            variableMap[Pair(name as String, type as String)] = value
+        }
+        if (type == "string" && value is String) {
+            variableMap[Pair(name as String, type as String)] = value
         }
 
-        return Unit
+        return Exception("Invalid type")
     }
 
     override fun visitCallExp(expression: CallNode): Any {
@@ -78,6 +87,11 @@ class EvalVisitor(private var variableMap: MutableMap<String, Any>) : Expression
     }
 
     override fun visitIdentifier(expression: Identifier): Any {
-        return variableMap[expression.getValue()] ?: throw Exception("Variable not found")
+        for ((key, value) in variableMap) {
+            if (key.first == expression.getName()) {
+                return value
+            }
+        }
+        throw Exception("Variable not found")
     }
 }

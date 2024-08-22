@@ -4,7 +4,7 @@ import nodes.Node
 
 class Interpreter {
 
-    private var variableMap = mutableMapOf<String, Any>()
+    private var variableMap = mutableMapOf<Pair<String, String>, Any>()
 
     fun interpret(expression: List<Node>): Any {
         val evalVisitor = EvalVisitor(variableMap)
@@ -15,7 +15,7 @@ class Interpreter {
         return Unit
     }
 
-    fun getVariableMap(): Map<String, Any> {
+    fun getVariableMap(): Map<Pair<String, String>, Any> {
         return variableMap
     }
 }
