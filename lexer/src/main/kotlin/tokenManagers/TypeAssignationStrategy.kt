@@ -6,7 +6,7 @@ import org.example.TokenStrategy
 
 class TypeAssignationStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer {
-        if (lexer.getCurrentChar() == ':') {
+        if (lexer.getChar() == ':') {
             val tokenType = TokenType.TYPE_ASSIGNATION
             val newLexer = lexer.goToNextPos()
             return Lexer(newLexer.getText(), newLexer.getTokenStrategies(), newLexer.getPos(), newLexer.getTokens() + Token(":", tokenType))

@@ -6,10 +6,10 @@ import org.example.TokenStrategy
 
 class StringStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer { //el texto del lexer es to do
-        if (lexer.getCurrentChar() == null) return lexer
-        if (lexer.getCurrentChar()!!.isLetter()) {
+        if (lexer.getChar() == null) return lexer
+        if (lexer.getChar()!!.isLetter()) {
             var newResult = result
-            newResult += lexer.getCurrentChar()
+            newResult += lexer.getChar()
             val newLexer = lexer.goToNextPos() //crea un nuevo lexer en la pos +1
             if (buildToken(newLexer, newResult) == newLexer) {
                 return when (newResult) {

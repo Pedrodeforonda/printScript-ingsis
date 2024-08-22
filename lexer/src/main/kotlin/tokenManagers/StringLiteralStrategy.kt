@@ -7,13 +7,13 @@ import org.example.TokenStrategy
 class StringLiteralStrategy : TokenStrategy {
 
     override fun buildToken(lexer: Lexer, result: String): Lexer {
-        if (lexer.getCurrentChar() == '\'' || lexer.getCurrentChar() == '"') {
+        if (lexer.getChar() == '\'' || lexer.getChar() == '"') {
             var result = ""
             var newLexer = lexer.goToNextPos()
-            while (newLexer.getCurrentChar() != null &&
-                (newLexer.getCurrentChar() != '\'' && newLexer.getCurrentChar() != '"')
+            while (newLexer.getChar() != null &&
+                (newLexer.getChar() != '\'' && newLexer.getChar() != '"')
             ) {
-                result += newLexer.getCurrentChar()
+                result += newLexer.getChar()
                 newLexer = newLexer.goToNextPos()
             }
             newLexer = newLexer.goToNextPos()

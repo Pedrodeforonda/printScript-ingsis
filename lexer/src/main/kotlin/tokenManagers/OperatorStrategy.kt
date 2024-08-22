@@ -6,7 +6,7 @@ import org.example.TokenStrategy
 
 class OperatorStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer {
-        val currentChar = lexer.getCurrentChar()
+        val currentChar = lexer.getChar()
         val tokenType = when (currentChar) {
             '+' -> TokenType.PLUS
             '-' -> TokenType.MINUS

@@ -17,8 +17,8 @@ class Lexer(private val text: String,
             return Lexer(text, tokenStrategies, newPos, getTokens())
         }
     }
-    private fun canSkip(): Boolean {
-        return currentChar!!.isWhitespace() || currentChar == '\r' || currentChar == '\n'
+    private fun canSkip(lexer: Lexer): Boolean {
+        return lexer.getChar()!!.isWhitespace() || lexer.getChar() == '\r' || lexer.getChar() == '\n'
     }
 
     fun getPos(): Int {
@@ -32,6 +32,10 @@ class Lexer(private val text: String,
         return tokenStrategies
     }
 
+    fun getChar(): Char? {
+        return currentChar
+    }
+
     fun getTokens(): List<Token> {
         return tokenList
     }
@@ -39,9 +43,21 @@ class Lexer(private val text: String,
         return updateLexer(lexer).getTokens()
     }
 
+    fun nextCharNull(lexer: Lexer): Boolean {
+        val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens())
+        return nextLexer.getChar() == null
+    }
+
     fun updateLexer(lexer: Lexer): Lexer {
-        while (currentChar != null) {
-            if (canSkip()) {return updateLexer(goToNextPos())} //gotonextpos es c el nuevo lexer
+        while (lexer.getChar() != null) {
+            if (canSkip(lexer)) {
+                if (!nextCharNull(lexer)) {
+                    return updateLexer(lexer.goToNextPos())
+                }
+                else {
+                    return lexer
+                }
+            } //gotonextpos es c el nuevo lexer
             for (tokenStrategy in tokenStrategies.getManagers()) {
                 val newLexer = tokenStrategy.buildToken(lexer, "")
                 if (newLexer != lexer) {
