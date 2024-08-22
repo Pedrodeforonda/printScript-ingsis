@@ -8,7 +8,12 @@ class RightParenStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer {
         if (lexer.getChar() == ')') {
             val tokenType = TokenType.RIGHT_PAREN
-            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(")", tokenType))
+            return Lexer(
+                lexer.getText(),
+                lexer.getTokenStrategies(),
+                lexer.getPos() + 1,
+                lexer.getTokens() + Token(")", tokenType),
+            )
         }
         return lexer
     }

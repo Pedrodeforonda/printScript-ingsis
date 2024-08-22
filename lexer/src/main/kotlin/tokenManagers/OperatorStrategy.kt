@@ -15,7 +15,12 @@ class OperatorStrategy : TokenStrategy {
             else -> TokenType.NULL_TYPE
         }
         if (tokenType != TokenType.NULL_TYPE) {
-            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(currentChar.toString(), tokenType))
+            return Lexer(
+                lexer.getText(),
+                lexer.getTokenStrategies(),
+                lexer.getPos() + 1,
+                lexer.getTokens() + Token(currentChar.toString(), tokenType),
+            )
         }
         return lexer
     }

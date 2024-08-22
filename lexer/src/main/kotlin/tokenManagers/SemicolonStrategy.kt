@@ -10,7 +10,12 @@ class SemicolonStrategy : TokenStrategy {
             val tokenChar = lexer.getChar()!!
             val tokenType = TokenType.SEMICOLON
             lexer.goToNextPos()
-            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens() + Token(tokenChar.toString(), tokenType))
+            return Lexer(
+                lexer.getText(),
+                lexer.getTokenStrategies(),
+                lexer.getPos() + 1,
+                lexer.getTokens() + Token(tokenChar.toString(), tokenType),
+            )
         }
         return lexer
     }

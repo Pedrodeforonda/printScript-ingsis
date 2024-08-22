@@ -7,7 +7,7 @@ import org.example.TokenStrategy
 class NumberStrategy : TokenStrategy {
 
     override fun buildToken(lexer: Lexer, result: String): Lexer {
-        if (lexer.getChar() == null) {return lexer}
+        if (lexer.getChar() == null) { return lexer }
         if (lexer.getChar()!!.isDigit()) {
             var myresult = result
             myresult += lexer.getChar()
@@ -15,7 +15,12 @@ class NumberStrategy : TokenStrategy {
             if (buildToken(newLexer, myresult) != newLexer) {
                 return buildToken(newLexer, myresult)
             }
-            return Lexer(newLexer.getText(), newLexer.getTokenStrategies(), newLexer.getPos(), newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL))
+            return Lexer(
+                newLexer.getText(),
+                newLexer.getTokenStrategies(),
+                newLexer.getPos(),
+                newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL),
+            )
         }
         return lexer
     }

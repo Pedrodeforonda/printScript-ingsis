@@ -2,17 +2,18 @@ package org.example
 
 import Token
 
-class Lexer(private val text: String,
-            private val tokenStrategies: ClassicTokenStrategies,
-            private val pos: Int = 0,
-            private val tokenList: List<Token> = emptyList()
+class Lexer(
+    private val text: String,
+    private val tokenStrategies: ClassicTokenStrategies,
+    private val pos: Int = 0,
+    private val tokenList: List<Token> = emptyList(),
 ) {
     val currentChar: Char? = if (pos > text.length - 1) null else text[pos]
 
-    fun goToNextPos(): Lexer{
+    fun goToNextPos(): Lexer {
         val newPos = pos + 1
         if (newPos > text.length - 1) {
-            return Lexer(text, tokenStrategies, pos, getTokens()) //currentChar = null
+            return Lexer(text, tokenStrategies, pos, getTokens()) // currentChar = null
         } else {
             return Lexer(text, tokenStrategies, newPos, getTokens())
         }
@@ -39,7 +40,7 @@ class Lexer(private val text: String,
     fun getTokens(): List<Token> {
         return tokenList
     }
-    fun nextCharNull(lexer: Lexer): Boolean { //chequea si el siguiente char es nulo
+    fun nextCharNull(lexer: Lexer): Boolean { // chequea si el siguiente char es nulo
         val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens())
         return nextLexer.getChar() == null
     }
@@ -48,24 +49,33 @@ class Lexer(private val text: String,
         return updateLexer(lexer).getTokens()
     }
 
-    fun updateLexer(lexer: Lexer): Lexer {
+    /**
+     * Updates the lexer by iterating through the characters and applying token strategies.
+     *
+     * - If the current character can be skipped (whitespace, carriage return, newline), it moves to the next position.
+     * - If the next character is null, it returns the current lexer.
+     * - If a token is successfully built by a token strategy, it updates the lexer and continues iterating.
+     * - The function returns the updated lexer when the end of the text is reached.
+     *
+     * @param lexer The current lexer instance.
+     * @return The updated lexer instance.
+     */
+    private fun updateLexer(lexer: Lexer): Lexer {
         while (lexer.getChar() != null) {
-            if (canSkip(lexer)) {// veo si es un character que no necesita una token, y lo salteo
-                if (!nextCharNull(lexer)) { //si el siguiente char es nulo, no se puede hacer goToNextPos
-                    return updateLexer(lexer.goToNextPos())// come el siguiente char no es nulo, se hace goToNextPos, salteando el char que no necesita token
+            if (canSkip(lexer)) {
+                if (!nextCharNull(lexer)) {
+                    return updateLexer(lexer.goToNextPos())
+                } else {
+                    return lexer
                 }
-                else {
-                    return lexer //si el siguiente char es nulo, se devuelve el lexer actual, terminando la cadena y la funcion
-                }
-            } //gotonextpos es c el nuevo lexer
+            }
             for (tokenStrategy in tokenStrategies.getStrategies()) {
-                val newLexer = tokenStrategy.buildToken(lexer, "")//intento de construir un token
-                if (newLexer != lexer) { //si el buildToken devuelve un lexer distinto al actual, se actualiza el lexer, ya que se encontro un token
-                    return updateLexer(newLexer) //el newlexer es el lexer actualizado, en donde se seguira iterando
+                val newLexer = tokenStrategy.buildToken(lexer, "")
+                if (newLexer != lexer) {
+                    return updateLexer(newLexer)
                 }
-            }//buildToken devuelve un lexer con el token agregado a la lista de tokens y el nuevo pos y char actual
+            }
         }
-        //devuelva rsta cuando es nulo pq ya se paso del length
         return lexer
     }
 }

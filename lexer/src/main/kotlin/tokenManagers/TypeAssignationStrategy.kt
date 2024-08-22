@@ -9,7 +9,12 @@ class TypeAssignationStrategy : TokenStrategy {
         if (lexer.getChar() == ':') {
             val tokenType = TokenType.TYPE_ASSIGNATION
             val newLexer = lexer.goToNextPos()
-            return Lexer(newLexer.getText(), newLexer.getTokenStrategies(), newLexer.getPos(), newLexer.getTokens() + Token(":", tokenType))
+            return Lexer(
+                newLexer.getText(),
+                newLexer.getTokenStrategies(),
+                newLexer.getPos(),
+                newLexer.getTokens() + Token(":", tokenType),
+            )
         }
         return lexer
     }
