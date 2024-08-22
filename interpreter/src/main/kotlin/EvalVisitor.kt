@@ -60,7 +60,9 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             val identifierName = (expression.getDeclaration() as Identifier).getName()
             val identifierType = variableMap.keys.find { it.first == identifierName }?.second
             identifierName to identifierType
-        } else expression.getDeclaration().accept(this) as Pair<*, *>
+        } else {
+            expression.getDeclaration().accept(this) as Pair<*, *>
+        }
 
         val value = expression.getValue().accept(this)
 

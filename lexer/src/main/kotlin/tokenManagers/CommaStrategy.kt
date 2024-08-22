@@ -5,12 +5,12 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class CommaStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == ',') {
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
+        if (lexer.currentChar == ',') {
             val tokenType = TokenType.COMMA
-            lexer.goToNextPos()
-            return Token(",", tokenType)
+            val newTokenList = lexer.getTokens() + Token(",", tokenType)
+            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, newTokenList)
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }

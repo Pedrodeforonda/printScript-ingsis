@@ -6,19 +6,24 @@ import org.example.TokenStrategy
 
 class StringLiteralStrategy : TokenStrategy {
 
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == '\'' || lexer.getCurrentChar() == '"') {
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
+        if (lexer.getChar() == '\'' || lexer.getChar() == '"') {
             var result = ""
-            lexer.goToNextPos()
-            while (lexer.getCurrentChar() != null &&
-                (lexer.getCurrentChar() != '\'' && lexer.getCurrentChar() != '"')
+            var newLexer = lexer.goToNextPos()
+            while (newLexer.getChar() != null &&
+                (newLexer.getChar() != '\'' && newLexer.getChar() != '"')
             ) {
-                result += lexer.getCurrentChar()
-                lexer.goToNextPos()
+                result += newLexer.getChar()
+                newLexer = newLexer.goToNextPos()
             }
-            lexer.goToNextPos()
-            return Token(result, TokenType.STRING_LITERAL)
+            newLexer = newLexer.goToNextPos()
+            return Lexer(
+                newLexer.getText(),
+                newLexer.getTokenStrategies(),
+                newLexer.getPos(),
+                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL),
+            )
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }
