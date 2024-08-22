@@ -39,29 +39,29 @@ class Lexer(private val text: String,
     fun getTokens(): List<Token> {
         return tokenList
     }
-    fun tokenizeAll2(lexer: Lexer): List<Token> { // funcion + imp del lexer
-        return updateLexer(lexer).getTokens()
-    }
-
-    fun nextCharNull(lexer: Lexer): Boolean {
+    fun nextCharNull(lexer: Lexer): Boolean { //chequea si el siguiente char es nulo
         val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens())
         return nextLexer.getChar() == null
     }
 
+    fun tokenizeAll(lexer: Lexer): List<Token> { // funcion + imp del lexer
+        return updateLexer(lexer).getTokens()
+    }
+
     fun updateLexer(lexer: Lexer): Lexer {
         while (lexer.getChar() != null) {
-            if (canSkip(lexer)) {
-                if (!nextCharNull(lexer)) {
-                    return updateLexer(lexer.goToNextPos())
+            if (canSkip(lexer)) {// veo si es un character que no necesita una token, y lo salteo
+                if (!nextCharNull(lexer)) { //si el siguiente char es nulo, no se puede hacer goToNextPos
+                    return updateLexer(lexer.goToNextPos())// come el siguiente char no es nulo, se hace goToNextPos, salteando el char que no necesita token
                 }
                 else {
-                    return lexer
+                    return lexer //si el siguiente char es nulo, se devuelve el lexer actual, terminando la cadena y la funcion
                 }
             } //gotonextpos es c el nuevo lexer
-            for (tokenStrategy in tokenStrategies.getManagers()) {
-                val newLexer = tokenStrategy.buildToken(lexer, "")
-                if (newLexer != lexer) {
-                    return updateLexer(newLexer)
+            for (tokenStrategy in tokenStrategies.getStrategies()) {
+                val newLexer = tokenStrategy.buildToken(lexer, "")//intento de construir un token
+                if (newLexer != lexer) { //si el buildToken devuelve un lexer distinto al actual, se actualiza el lexer, ya que se encontro un token
+                    return updateLexer(newLexer) //el newlexer es el lexer actualizado, en donde se seguira iterando
                 }
             }//buildToken devuelve un lexer con el token agregado a la lista de tokens y el nuevo pos y char actual
         }

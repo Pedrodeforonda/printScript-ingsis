@@ -11,11 +11,11 @@ import org.example.tokenManagers.StringStrategy
 import org.example.tokenManagers.TypeAssignationStrategy
 
 class ClassicTokenStrategies {
-    fun getManagers(): List<TokenStrategy> {
-        return listOfManagers
+    fun getStrategies(): List<TokenStrategy> {
+        return listOfStrategies
     }
 
-    private var listOfManagers = listOf(
+    private var listOfStrategies = listOf(
         AssignationStrategy(),
         NumberStrategy(),
         OperatorStrategy(),
