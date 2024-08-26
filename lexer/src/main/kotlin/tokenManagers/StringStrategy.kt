@@ -17,31 +17,36 @@ class StringStrategy : TokenStrategy {
                         lexer.getText(),
                         lexer.getTokenStrategies(),
                         lexer.getPos() + 1,
-                        lexer.getTokens() + Token(newResult, TokenType.LET_KEYWORD),
+                        newLexer.getLexerPosition().nextColumn(),
+                        lexer.getTokens() + Token(newResult, TokenType.LET_KEYWORD, newLexer.getLexerPosition()),
                     )
                     "string" -> Lexer(
                         lexer.getText(),
                         lexer.getTokenStrategies(),
                         lexer.getPos() + 1,
-                        lexer.getTokens() + Token(newResult, TokenType.STRING_TYPE),
+                        newLexer.getLexerPosition().nextColumn(),
+                        lexer.getTokens() + Token(newResult, TokenType.STRING_TYPE, newLexer.getLexerPosition()),
                     )
                     "number" -> Lexer(
                         lexer.getText(),
                         lexer.getTokenStrategies(),
                         lexer.getPos() + 1,
-                        lexer.getTokens() + Token(newResult, TokenType.NUMBER_TYPE),
+                        newLexer.getLexerPosition().nextColumn(),
+                        lexer.getTokens() + Token(newResult, TokenType.NUMBER_TYPE, newLexer.getLexerPosition()),
                     )
                     "println" -> Lexer(
                         lexer.getText(),
                         lexer.getTokenStrategies(),
                         lexer.getPos() + 1,
-                        lexer.getTokens() + Token(newResult, TokenType.CALL_FUNC),
+                        newLexer.getLexerPosition().nextColumn(),
+                        lexer.getTokens() + Token(newResult, TokenType.CALL_FUNC, newLexer.getLexerPosition()),
                     )
                     else -> Lexer(
                         lexer.getText(),
                         lexer.getTokenStrategies(),
                         lexer.getPos() + 1,
-                        lexer.getTokens() + Token(newResult, TokenType.IDENTIFIER),
+                        newLexer.getLexerPosition().nextColumn(),
+                        lexer.getTokens() + Token(newResult, TokenType.IDENTIFIER, newLexer.getLexerPosition()),
                     )
                 }
             } else {

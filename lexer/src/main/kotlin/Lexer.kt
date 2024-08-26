@@ -1,11 +1,13 @@
 package org.example
 
+import Position
 import Token
 
 class Lexer(
     private val text: String,
     private val tokenStrategies: ClassicTokenStrategies,
     private val pos: Int = 0,
+    private val lexerPosition: Position = Position(1, 1),
     private val tokenList: List<Token> = emptyList(),
 ) {
     val currentChar: Char? = if (pos > text.length - 1) null else text[pos]
@@ -13,9 +15,9 @@ class Lexer(
     fun goToNextPos(): Lexer {
         val newPos = pos + 1
         if (newPos > text.length - 1) {
-            return Lexer(text, tokenStrategies, pos, getTokens()) // currentChar = null
+            return Lexer(text, tokenStrategies, pos, lexerPosition, getTokens()) // currentChar = null
         } else {
-            return Lexer(text, tokenStrategies, newPos, getTokens())
+            return Lexer(text, tokenStrategies, newPos, lexerPosition.nextLine(), getTokens())
         }
     }
     private fun canSkip(lexer: Lexer): Boolean {
@@ -41,7 +43,7 @@ class Lexer(
         return tokenList
     }
     fun nextCharNull(lexer: Lexer): Boolean { // chequea si el siguiente char es nulo
-        val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexer.getTokens())
+        val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexerPosition, lexer.getTokens())
         return nextLexer.getChar() == null
     }
 
@@ -77,5 +79,9 @@ class Lexer(
             }
         }
         return lexer
+    }
+
+    fun getLexerPosition(): Position {
+        return lexerPosition
     }
 }
