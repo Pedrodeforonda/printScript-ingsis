@@ -5,10 +5,12 @@
 ./gradlew ktlintFormat
 
 # Check if ktlintFormat made any changes
-if [ $? -ne 0 ]; then
-  echo "ktlintFormat made changes. Please add the formatted files before committing."
-  exit 1
-fi
+while [ $? -ne 0 ]
+  do
+    echo "ktlintFormat made changes. Please add the formatted files before committing."
+    git add .
+  done
+
 
 # Run ktlintCheck to check for any code style issues
 ./gradlew ktlintCheck

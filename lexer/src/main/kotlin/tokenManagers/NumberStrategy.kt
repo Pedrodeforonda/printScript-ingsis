@@ -5,16 +5,23 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class NumberStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == null) return Token("", TokenType.NULL_TYPE)
-        if (lexer.getCurrentChar()!!.isDigit()) {
-            var myresult = ""
-            while (lexer.getCurrentChar() != null && lexer.getCurrentChar()!!.isDigit()) {
-                myresult += lexer.getCurrentChar()
-                lexer.goToNextPos()
+
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
+        if (lexer.getChar() == null) { return lexer }
+        if (lexer.getChar()!!.isDigit()) {
+            var myresult = result
+            myresult += lexer.getChar()
+            val newLexer = lexer.goToNextPos()
+            if (buildToken(newLexer, myresult) != newLexer) {
+                return buildToken(newLexer, myresult)
             }
-            return Token(myresult, TokenType.NUMBER_LITERAL)
+            return Lexer(
+                newLexer.getText(),
+                newLexer.getTokenStrategies(),
+                newLexer.getPos(),
+                newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL),
+            )
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }

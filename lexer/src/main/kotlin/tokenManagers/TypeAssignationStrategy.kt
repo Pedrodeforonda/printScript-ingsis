@@ -5,12 +5,17 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class TypeAssignationStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer): Token {
-        if (lexer.getCurrentChar() == ':') {
+    override fun buildToken(lexer: Lexer, result: String): Lexer {
+        if (lexer.getChar() == ':') {
             val tokenType = TokenType.TYPE_ASSIGNATION
-            lexer.goToNextPos()
-            return Token(":", tokenType)
+            val newLexer = lexer.goToNextPos()
+            return Lexer(
+                newLexer.getText(),
+                newLexer.getTokenStrategies(),
+                newLexer.getPos(),
+                newLexer.getTokens() + Token(":", tokenType),
+            )
         }
-        return Token("", TokenType.NULL_TYPE)
+        return lexer
     }
 }

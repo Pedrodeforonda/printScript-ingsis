@@ -14,7 +14,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll()
+        val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD),
@@ -36,7 +36,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll()
+        val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD),
@@ -58,7 +58,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll()
+        val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
             Token("a", TokenType.IDENTIFIER),
@@ -77,7 +77,7 @@ class LexerTest {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll()
+        val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
             Token("println", TokenType.CALL_FUNC),
