@@ -66,11 +66,20 @@ class Parser(private val tokens: List<Token>) {
         while (hasNextToken()) {
             expressions.add(parseExpression())
             if (currentToken.getType() == TokenType.SEMICOLON && !hasNextToken()) {
+                val errors = checkExpressions(expressions)
+                if (errors.isNotEmpty()) {
+                    throw ParseException(errors.joinToString("\n") { it.message.toString() })
+                }
                 return expressions
             }
             if (currentToken.getType() == TokenType.SEMICOLON) {
                 consume()
             }
+        }
+
+        val errors = checkExpressions(expressions)
+        if (errors.isNotEmpty()) {
+            throw ParseException(errors.joinToString("\n") { it.message.toString() })
         }
 
         return expressions
@@ -99,6 +108,21 @@ class Parser(private val tokens: List<Token>) {
 
     fun getCurrentToken(): Token {
         return currentToken
+    }
+
+    fun checkExpressions(expressions: List<Node>): MutableList<Error> {
+        val variables = HashMap<String, String>()
+        val visitor = ExpressionCheckerVisitor(variables)
+        val result: MutableList<Error> = ArrayList()
+        expressions.forEach { expression ->
+            val checkResult = expression.accept(visitor)
+            if (checkResult is CheckAstResult) {
+                if (!checkResult.isPass()) {
+                    result.add(Error(checkResult.getMessage()))
+                }
+            }
+        }
+        return result
     }
 }
 

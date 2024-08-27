@@ -5,10 +5,8 @@ import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
-import nodes.GroupingNode
 import nodes.Identifier
 import nodes.Literal
-import nodes.UnaryNode
 
 class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
 
@@ -18,10 +16,6 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
 
     override fun visitLiteral(expression: Literal): Any {
         return expression.getValue()
-    }
-
-    override fun visitGroupingExp(expression: GroupingNode): Any {
-        return expression.getNode().accept(this)
     }
 
     override fun visitBinaryExp(expression: BinaryNode): Any {
@@ -49,10 +43,6 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         }
 
         throw Exception("Invalid operation")
-    }
-
-    override fun visitUnaryExp(expression: UnaryNode): Any {
-        TODO("Not yet implemented")
     }
 
     override fun visitAssignment(expression: Assignation): Any {
