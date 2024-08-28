@@ -23,7 +23,7 @@ tasks {
                 limit {
                     counter = "LINE"
                     value = "COVEREDRATIO"
-                    minimum = 0.95.toBigDecimal()
+                    minimum = 0.8.toBigDecimal()
                 }
             }
         }

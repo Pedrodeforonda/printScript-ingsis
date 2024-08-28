@@ -22,7 +22,11 @@ class Linter(private val config: LinterConfig) {
         val matcher = printlnPattern.matcher(line)
         if (matcher.find()) {
             val argument = matcher.group(1).trim()
-            return argument.matches(Regex("""[a-zA-Z_][a-zA-Z0-9_]*""")) || argument.matches(Regex("""".*"""")) || argument.matches(Regex("""\d+"""))
+            return argument.matches(Regex("""[a-zA-Z_][a-zA-Z0-9_]*""")) ||
+                argument.matches(Regex("""".*"""")) ||
+                argument.matches(
+                    Regex("""\d+"""),
+                )
         }
         return true
     }

@@ -11,6 +11,7 @@
                 <projects>
                   <project path="$PROJECT_DIR$/buildSrc" />
                   <project path="$PROJECT_DIR$/buildSrc/ast" />
+                  <project path="$PROJECT_DIR$/buildSrc/linter" />
                   <project path="$PROJECT_DIR$/buildSrc/token" />
                 </projects>
               </build>
@@ -26,6 +27,7 @@
             <option value="$PROJECT_DIR$/ast" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/buildSrc/ast" />
+            <option value="$PROJECT_DIR$/buildSrc/linter" />
             <option value="$PROJECT_DIR$/buildSrc/token" />
             <option value="$PROJECT_DIR$/interpreter" />
             <option value="$PROJECT_DIR$/lexer" />
