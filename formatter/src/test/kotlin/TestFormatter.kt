@@ -7,7 +7,7 @@ class TestFormatter {
     @Test
     fun test() {
         val inputStream: InputStream? = this::class.java.classLoader.getResourceAsStream("input.txt")
-        val outputPath = "formatter/src/test/resources/output.txt"
+        val outputPath = "src/test/resources/output.txt"
         val formatter = Formatter()
 
         if (inputStream == null) {

@@ -1,9 +1,7 @@
 {
-  "rules":{
-    "spaceBeforeColon": true,
-    "spaceAfterColon": false,
-    "spaceBeforeAssignment": true,
-    "spaceAfterAssignment": true,
-    "newLinesBeforePrintln": 1
-  }
+  "spaceBeforeColon": true,
+  "spaceAfterColon": false,
+  "spaceBeforeAssignment": true,
+  "spaceAfterAssignment": true,
+  "newLinesBeforePrintln": 1
 }
