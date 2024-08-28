@@ -20,7 +20,7 @@ class FunCallParser : Prefix {
         if (currentToken.getType() != TokenType.RIGHT_PAREN) {
             do {
                 arguments.add(parser.parseExpression()) // Parse each argument
-                if (parser.lookAhead(0).getType() != TokenType.COMMA) break
+                if (parser.lookAhead(-1).getType() != TokenType.COMMA) break
                 parser.consume() // Consume comma between arguments
             } while (true)
         }

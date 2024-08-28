@@ -12,19 +12,23 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+
 import Result
+
 
 class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
 
-    override fun visitDeclaration(expression: Declaration): Result {
+    override fun visitDeclaration(expression: Declaration): Any {
         return DeclarationResult(expression.getName(), expression.getType())
     }
 
-    override fun visitLiteral(expression: Literal): Result {
+    override fun visitLiteral(expression: Literal): Any {
         return LiteralResult(expression.getValue())
     }
 
-    override fun visitBinaryExp(expression: BinaryNode): Result {
+
+    override fun visitBinaryExp(expression: BinaryNode): Any {
+
         val operator = expression.getOperator()
         val leftResult = expression.getLeft().accept(this)
         val rightResult = expression.getRight().accept(this)
@@ -57,7 +61,8 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         return FailureResult("Invalid operation")
     }
 
-    override fun visitAssignment(expression: Assignation): Result {
+
+    override fun visitAssignment(expression: Assignation): Any {
         val left = expression.getDeclaration().accept(this) as Result
         val (name, type) = if (left is DeclarationResult) Pair(left.name, left.type)
             else (left as IdentifierResult).nameAndType
@@ -75,7 +80,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         return FailureResult("Invalid assignment")
     }
 
-    override fun visitCallExp(expression: CallNode): Result {
+    override fun visitCallExp(expression: CallNode): Any {
         if (expression.getFunc() == "println") {
             val arg = expression.getArguments()
             if (arg.size != 1) {
@@ -92,7 +97,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         return FailureResult("Invalid function")
     }
 
-    override fun visitIdentifier(expression: Identifier): Result {
+    override fun visitIdentifier(expression: Identifier): Any {
         for ((key, value) in variableMap) {
             if (key.first == expression.getName()) {
                 return IdentifierResult(key, value)
