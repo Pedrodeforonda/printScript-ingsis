@@ -12,22 +12,33 @@ class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         val letToken: Token = token
         if (letToken.getType() != TokenType.LET_KEYWORD) {
-            throw ParseException("Expected let token")
+            throw ParseException(
+                "Semantic Error at ${letToken.getPosition().getLine()}, ${letToken.getPosition().getColumn()}" +
+                        " Expected let keyword",
+            )
         }
         val identifierToken: Token = parser.lookAhead(0)
         parser.consume()
         if (identifierToken.getType() != TokenType.IDENTIFIER) {
-            throw ParseException("Expected identifier token")
+            throw ParseException(
+                "Semantic Error at ${identifierToken.getPosition().getLine()}, " +
+                    "${identifierToken.getPosition().getColumn()} Expected identifier token",
+            )
         }
         val typeAssignation = parser.lookAhead(0)
         parser.consume()
         if (typeAssignation.getType() != TokenType.TYPE_ASSIGNATION) {
-            throw ParseException("Expected type assignation token")
+            throw ParseException(
+                "Semantic Error at ${typeAssignation.getPosition().getLine()}, " +
+                    "${typeAssignation.getPosition().getColumn()} Expected type assignation",
+            )
         }
         val type = parser.lookAhead(0)
         parser.consume()
         if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE) {
-            throw ParseException("Expected type token")
+            throw ParseException(
+                "Semantic Error at ${type.getPosition().getLine()}, ${type.getPosition().getColumn()} Expected type",
+            )
         }
         parser.consume()
         val letKeword: DeclarationKeyWord = DeclarationKeyWord.LET_KEYWORD

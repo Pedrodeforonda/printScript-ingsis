@@ -41,9 +41,8 @@ class Parser(private val tokens: List<Token>) {
     fun parseExpression(precedence: Int = 0): Node {
         val token = currentToken
         val prefixParser = prefixParsers[token.getType()] ?: throw ParseException(
-            "Unexpected token: ${
-                token.getCharArray()
-            }",
+            "Syntax Error At: ${token.getPosition().getLine()}, ${token.getPosition().getColumn()}" +
+                    " Unknown token ${token.getCharArray()}",
         )
 
         var left = prefixParser.parse(this, token)

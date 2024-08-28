@@ -20,7 +20,7 @@ class NumberStrategy : TokenStrategy {
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
                 newLexer.getLexerPosition().nextColumn(),
-                newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL, newLexer.getLexerPosition())
+                newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL, newLexer.getLexerPosition()),
             )
         }
         return lexer

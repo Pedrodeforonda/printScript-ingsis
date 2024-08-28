@@ -1,7 +1,7 @@
 class Token(
     private val string: String,
     private val type: TokenType,
-    private val position: Position
+    private val position: Position,
 ) {
     fun getCharArray(): String {
         return string
@@ -9,6 +9,10 @@ class Token(
 
     fun getType(): TokenType {
         return type
+    }
+
+    fun getPosition(): Position {
+        return position
     }
 
     override fun equals(other: Any?): Boolean {
