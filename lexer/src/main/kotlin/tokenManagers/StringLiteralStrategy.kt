@@ -21,7 +21,8 @@ class StringLiteralStrategy : TokenStrategy {
                 newLexer.getText(),
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
-                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL),
+                newLexer.getLexerPosition().nextColumn(),
+                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL, newLexer.getLexerPosition()),
             )
         }
         return lexer
