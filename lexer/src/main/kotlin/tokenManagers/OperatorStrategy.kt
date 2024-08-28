@@ -20,7 +20,7 @@ class OperatorStrategy : TokenStrategy {
                 lexer.getTokenStrategies(),
                 lexer.getPos() + 1,
                 lexer.getLexerPosition().nextColumn(),
-                lexer.getTokens() + Token(currentChar.toString(), tokenType, lexer.getLexerPosition())
+                lexer.getTokens() + Token(currentChar.toString(), tokenType, lexer.getLexerPosition()),
             )
         }
         return lexer

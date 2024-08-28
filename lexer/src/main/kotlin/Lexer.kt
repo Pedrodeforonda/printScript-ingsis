@@ -43,7 +43,8 @@ class Lexer(
         return tokenList
     }
     fun nextCharNull(lexer: Lexer): Boolean { // chequea si el siguiente char es nulo
-        val nextLexer = Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexerPosition, lexer.getTokens())
+        val nextLexer =
+            Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, lexerPosition, lexer.getTokens())
         return nextLexer.getChar() == null
     }
 

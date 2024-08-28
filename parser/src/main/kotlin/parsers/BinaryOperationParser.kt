@@ -1,13 +1,14 @@
 package parsers
 
 import Parser
+import Position
 import Token
 import TokenType
 import nodes.BinaryNode
 import nodes.Node
 
 class BinaryOperationParser(private val precedence: Int) : Infix {
-    var myToken: Token = Token("+", TokenType.PLUS)
+    private var myToken: Token = Token("+", TokenType.PLUS, Position(0, 0))
 
     override fun parse(parser: Parser, left: Node, token: Token): Node {
         val right = parser.parseExpression(precedence)

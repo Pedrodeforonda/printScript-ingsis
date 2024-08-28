@@ -5,6 +5,7 @@ import ExpressionVisitor
 import FailureResult
 import IdentifierResult
 import LiteralResult
+import Result
 import SuccessResult
 import nodes.Assignation
 import nodes.BinaryNode
@@ -12,9 +13,6 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
-
-import Result
-
 
 class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
 
@@ -26,18 +24,18 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         return LiteralResult(expression.getValue())
     }
 
-
     override fun visitBinaryExp(expression: BinaryNode): Any {
-
         val operator = expression.getOperator()
         val leftResult = expression.getLeft().accept(this)
         val rightResult = expression.getRight().accept(this)
 
-        val left = if (leftResult is IdentifierResult) leftResult.value
-            else (leftResult as LiteralResult).value
+        val left = if (leftResult is IdentifierResult) {
+            leftResult.value
+        } else (leftResult as LiteralResult).value
 
-        val right = if (rightResult is IdentifierResult) rightResult.value
-            else (rightResult as LiteralResult).value
+        val right = if (rightResult is IdentifierResult) {
+            rightResult.value
+        } else (rightResult as LiteralResult).value
 
         if (left is Number && right is Number) {
             return when (operator.getType()) {
@@ -61,11 +59,11 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         return FailureResult("Invalid operation")
     }
 
-
     override fun visitAssignment(expression: Assignation): Any {
         val left = expression.getDeclaration().accept(this) as Result
-        val (name, type) = if (left is DeclarationResult) Pair(left.name, left.type)
-            else (left as IdentifierResult).nameAndType
+        val (name, type) = if (left is DeclarationResult) {
+            Pair(left.name, left.type)
+        } else (left as IdentifierResult).nameAndType
         val right = expression.getValue().accept(this) as LiteralResult
 
         if (type == "number" && right.value is Number) {

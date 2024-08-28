@@ -1,4 +1,4 @@
 let a: string = 12 + "hola";
 let b: number = 4;
-a =  3 +  84 + "hey";
+a =  3 +  84 ;
 println("Result: " + a);

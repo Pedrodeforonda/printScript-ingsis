@@ -1,4 +1,4 @@
-class Position(val line: Int, val column: Int) {
+class Position(private val line: Int, private val column: Int) {
     fun nextColumn(): Position {
         return Position(1, column + 1)
     }
@@ -6,4 +6,11 @@ class Position(val line: Int, val column: Int) {
         return Position(line + 1, column)
     }
 
+    fun getLine(): Int {
+        return line
+    }
+
+    fun getColumn(): Int {
+        return column
+    }
 }
