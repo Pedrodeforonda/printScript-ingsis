@@ -31,6 +31,7 @@
             <option value="$PROJECT_DIR$/buildSrc/token" />
             <option value="$PROJECT_DIR$/interpreter" />
             <option value="$PROJECT_DIR$/lexer" />
+            <option value="$PROJECT_DIR$/linter" />
             <option value="$PROJECT_DIR$/parser" />
             <option value="$PROJECT_DIR$/runner" />
             <option value="$PROJECT_DIR$/token" />
