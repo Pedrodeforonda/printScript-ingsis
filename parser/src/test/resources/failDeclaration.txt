@@ -1,0 +1,5 @@
+a let: number = 5;
+let b number = 4;
+let c: numer = 3;
+a =  3 +  84 + "hey";
+println("Result: " + a);
