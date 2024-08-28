@@ -10,6 +10,7 @@ while [ $? -ne 0 ]
     echo "ktlintFormat made changes. Please add the formatted files before committing."
     git add .
     ./gradlew ktlintFormat
+    git add .
   done
 
 

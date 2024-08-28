@@ -32,7 +32,12 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         val right = expression.getRight()
         val leftResult = left.accept(this) as CheckAstResult
         val rightResult = right.accept(this) as CheckAstResult
-
+        val operator = expression.getOperator()
+        if (operator.getType() != TokenType.PLUS) {
+            if (leftResult.getResultType() != rightResult.getResultType()) {
+                return CheckAstResult(false, "Binary operation not supported", "invalid")
+            }
+        }
         if (leftResult.getResultType() == "string" || rightResult.getResultType() == "string") {
             return CheckAstResult(true, "", "string")
         }
@@ -43,7 +48,12 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
     override fun visitAssignment(expression: Assignation): Any {
         val (name, type) = if (expression.getDeclaration() is Identifier) {
             val identifierName = (expression.getDeclaration() as Identifier).getName()
-            Pair(identifierName, variableTypeMap[identifierName]!!)
+            val type = variableTypeMap[identifierName] ?: return CheckAstResult(
+                false,
+                "variable $identifierName does not exist",
+                "not defined",
+            )
+            Pair(identifierName, type)
         } else {
             val declaration = expression.getDeclaration() as Declaration
             val isError: CheckAstResult = declaration.accept(this) as CheckAstResult
@@ -54,6 +64,13 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         }
         val value = expression.getValue()
         val valueResult = value.accept(this) as CheckAstResult
+        if (!valueResult.isPass()) {
+            return CheckAstResult(
+                false,
+                valueResult.getMessage(),
+                valueResult.getResultType(),
+            )
+        }
         if (valueResult.getResultType() != type) {
             return CheckAstResult(
                 false,

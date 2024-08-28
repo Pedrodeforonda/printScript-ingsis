@@ -37,11 +37,12 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens)
-        val result = parser.parseExpressions()
-        val expected = listOf(
-            Assignation(Identifier("a"), Literal(1)),
-        )
-        assertEquals(expected, result)
+
+        val error = assertFailsWith<ParseException> {
+            val result = parser.parseExpressions()
+        }
+
+        println("Error Message: ${error.message}")
     }
 
     @Test
@@ -275,8 +276,134 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens)
-        assertFailsWith<ParseException> {
+        val exception = assertFailsWith<ParseException> {
             parser.parseExpressions()
         }
+
+        println("Error message: ${exception.message}")
+    }
+
+    @Test
+    fun testErrorType() {
+        val tokens = listOf(
+            Token("let", TokenType.LET_KEYWORD),
+            Token("a", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("number", TokenType.NUMBER_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("5", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("let", TokenType.LET_KEYWORD),
+            Token("b", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("number", TokenType.NUMBER_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("4", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("a", TokenType.IDENTIFIER),
+            Token("=", TokenType.ASSIGNATION),
+            Token("3", TokenType.NUMBER_LITERAL),
+            Token("+", TokenType.PLUS),
+            Token("84", TokenType.NUMBER_LITERAL),
+            Token("+", TokenType.PLUS),
+            Token("hey", TokenType.STRING_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("println", TokenType.CALL_FUNC),
+            Token("(", TokenType.LEFT_PAREN),
+            Token("Result:", TokenType.STRING_LITERAL),
+            Token("+", TokenType.PLUS),
+            Token("a", TokenType.IDENTIFIER),
+            Token(")", TokenType.RIGHT_PAREN),
+            Token(";", TokenType.SEMICOLON),
+        )
+
+        val parser = Parser(tokens)
+        val exception = assertFailsWith<ParseException> {
+            parser.parseExpressions()
+        }
+
+        println("Error message: ${exception.message}")
+    }
+
+    @Test
+    fun testErrorMultiply() {
+        val tokens = listOf(
+            Token("let", TokenType.LET_KEYWORD),
+            Token("a", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("string", TokenType.STRING_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("hola", TokenType.STRING_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("let", TokenType.LET_KEYWORD),
+            Token("b", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("number", TokenType.NUMBER_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("4", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("a", TokenType.IDENTIFIER),
+            Token("=", TokenType.ASSIGNATION),
+            Token("hey", TokenType.STRING_LITERAL),
+            Token("*", TokenType.ASTERISK),
+            Token("3", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("println", TokenType.CALL_FUNC),
+            Token("(", TokenType.LEFT_PAREN),
+            Token("Result:", TokenType.STRING_LITERAL),
+            Token("+", TokenType.PLUS),
+            Token("a", TokenType.IDENTIFIER),
+            Token(")", TokenType.RIGHT_PAREN),
+            Token(";", TokenType.SEMICOLON),
+        )
+
+        val parser = Parser(tokens)
+        val exception = assertFailsWith<ParseException> {
+            parser.parseExpressions()
+        }
+        println("Error message: ${exception.message}")
+    }
+
+    @Test
+    fun testPrintlnWithMultipleArguments() {
+        val tokens = listOf(
+            Token("let", TokenType.LET_KEYWORD),
+            Token("a", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("number", TokenType.NUMBER_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("5", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("let", TokenType.LET_KEYWORD),
+            Token("b", TokenType.IDENTIFIER),
+            Token(":", TokenType.TYPE_ASSIGNATION),
+            Token("number", TokenType.NUMBER_TYPE),
+            Token("=", TokenType.ASSIGNATION),
+            Token("4", TokenType.NUMBER_LITERAL),
+            Token(";", TokenType.SEMICOLON),
+
+            Token("println", TokenType.CALL_FUNC),
+            Token("(", TokenType.LEFT_PAREN),
+            Token("Result:", TokenType.STRING_LITERAL),
+            Token("+", TokenType.PLUS),
+            Token("a", TokenType.IDENTIFIER),
+            Token(",", TokenType.COMMA),
+            Token("b", TokenType.IDENTIFIER),
+            Token(")", TokenType.RIGHT_PAREN),
+            Token(";", TokenType.SEMICOLON),
+        )
+
+        val parser = Parser(tokens)
+        val exception = assertFailsWith<ParseException> {
+            parser.parseExpressions()
+        }
+        println("Error message: ${exception.message}")
     }
 }
