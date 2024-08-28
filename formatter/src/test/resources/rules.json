@@ -1,7 +1,6 @@
 {
-  "spaceBeforeColon": true,
-  "spaceAfterColon": false,
+  "spaceBeforeColon": false,
+  "spaceAfterColon": true,
   "spaceBeforeAssignment": true,
-  "spaceAfterAssignment": true,
-  "newLinesBeforePrintln": 1
+  "spaceAfterAssignment": true
 }

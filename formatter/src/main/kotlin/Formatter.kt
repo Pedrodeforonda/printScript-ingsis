@@ -31,7 +31,7 @@ class Formatter {
         }
 
         // Salto de línea antes de "println"
-        output = output.replace(Regex("(?<!\\n){1,}\\s*println"), "\n".repeat(config.newLinesBeforePrintln) + "println")
+        output = output.replace(Regex("(?<!\\n)+println"), "println")
 
         // Un solo espacio entre tokens
         output = output.replace(Regex("\\s+"), " ")

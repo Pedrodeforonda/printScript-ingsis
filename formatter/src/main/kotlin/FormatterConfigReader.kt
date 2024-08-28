@@ -7,7 +7,6 @@ data class FormatterConfigReader(
     val spaceAfterColon: Boolean,
     val spaceBeforeAssignment: Boolean,
     val spaceAfterAssignment: Boolean,
-    val newLinesBeforePrintln: Int,
 )
 
 fun loadConfig(configPath: String): FormatterConfigReader {
