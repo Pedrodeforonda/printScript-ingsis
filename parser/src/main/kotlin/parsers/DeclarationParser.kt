@@ -14,7 +14,7 @@ class DeclarationParser : Prefix {
         if (letToken.getType() != TokenType.LET_KEYWORD) {
             throw ParseException(
                 "Semantic Error at ${letToken.getPosition().getLine()}, ${letToken.getPosition().getColumn()}" +
-                        " Expected let keyword",
+                    " Expected let keyword",
             )
         }
         val identifierToken: Token = parser.lookAhead(0)
