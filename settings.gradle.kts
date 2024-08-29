@@ -24,4 +24,6 @@ include(":lexer")
 findProject(":lexer")?.name = "lexer"
 include(":runner")
 findProject(":runner")?.name = "runner"
+include("formatter")
 include("linter")
+

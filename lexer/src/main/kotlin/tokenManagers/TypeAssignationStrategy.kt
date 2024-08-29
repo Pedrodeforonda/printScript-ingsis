@@ -13,7 +13,8 @@ class TypeAssignationStrategy : TokenStrategy {
                 newLexer.getText(),
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
-                newLexer.getTokens() + Token(":", tokenType),
+                newLexer.getLexerPosition().nextColumn(),
+                newLexer.getTokens() + Token(":", tokenType, newLexer.getLexerPosition()),
             )
         }
         return lexer

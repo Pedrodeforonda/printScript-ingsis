@@ -14,7 +14,8 @@ class SemicolonStrategy : TokenStrategy {
                 lexer.getText(),
                 lexer.getTokenStrategies(),
                 lexer.getPos() + 1,
-                lexer.getTokens() + Token(tokenChar.toString(), tokenType),
+                lexer.getLexerPosition().nextLine(),
+                lexer.getTokens() + Token(tokenChar.toString(), tokenType, lexer.getLexerPosition()),
             )
         }
         return lexer

@@ -8,9 +8,14 @@ class AssignationStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer {
         if (lexer.currentChar == '=') {
             val tokenType = TokenType.ASSIGNATION
-            lexer.goToNextPos()
-            val newTokenList = lexer.getTokens() + Token("=", tokenType)
-            return Lexer(lexer.getText(), lexer.getTokenStrategies(), lexer.getPos() + 1, newTokenList)
+            val newTokenList = lexer.getTokens() + Token("=", tokenType, lexer.getLexerPosition())
+            return Lexer(
+                lexer.getText(),
+                lexer.getTokenStrategies(),
+                lexer.getPos() + 1,
+                lexer.getLexerPosition().nextColumn(),
+                newTokenList,
+            )
         }
         return lexer
     }

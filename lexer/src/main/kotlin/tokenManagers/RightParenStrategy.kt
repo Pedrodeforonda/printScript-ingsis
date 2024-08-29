@@ -12,7 +12,8 @@ class RightParenStrategy : TokenStrategy {
                 lexer.getText(),
                 lexer.getTokenStrategies(),
                 lexer.getPos() + 1,
-                lexer.getTokens() + Token(")", tokenType),
+                lexer.getLexerPosition().nextColumn(),
+                lexer.getTokens() + Token(")", tokenType, lexer.getLexerPosition()),
             )
         }
         return lexer

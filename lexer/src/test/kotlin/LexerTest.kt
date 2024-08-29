@@ -17,13 +17,13 @@ class LexerTest {
         val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
-            Token("let", TokenType.LET_KEYWORD),
-            Token("a", TokenType.IDENTIFIER),
-            Token(":", TokenType.TYPE_ASSIGNATION),
-            Token("number", TokenType.NUMBER_TYPE),
-            Token("=", TokenType.ASSIGNATION),
-            Token("12", TokenType.NUMBER_LITERAL),
-            Token(";", TokenType.SEMICOLON),
+            Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 5)),
+            Token(":", TokenType.TYPE_ASSIGNATION, Position(1, 6)),
+            Token("number", TokenType.NUMBER_TYPE, Position(1, 8)),
+            Token("=", TokenType.ASSIGNATION, Position(1, 15)),
+            Token("12", TokenType.NUMBER_LITERAL, Position(1, 17)),
+            Token(";", TokenType.SEMICOLON, Position(1, 19)),
         )
 
         assertEquals(expectedTokens, actualTokens)
@@ -39,13 +39,13 @@ class LexerTest {
         val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
-            Token("let", TokenType.LET_KEYWORD),
-            Token("a", TokenType.IDENTIFIER),
-            Token(":", TokenType.TYPE_ASSIGNATION),
-            Token("string", TokenType.STRING_TYPE),
-            Token("=", TokenType.ASSIGNATION),
-            Token("monos", TokenType.STRING_LITERAL),
-            Token(";", TokenType.SEMICOLON),
+            Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 5)),
+            Token(":", TokenType.TYPE_ASSIGNATION, Position(1, 6)),
+            Token("string", TokenType.STRING_TYPE, Position(1, 8)),
+            Token("=", TokenType.ASSIGNATION, Position(1, 15)),
+            Token("monos", TokenType.STRING_LITERAL, Position(1, 17)),
+            Token(";", TokenType.SEMICOLON, Position(1, 22)),
         )
 
         assertEquals(expectedTokens, actualTokens)
@@ -61,12 +61,12 @@ class LexerTest {
         val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
-            Token("a", TokenType.IDENTIFIER),
-            Token("=", TokenType.ASSIGNATION),
-            Token("a", TokenType.IDENTIFIER),
-            Token("/", TokenType.SLASH),
-            Token("b", TokenType.IDENTIFIER),
-            Token(";", TokenType.SEMICOLON),
+            Token("a", TokenType.IDENTIFIER, Position(1, 1)),
+            Token("=", TokenType.ASSIGNATION, Position(1, 3)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 5)),
+            Token("/", TokenType.SLASH, Position(1, 7)),
+            Token("b", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(";", TokenType.SEMICOLON, Position(1, 10)),
         )
 
         assertEquals(expectedTokens, actualTokens)
@@ -80,11 +80,11 @@ class LexerTest {
         val actualTokens = lexer.tokenizeAll(lexer)
 
         val expectedTokens = listOf(
-            Token("println", TokenType.CALL_FUNC),
-            Token("(", TokenType.LEFT_PAREN),
-            Token("a", TokenType.IDENTIFIER),
-            Token(")", TokenType.RIGHT_PAREN),
-            Token(";", TokenType.SEMICOLON),
+            Token("println", TokenType.CALL_FUNC, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 8)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 10)),
+            Token(";", TokenType.SEMICOLON, Position(1, 11)),
         )
 
         assertEquals(expectedTokens, actualTokens)
