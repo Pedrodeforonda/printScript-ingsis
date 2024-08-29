@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.jitpack"
+group = "com.github.printSrcript"
 version = "2.0"
 
 java {
@@ -40,8 +40,12 @@ publishing {
     }
 }
 
-// Correct way to configure the wrapper task in a convention script
 tasks.named<Wrapper>("wrapper") {
     gradleVersion = "7.3.3"
     distributionType = Wrapper.DistributionType.ALL
+}
+
+
+tasks.register("publish") {
+    dependsOn("publishToGitHubPackagesRepository")
 }
