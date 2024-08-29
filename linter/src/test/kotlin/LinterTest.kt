@@ -7,25 +7,37 @@ import java.io.File
 
 class LinterTest {
 
-    private val config = LinterConfig("camelCase", true)
-    private val linter = Linter(config)
-
     @Test
     fun testCheckIdentifier() {
+        val config = LinterConfig("camelCase", true)
+        val linter = Linter(config)
         assertTrue(linter.checkIdentifier("validIdentifier"))
         assertFalse(linter.checkIdentifier("Invalid_identifier"))
     }
 
     @Test
     fun testCheckPrintlnUsage() {
-        assertTrue(linter.checkPrintlnUsage("""println("Hello")"""))
+        val config = LinterConfig("camelCase", true)
+        val linter = Linter(config)
+        assertTrue(linter.checkPrintlnUsage("""println(Hello)"""))
         assertFalse(linter.checkPrintlnUsage("""println(123abc)"""))
     }
 
     @Test
-    fun testLintFile() {
-        val file = File("path/to/testFile.kt")
+    fun testLintCamelCaseFile() {
+        val config = LinterConfig("camelCase", true)
+        val linter = Linter(config)
+        val file = File("src/test/resources/LinterCamelCaseTest")
         val errors = linter.lintFile(file)
-        assertTrue(errors.isNotEmpty())
+        assertTrue(errors.isEmpty())
+    }
+
+    @Test
+    fun testLintSnakeCaseFile() {
+        val config = LinterConfig("snake_case", true)
+        val linter = Linter(config)
+        val file = File("src/test/resources/LinterSnakeCaseTest")
+        val errors = linter.lintFile(file)
+        assertTrue(errors.isEmpty())
     }
 }

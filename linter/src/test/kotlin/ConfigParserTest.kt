@@ -5,9 +5,16 @@ import org.junit.jupiter.api.Test
 class ConfigParserTest {
 
     @Test
-    fun testParseConfig() {
-        val config = ConfigParser.parseConfig("path/to/config.json")
+    fun testParseCamelCaseConfig() {
+        val config = ConfigParser.parseConfig("src/test/resources/LinterCamelCaseTest")
         assertEquals("camelCase", config.identifierFormat)
+        assertEquals(true, config.restrictPrintln)
+    }
+
+    @Test
+    fun testParseSnakeCaseConfig() {
+        val config = ConfigParser.parseConfig("src/test/resources/LinterSnakeCaseTest")
+        assertEquals("snake_case", config.identifierFormat)
         assertEquals(true, config.restrictPrintln)
     }
 }

@@ -1,5 +1,7 @@
 package main.kotlin
 
+import org.example.ClassicTokenStrategies
+import org.example.Lexer
 import java.io.File
 import java.util.regex.Pattern
 
@@ -22,26 +24,20 @@ class Linter(private val config: LinterConfig) {
         val matcher = printlnPattern.matcher(line)
         if (matcher.find()) {
             val argument = matcher.group(1).trim()
-            return argument.matches(Regex("""[a-zA-Z_][a-zA-Z0-9_]*""")) ||
-                argument.matches(Regex("""".*"""")) ||
-                argument.matches(
-                    Regex("""\d+"""),
-                )
+            return argument.matches(Regex("""[a-zA-Z_][a-zA-Z0-9_]*"""))
         }
-        return true
+        return false
     }
 
     fun lintFile(file: File): List<String> {
+        val lexer = Lexer(file.toString(), ClassicTokenStrategies())
+        val tokens = lexer.tokenizeAll(lexer)
         val errors = mutableListOf<String>()
-        file.readLines().forEachIndexed { index, line ->
-            val words = line.split(Regex("\\W+"))
-            words.forEach { word ->
-                if (!checkIdentifier(word)) {
-                    errors.add("Line ${index + 1}, Column ${line.indexOf(word) + 1}: Invalid identifier format: $word")
+        for (token in tokens) {
+            if (token.getType() == TokenType.IDENTIFIER){
+                if (!checkIdentifier(token.getCharArray())) {
+                    errors.add("Invalid identifier: ${token.getCharArray()}")
                 }
-            }
-            if (!checkPrintlnUsage(line)) {
-                errors.add("Line ${index + 1}: Invalid println usage")
             }
         }
         return errors
