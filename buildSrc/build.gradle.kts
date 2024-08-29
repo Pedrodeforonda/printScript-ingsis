@@ -20,3 +20,9 @@ dependencies {
     implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.1")
     testImplementation("org.jacoco:org.jacoco.agent:0.8.12")
 }
+
+
+tasks.named<Wrapper>("wrapper") {
+    gradleVersion = "7.3.3"
+    distributionType = Wrapper.DistributionType.ALL
+}
