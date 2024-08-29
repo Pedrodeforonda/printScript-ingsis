@@ -1,12 +1,13 @@
 package org.example.tokenManagers
 
+import Position
 import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
 class StringLiteralStrategy : TokenStrategy {
 
-    override fun buildToken(lexer: Lexer, result: String): Lexer {
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
         if (lexer.getChar() == '\'' || lexer.getChar() == '"') {
             var result = ""
             var newLexer = lexer.goToNextPos()
@@ -22,7 +23,7 @@ class StringLiteralStrategy : TokenStrategy {
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
                 newLexer.getLexerPosition().nextColumn(),
-                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL, newLexer.getLexerPosition()),
+                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL, initialPosition),
             )
         }
         return lexer

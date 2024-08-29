@@ -17,10 +17,13 @@ class Token(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Token) return false
+        if (other == null || javaClass != other.javaClass) return false
+
+        other as Token
 
         if (string != other.string) return false
         if (type != other.type) return false
+        if (position != other.position) return false
 
         return true
     }
@@ -29,5 +32,13 @@ class Token(
         var result = string.hashCode()
         result = 31 * result + type.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "Token{" +
+            "string='$string', " +
+            "type=$type, " +
+            "position=$position" +
+            "}"
     }
 }

@@ -1,11 +1,12 @@
 package org.example.tokenManagers
 
+import Position
 import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
 class OperatorStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer, result: String): Lexer {
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
         val currentChar = lexer.getChar()
         val tokenType = when (currentChar) {
             '+' -> TokenType.PLUS
@@ -20,7 +21,7 @@ class OperatorStrategy : TokenStrategy {
                 lexer.getTokenStrategies(),
                 lexer.getPos() + 1,
                 lexer.getLexerPosition().nextColumn(),
-                lexer.getTokens() + Token(currentChar.toString(), tokenType, lexer.getLexerPosition()),
+                lexer.getTokens() + Token(currentChar.toString(), tokenType, initialPosition),
             )
         }
         return lexer
