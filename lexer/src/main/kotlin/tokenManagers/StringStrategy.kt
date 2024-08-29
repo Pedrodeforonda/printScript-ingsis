@@ -7,7 +7,7 @@ import org.example.TokenStrategy
 class StringStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String): Lexer { // el texto del lexer es to do
         if (lexer.getChar() == null) return lexer
-        if (lexer.getChar()!!.isLetter()) {
+        if (lexer.getChar()!!.isLetter() || lexer.getChar() == '_') {
             var newResult = result
             newResult += lexer.getChar()
             val newLexer = lexer.goToNextPos() // crea un nuevo lexer en la pos +1

@@ -1,2 +1,1 @@
-"identifierFormat": "camelCase",
-"restrictPrintln": true
+let aB: string = "monos";

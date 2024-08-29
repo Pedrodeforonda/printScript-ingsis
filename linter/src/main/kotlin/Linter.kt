@@ -30,13 +30,14 @@ class Linter(private val config: LinterConfig) {
     }
 
     fun lintFile(file: File): List<String> {
-        val lexer = Lexer(file.toString(), ClassicTokenStrategies())
+        val lexer = Lexer(file.readText(), ClassicTokenStrategies())
         val tokens = lexer.tokenizeAll(lexer)
         val errors = mutableListOf<String>()
         for (token in tokens) {
             if (token.getType() == TokenType.IDENTIFIER) {
                 if (!checkIdentifier(token.getCharArray())) {
-                    errors.add("Invalid identifier: ${token.getCharArray()}")
+                    errors.add("Invalid identifier: ${token.getCharArray()}"
+                            + " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}")
                 }
             }
         }
