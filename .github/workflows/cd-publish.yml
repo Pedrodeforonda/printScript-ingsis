@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - cd-publish
 
 jobs:
   publish:
