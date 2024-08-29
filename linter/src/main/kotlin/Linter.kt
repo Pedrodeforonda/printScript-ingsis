@@ -36,8 +36,10 @@ class Linter(private val config: LinterConfig) {
         for (token in tokens) {
             if (token.getType() == TokenType.IDENTIFIER) {
                 if (!checkIdentifier(token.getCharArray())) {
-                    errors.add("Invalid identifier: ${token.getCharArray()}"
-                            + " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}")
+                    errors.add(
+                        "Invalid identifier: ${token.getCharArray()}" +
+                            " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}",
+                    )
                 }
             }
         }
