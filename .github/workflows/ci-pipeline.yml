@@ -97,4 +97,4 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run coverage check
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew jacocoTestCoverageVerification
