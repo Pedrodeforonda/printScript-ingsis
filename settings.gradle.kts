@@ -26,4 +26,7 @@ include(":runner")
 findProject(":runner")?.name = "runner"
 include("formatter")
 include("linter")
-
+include("cli")
+include("clii")
+include("cli")
+include("cli")

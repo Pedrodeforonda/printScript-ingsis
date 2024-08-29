@@ -29,6 +29,8 @@
             <option value="$PROJECT_DIR$/buildSrc/ast" />
             <option value="$PROJECT_DIR$/buildSrc/linter" />
             <option value="$PROJECT_DIR$/buildSrc/token" />
+            <option value="$PROJECT_DIR$/cli" />
+            <option value="$PROJECT_DIR$/clii" />
             <option value="$PROJECT_DIR$/formatter" />
             <option value="$PROJECT_DIR$/interpreter" />
             <option value="$PROJECT_DIR$/lexer" />

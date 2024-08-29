@@ -1,6 +1,7 @@
 package org.example
 
 import DeclarationKeyWord
+import Position
 import Token
 import TokenType
 import nodes.Assignation
@@ -91,7 +92,7 @@ class InterpreterTest {
 
     @Test
     fun testSum() {
-        val sum = BinaryNode(Literal(10), Token("+", TokenType.PLUS), Literal(20))
+        val sum = BinaryNode(Literal(10), Token("+", TokenType.PLUS, Position(0, 0)), Literal(20))
         val callNode = CallNode("println", listOf(sum))
 
         val outContent = ByteArrayOutputStream()
@@ -106,7 +107,7 @@ class InterpreterTest {
     fun testConcatenation() {
         val concatenation = BinaryNode(
             Literal("Hello"),
-            Token("+", TokenType.PLUS),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(" World"),
         )
         val callNode = CallNode("println", listOf(concatenation))
@@ -123,7 +124,7 @@ class InterpreterTest {
     fun testMixedConcatenation() {
         val concatenation = BinaryNode(
             Literal("Diego"),
-            Token("+", TokenType.PLUS),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(10),
         )
         val callNode = CallNode("println", listOf(concatenation))
@@ -137,7 +138,7 @@ class InterpreterTest {
 
         val concatenation2 = BinaryNode(
             Literal(10),
-            Token("+", TokenType.PLUS),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal("Diego"),
         )
         val callNode2 = CallNode("println", listOf(concatenation2))
@@ -154,7 +155,7 @@ class InterpreterTest {
     fun testSubtraction() {
         val subtraction = BinaryNode(
             Literal(10),
-            Token("-", TokenType.MINUS),
+            Token("-", TokenType.MINUS, Position(0, 0)),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(subtraction))
@@ -171,7 +172,7 @@ class InterpreterTest {
     fun testMultiplication() {
         val multiplication = BinaryNode(
             Literal(10),
-            Token("*", TokenType.ASTERISK),
+            Token("*", TokenType.ASTERISK, Position(0, 0)),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(multiplication))
@@ -188,7 +189,7 @@ class InterpreterTest {
     fun testDivision() {
         val division = BinaryNode(
             Literal(10),
-            Token("/", TokenType.SLASH),
+            Token("/", TokenType.SLASH, Position(0, 0)),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(division))
@@ -204,21 +205,21 @@ class InterpreterTest {
     @Test
     fun testPrintOperations() {
         val sum = BinaryNode(
-            BinaryNode(Literal(10), Token("+", TokenType.PLUS), Literal(20)),
-            Token("+", TokenType.PLUS),
+            BinaryNode(Literal(10), Token("+", TokenType.PLUS, Position(0, 0)), Literal(20)),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(" "),
         )
         val sub = BinaryNode(
-            BinaryNode(Literal(10), Token("-", TokenType.MINUS), Literal(5)),
-            Token("+", TokenType.PLUS),
+            BinaryNode(Literal(10), Token("-", TokenType.MINUS, Position(0, 0)), Literal(5)),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(" "),
         )
         val mul = BinaryNode(
-            BinaryNode(Literal(10), Token("*", TokenType.ASTERISK), Literal(5)),
-            Token("+", TokenType.PLUS),
+            BinaryNode(Literal(10), Token("*", TokenType.ASTERISK, Position(0, 0)), Literal(5)),
+            Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(" "),
         )
-        val div = BinaryNode(Literal(10), Token("/", TokenType.SLASH), Literal(5))
+        val div = BinaryNode(Literal(10), Token("/", TokenType.SLASH, Position(0, 0)), Literal(5))
 
         val callNode = CallNode("println", listOf(sum))
         val callNode2 = CallNode("println", listOf(sub))
