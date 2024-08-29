@@ -34,7 +34,7 @@ class Linter(private val config: LinterConfig) {
         val tokens = lexer.tokenizeAll(lexer)
         val errors = mutableListOf<String>()
         for (token in tokens) {
-            if (token.getType() == TokenType.IDENTIFIER){
+            if (token.getType() == TokenType.IDENTIFIER) {
                 if (!checkIdentifier(token.getCharArray())) {
                     errors.add("Invalid identifier: ${token.getCharArray()}")
                 }
