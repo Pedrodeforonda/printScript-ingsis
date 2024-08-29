@@ -4,11 +4,11 @@ plugins {
 }
 
 group = "com.github.printSrcript"
-version = "2.0"
+version = "1.0"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 
     withSourcesJar()
     withJavadocJar()
@@ -40,12 +40,4 @@ publishing {
     }
 }
 
-tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "7.3.3"
-    distributionType = Wrapper.DistributionType.ALL
-}
 
-
-tasks.register("publish") {
-    dependsOn("publishToGitHubPackagesRepository")
-}
