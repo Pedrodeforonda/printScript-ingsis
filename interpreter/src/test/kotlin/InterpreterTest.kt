@@ -155,11 +155,7 @@ class InterpreterTest {
     fun testSubtraction() {
         val subtraction = BinaryNode(
             Literal(10),
-            Token(
-                "-",
-                TokenType.MINUS,
-                Position(0, 0),
-            ),
+            Token("-", TokenType.MINUS, Position(0, 0)),
             Literal(5),
         )
         val callNode = CallNode("println", listOf(subtraction))
@@ -223,7 +219,7 @@ class InterpreterTest {
             Token("+", TokenType.PLUS, Position(0, 0)),
             Literal(" "),
         )
-        val div = BinaryNode(Literal(10), Token("/", TokenType.SLASH, Position(10, 5)), Literal(5))
+        val div = BinaryNode(Literal(10), Token("/", TokenType.SLASH, Position(0, 0)), Literal(5))
 
         val callNode = CallNode("println", listOf(sum))
         val callNode2 = CallNode("println", listOf(sub))
