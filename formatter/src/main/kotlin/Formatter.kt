@@ -3,14 +3,12 @@ class Formatter {
     fun formatCode(input: String, config: FormatterConfigReader): String {
         var output = input
 
-        // Espacio antes del ":"
         if (config.spaceBeforeColon) {
             output = output.replace(Regex("\\s*:"), " :")
         } else {
             output = output.replace(Regex("\\s*:"), ":")
         }
 
-        // Espacio después del ":"
         if (config.spaceAfterColon) {
             output = output.replace(Regex(":\\s*"), ": ")
         } else {
