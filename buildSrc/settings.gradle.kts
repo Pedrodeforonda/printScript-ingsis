@@ -18,4 +18,6 @@ include(":ast")
 findProject(":ast")?.name = "ast"
 include(":token")
 findProject(":token")?.name = "token"
+include(":linter")
+findProject(":linter")?.name = "linter"
 
