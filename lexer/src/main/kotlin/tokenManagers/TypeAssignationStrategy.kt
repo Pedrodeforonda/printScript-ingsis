@@ -1,11 +1,12 @@
 package org.example.tokenManagers
 
+import Position
 import Token
 import org.example.Lexer
 import org.example.TokenStrategy
 
 class TypeAssignationStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer, result: String): Lexer {
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
         if (lexer.getChar() == ':') {
             val tokenType = TokenType.TYPE_ASSIGNATION
             val newLexer = lexer.goToNextPos()
@@ -14,7 +15,7 @@ class TypeAssignationStrategy : TokenStrategy {
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
                 newLexer.getLexerPosition().nextColumn(),
-                newLexer.getTokens() + Token(":", tokenType, newLexer.getLexerPosition()),
+                newLexer.getTokens() + Token(":", tokenType, initialPosition),
             )
         }
         return lexer

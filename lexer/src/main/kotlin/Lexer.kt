@@ -17,7 +17,7 @@ class Lexer(
         if (newPos > text.length - 1) {
             return Lexer(text, tokenStrategies, pos, lexerPosition, getTokens()) // currentChar = null
         } else {
-            return Lexer(text, tokenStrategies, newPos, lexerPosition.nextLine(), getTokens())
+            return Lexer(text, tokenStrategies, newPos, lexerPosition.nextColumn(), getTokens())
         }
     }
     private fun canSkip(lexer: Lexer): Boolean {
@@ -73,7 +73,7 @@ class Lexer(
                 }
             }
             for (tokenStrategy in tokenStrategies.getStrategies()) {
-                val newLexer = tokenStrategy.buildToken(lexer, "")
+                val newLexer = tokenStrategy.buildToken(lexer, "", lexer.getLexerPosition())
                 if (newLexer != lexer) {
                     return updateLexer(newLexer)
                 }

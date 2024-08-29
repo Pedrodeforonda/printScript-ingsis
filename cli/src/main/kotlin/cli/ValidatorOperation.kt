@@ -6,7 +6,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 class ValidatorOperation : CliktCommand(
-    name = "ValidatorOperation",
+    name = "validate",
     help = "Validate the source file.",
 ) {
     private val sourceFile: File by argument(help = "Source file to process.")
