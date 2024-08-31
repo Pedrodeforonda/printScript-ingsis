@@ -2,5 +2,6 @@
   "spaceBeforeColon": false,
   "spaceAfterColon": true,
   "spaceBeforeAssignment": true,
-  "spaceAfterAssignment": true
+  "spaceAfterAssignment": true,
+  "linesBeforePrintln": 1
 }
