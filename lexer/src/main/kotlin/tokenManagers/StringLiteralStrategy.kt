@@ -22,7 +22,7 @@ class StringLiteralStrategy : TokenStrategy {
                 newLexer.getText(),
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
-                newLexer.getLexerPosition().nextColumn(),
+                newLexer.getLexerPosition(),
                 newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL, initialPosition),
             )
         }
