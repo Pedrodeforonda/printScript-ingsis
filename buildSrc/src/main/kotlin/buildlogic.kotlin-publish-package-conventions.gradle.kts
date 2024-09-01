@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.printSrcript"
-version = "1.0"
+version = "1.0.${System.getenv("GITHUB_RUN_NUMBER")}" // Dynamic version
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -39,5 +39,3 @@ publishing {
         }
     }
 }
-
-
