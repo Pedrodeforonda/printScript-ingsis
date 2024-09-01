@@ -8,8 +8,11 @@ import org.example.TokenStrategy
 class StringStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
         if (lexer.getChar() == null) return lexer
-        if (lexer.getChar()!!.isLetter() || ((lexer.getChar() == '_' || lexer.getChar()!!.isDigit())
-                    && result.isNotEmpty())) {
+        if (lexer.getChar()!!.isLetter() || (
+                (lexer.getChar() == '_' || lexer.getChar()!!.isDigit()) &&
+                    result.isNotEmpty()
+                )
+        ) {
             var newResult = result
             newResult += lexer.getChar()
             val newLexer = lexer.goToNextPos() // crea un nuevo lexer en la pos +1
