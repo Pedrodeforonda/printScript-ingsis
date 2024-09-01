@@ -8,7 +8,7 @@ import main.kotlin.Linter
 import java.io.File
 
 class AnalyzerOperation : CliktCommand(
-    name = "analyzer",
+    name = "analyze",
     help = "Analyze the source file.",
 ) {
     private val sourceFile: File by argument(help = "Source file to process.")
@@ -19,8 +19,7 @@ class AnalyzerOperation : CliktCommand(
 
     override fun run() {
         val config = ConfigParser.parseConfig(configFile.absolutePath)
-        val linter = Linter(config)
-        val errors = linter.lintFile(sourceFile)
+        val errors = Linter().lint(sourceFile.readText(), config)
         if (errors.isEmpty()) {
             println("No errors found.")
         } else {

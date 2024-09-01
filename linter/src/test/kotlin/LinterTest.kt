@@ -27,7 +27,7 @@ class LinterTest {
     fun testLintCamelCaseFile() {
         val config = LinterConfig("camelCase", true)
         val linter = Linter(config)
-        val file = File("src/test/resources/LinterCamelCaseTest")
+        val file = File("src/test/resources/LinterCamelCaseTest.txt")
         val errors = linter.lintFile(file)
         assertTrue(errors.isEmpty())
     }
@@ -36,7 +36,7 @@ class LinterTest {
     fun testLintSnakeCaseFile() {
         val config = LinterConfig("snake_case", true)
         val linter = Linter(config)
-        val file = File("src/test/resources/LinterSnakeCaseTest")
+        val file = File("src/test/resources/LinterSnakeCaseTest.txt")
         val errors = linter.lintFile(file)
         assertTrue(errors.isEmpty())
     }

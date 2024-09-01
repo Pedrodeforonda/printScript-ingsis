@@ -1,1 +1,2 @@
 let Rama_mono: string = "monos";
+print(Rama_mono);
