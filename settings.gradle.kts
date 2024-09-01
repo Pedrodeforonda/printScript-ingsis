@@ -25,8 +25,8 @@ findProject(":lexer")?.name = "lexer"
 include(":runner")
 findProject(":runner")?.name = "runner"
 include("formatter")
-include("linter")
-include("cli")
-include("clii")
-include("cli")
-include("cli")
+findProject(":formatter")?.name = "formatter"
+include(":linter")
+findProject(":linter")?.name = "linter"
+include(":cli")
+findProject(":cli")?.name = "cli"
