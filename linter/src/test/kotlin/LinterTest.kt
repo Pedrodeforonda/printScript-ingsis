@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class LinterTest {
-    
+
+    private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
+
     private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
 
     private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
