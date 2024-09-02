@@ -1,6 +1,7 @@
 package org.example
 
 import DeclarationKeyWord
+import InterpreterException
 import Position
 import Token
 import TokenType
@@ -309,6 +310,6 @@ class InterpreterTest {
             interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
         }
 
-        assertEquals(error.message, "Invalid type: expected string, but got Int on variable name, at line 0 column 0")
+        assertEquals(error.message, "Invalid type: expected string, but got number on variable name, at line 0 column 0")
     }
 }
