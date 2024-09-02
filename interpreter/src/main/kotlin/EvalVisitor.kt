@@ -75,7 +75,8 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         }
 
         throw InterpreterException(
-            "Invalid type: expected $type, but got ${right.value::class.simpleName} on variable $name",
+            "Invalid type: expected $type, but got ${right.value::class.simpleName} on variable $name," +
+                    " at line ${expression.getPos().getLine()} column ${expression.getPos().getColumn()}",
         )
     }
 
