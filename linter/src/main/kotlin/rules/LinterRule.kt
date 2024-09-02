@@ -1,7 +1,7 @@
 package main.kotlin.rules
 
-import org.example.Lexer
+import Token
 
 interface LinterRule {
-    fun lintCode(input: String, lexer: Lexer): List<String>
+    fun lintCode(tokens: List<Token>): List<String>
 }

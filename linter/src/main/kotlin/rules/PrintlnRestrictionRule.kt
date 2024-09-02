@@ -1,38 +1,46 @@
 package main.kotlin.rules
 
 import Token
-import org.example.ClassicTokenStrategies
-import org.example.Lexer
-import java.util.regex.Pattern
+import TokenType
 
 class PrintlnRestrictionRule : LinterRule {
 
-    private val printlnPattern = Pattern.compile("""println\(([^)]+)\)""")
-
-    override fun lintCode(input: String, lexer: Lexer): List<String> {
-        val lines = input.split("\n")
+    override fun lintCode(tokens: List<Token>): List<String> {
         val errors = mutableListOf<String>()
-        for (line in lines) {
-            val matcher = printlnPattern.matcher(line)
-            if (matcher.find()) { // If println is found in the line
-                val argument = matcher.group(1) // Extract the argument of println
-                val lexer = Lexer(argument, ClassicTokenStrategies())
-                val tokens = lexer.tokenizeAll(lexer) // Tokenize the argument
-                if (printlnArgumentIsInvalid(tokens)) {
-                    errors.add(
-                        "Invalid argument in println: ${tokens[0].getCharArray()}" +
-                            " at line ${tokens[0].getPosition().getLine()}" +
-                                " column ${tokens[0].getPosition().getColumn()}",
-                    )
-                }
+        val listsOfPrintlnArgumentTokens = getListsOfPrintlnArgumentTokens(tokens)
+        for (printlnArgumentTokens in listsOfPrintlnArgumentTokens) {
+            if (printlnArgumentIsInvalid(printlnArgumentTokens)) {
+                errors.add(
+                    "Invalid argument in println" +
+                            " at line ${printlnArgumentTokens[0].getPosition().getLine()}" +
+                            " column ${printlnArgumentTokens[0].getPosition().getColumn()}",
+                )
             }
         }
         return errors
     }
 
-    private fun printlnArgumentIsInvalid(tokens: List<Token>): Boolean {
-        val type = tokens[0].getType()
-        return tokens.size != 1 || (
+    private fun getListsOfPrintlnArgumentTokens(tokens: List<Token>): List<List<Token>> {
+        val listsOfPrintlnArgumentTokens = mutableListOf<List<Token>>()
+        for ((index, token) in tokens.withIndex()) {
+            if (token.getType() == TokenType.CALL_FUNC && token.getCharArray() == "println") {
+                if (tokens[index + 1].getType() == TokenType.LEFT_PAREN) {
+                    val printlnArgumentTokens = mutableListOf<Token>()
+                    var i = index + 2
+                    while (tokens[i].getType() != TokenType.RIGHT_PAREN) {
+                        printlnArgumentTokens.add(tokens[i])
+                        i++
+                    }
+                    listsOfPrintlnArgumentTokens.add(printlnArgumentTokens)
+                }
+            }
+        }
+        return listsOfPrintlnArgumentTokens
+    }
+
+    private fun printlnArgumentIsInvalid(argumentTokens: List<Token>): Boolean {
+        val type = argumentTokens[0].getType()
+        return argumentTokens.size != 1 || (
             type != TokenType.IDENTIFIER &&
                 type != TokenType.NUMBER_LITERAL && type != TokenType.STRING_LITERAL
             )
