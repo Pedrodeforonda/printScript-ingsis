@@ -265,4 +265,42 @@ public class ParserTester {
 
         println(error.message!!)
     }
+
+    @Test
+    fun testFunctionCall() {
+        val tokens = listOf(
+            Token("println", TokenType.CALL_FUNC, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 8)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 10)),
+            Token(";", TokenType.SEMICOLON, Position(1, 11)),
+        )
+
+        val parser = Parser(tokens.listIterator())
+        val result = parser.parseExpressions().toList()
+        val expected = listOf(
+            CallNode("println", listOf(Identifier("a", Position(1, 9))), Position(1, 1)),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun testFunctionCallFail() {
+        val tokens = listOf(
+            Token("println", TokenType.CALL_FUNC, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 8)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(";", TokenType.SEMICOLON, Position(1, 11)),
+        )
+
+        val parser = Parser(tokens.listIterator())
+        val error = assertFailsWith<ParseException> {
+            parser.parseExpressions().toList()
+        }
+        assertEquals(
+            error.message,
+            "Syntax Error at 1, 11" +
+                " Expected right parenthesis",
+        )
+    }
 }

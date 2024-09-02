@@ -21,7 +21,7 @@ class FunCallParser : Prefix {
         if (currentToken.getType() != TokenType.RIGHT_PAREN) {
             do {
                 arguments.add(parser.parseExpression()) // Parse each argument
-                if (parser.getCurrentToken().getType() == TokenType.RIGHT_PAREN) {
+                if (parser.getCurrentToken().getType() != TokenType.COMMA) {
                     break
                 }
                 parser.consume() // Consume comma between arguments
@@ -29,13 +29,14 @@ class FunCallParser : Prefix {
         }
 
         val rightParen: Token = parser.getCurrentToken()
-        parser.consume()
+
         if (rightParen.getType() != TokenType.RIGHT_PAREN) {
             throw ParseException(
                 "Syntax Error at ${rightParen.getPosition().getLine()}, ${rightParen.getPosition().getColumn()}" +
                     " Expected right parenthesis",
             )
         }
+        parser.consume()
         return function
     }
 }
