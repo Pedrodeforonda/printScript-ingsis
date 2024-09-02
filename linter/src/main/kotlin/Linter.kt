@@ -1,21 +1,17 @@
 package main.kotlin
 
+import main.kotlin.strategies.IdentifierStrategy
 import org.example.ClassicTokenStrategies
 import org.example.Lexer
 import java.io.File
 import java.util.regex.Pattern
 
-class Linter(private val config: LinterConfig) {
+class Linter(private val config: LinterConfig, private val strategies: Map<String, IdentifierStrategy>) {
 
-    private val camelCasePattern = Pattern.compile("^[a-z]+([A-Z][a-z]*)*$")
-    private val snakeCasePattern = Pattern.compile("^[a-z]+(_[a-z]+)*$")
+    private val identifierStrategy: IdentifierStrategy = strategies[config.identifierFormat]!!
 
-    fun checkIdentifier(identifier: String): Boolean {
-        return when (config.identifierFormat) {
-            "camelCase" -> camelCasePattern.matcher(identifier).matches()
-            "snake_case" -> snakeCasePattern.matcher(identifier).matches()
-            else -> false
-        }
+    fun checkIdentifierStrategies(identifier: String): Boolean {
+        return identifierStrategy.checkIdentifier(identifier)
     }
 
     fun checkPrintlnUsage(line: String): Boolean {
@@ -35,7 +31,7 @@ class Linter(private val config: LinterConfig) {
         val errors = mutableListOf<String>()
         for (token in tokens) {
             if (token.getType() == TokenType.IDENTIFIER) {
-                if (!checkIdentifier(token.getCharArray())) {
+                if (!checkIdentifierStrategies(token.getCharArray())) {
                     errors.add(
                         "Invalid identifier: ${token.getCharArray()}" +
                             " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}",
