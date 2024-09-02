@@ -1,47 +1,41 @@
 import main.kotlin.Linter
 import main.kotlin.LinterConfig
-import main.kotlin.strategies.CamelStrategy
-import main.kotlin.strategies.SnakeStrategy
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.File
 
 class LinterTest {
 
-    private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
-
     @Test
-    fun testCheckIdentifier() {
-        val config = LinterConfig("camelCase", true)
-        val linter = Linter(config, strategyMap)
-        assertTrue(linter.checkIdentifierStrategies("validIdentifier"))
-        assertFalse(linter.checkIdentifierStrategies("Invalid_identifier"))
-    }
-
-    @Test
-    fun testCheckPrintlnUsage() {
-        val config = LinterConfig("camelCase", true)
-        val linter = Linter(config, strategyMap)
-        assertTrue(linter.checkPrintlnUsage("""println(Hello)"""))
-        assertFalse(linter.checkPrintlnUsage("""println(123abc)"""))
-    }
-
-    @Test
-    fun testLintCamelCaseFile() {
-        val config = LinterConfig("camelCase", true)
-        val linter = Linter(config, strategyMap)
-        val file = File("src/test/resources/LinterCamelCaseTest")
-        val errors = linter.lintFile(file)
+    fun testCamelCaseRule() {
+        val config = LinterConfig("camelCase", false)
+        val input = File("src/test/resources/LinterCamelCaseTest.txt").readText()
+        val errors = Linter().lint(input, config)
         assertTrue(errors.isEmpty())
+        val input2 = File("src/test/resources/LinterCamelCaseTest2.txt").readText()
+        val errors2 = Linter().lint(input2, config)
+        assertTrue(errors2.size == 2)
     }
 
     @Test
-    fun testLintSnakeCaseFile() {
-        val config = LinterConfig("snake_case", true)
-        val linter = Linter(config, strategyMap)
-        val file = File("src/test/resources/LinterSnakeCaseTest")
-        val errors = linter.lintFile(file)
+    fun testSnakeCaseRule() {
+        val config = LinterConfig("snake_case", false)
+        val input = File("src/test/resources/LinterSnakeCaseTest.txt").readText()
+        val errors = Linter().lint(input, config)
         assertTrue(errors.isEmpty())
+        val input2 = File("src/test/resources/LinterSnakeCaseTest2.txt").readText()
+        val errors2 = Linter().lint(input2, config)
+        assertTrue(errors2.size == 3)
+    }
+
+    @Test
+    fun testPrintlnRestrictionRule() {
+        val config = LinterConfig("", true)
+        val input = File("src/test/resources/LinterPrintlnRestrictionTest.txt").readText()
+        val errors = Linter().lint(input, config)
+        assertTrue(errors.isEmpty())
+        val input2 = File("src/test/resources/LinterPrintlnRestrictionTest2.txt").readText()
+        val errors2 = Linter().lint(input2, config)
+        assertTrue(errors2.size == 3)
     }
 }

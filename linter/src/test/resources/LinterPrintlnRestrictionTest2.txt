@@ -1,0 +1,5 @@
+let a: string = "monos";
+let b: string = "monitos";
+println(a + b);
+println("c" + "d");
+println(1 * 5);
