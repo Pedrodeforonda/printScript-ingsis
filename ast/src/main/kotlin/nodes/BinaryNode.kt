@@ -1,9 +1,15 @@
 package nodes
 
 import ExpressionVisitor
+import Position
 import Token
 
-class BinaryNode(private val left: Node, private val operator: Token, private val right: Node) : Node {
+class BinaryNode(
+    private val left: Node,
+    private val operator: Token,
+    private val right: Node,
+    private val pos: Position,
+) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitBinaryExp(this)
     }
@@ -18,6 +24,10 @@ class BinaryNode(private val left: Node, private val operator: Token, private va
 
     fun getRight(): Node {
         return right
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {
