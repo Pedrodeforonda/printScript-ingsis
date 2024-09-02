@@ -17,24 +17,21 @@ class DeclarationParser : Prefix {
                     " Expected let keyword",
             )
         }
-        val identifierToken: Token = parser.lookAhead(0)
-        parser.consume()
+        val identifierToken: Token = parser.consume()
         if (identifierToken.getType() != TokenType.IDENTIFIER) {
             throw ParseException(
                 "Semantic Error at ${identifierToken.getPosition().getLine()}, " +
                     "${identifierToken.getPosition().getColumn()} Expected identifier token",
             )
         }
-        val typeAssignation = parser.lookAhead(0)
-        parser.consume()
+        val typeAssignation = parser.consume()
         if (typeAssignation.getType() != TokenType.TYPE_ASSIGNATION) {
             throw ParseException(
                 "Semantic Error at ${typeAssignation.getPosition().getLine()}, " +
                     "${typeAssignation.getPosition().getColumn()} Expected type assignation",
             )
         }
-        val type = parser.lookAhead(0)
-        parser.consume()
+        val type = parser.consume()
         if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE) {
             throw ParseException(
                 "Semantic Error at ${type.getPosition().getLine()}, ${type.getPosition().getColumn()} Expected type",
@@ -46,6 +43,7 @@ class DeclarationParser : Prefix {
             identifierToken.getCharArray(),
             type.getCharArray(),
             letKeword,
+            letToken.getPosition(),
         )
     }
 }

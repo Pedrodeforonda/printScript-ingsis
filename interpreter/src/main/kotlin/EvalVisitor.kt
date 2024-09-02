@@ -2,8 +2,8 @@ package org.example
 
 import DeclarationResult
 import ExpressionVisitor
-import FailureResult
 import IdentifierResult
+import InterpreterException
 import LiteralResult
 import Result
 import SuccessResult
@@ -56,7 +56,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             return LiteralResult(left.toString() + right)
         }
 
-        return FailureResult("Invalid operation")
+        return InterpreterException("Invalid operation")
     }
 
     override fun visitAssignment(expression: Assignation): Any {
@@ -75,14 +75,17 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             return SuccessResult("String type variable assigned")
         }
 
-        return FailureResult("Invalid assignment")
+        throw InterpreterException(
+            "Invalid type: expected $type, but got ${getType(right.value)} on variable $name," +
+                " at line ${expression.getPos().getLine()} column ${expression.getPos().getColumn()}",
+        )
     }
 
     override fun visitCallExp(expression: CallNode): Any {
         if (expression.getFunc() == "println") {
             val arg = expression.getArguments()
             if (arg.size != 1) {
-                return FailureResult("Invalid number of arguments")
+                return InterpreterException("Invalid number of arguments")
             }
             val result = arg[0].accept(this)
             if (result is IdentifierResult) {
@@ -92,7 +95,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             println((result as LiteralResult).value)
             return SuccessResult("Printed")
         }
-        return FailureResult("Invalid function")
+        return InterpreterException("Invalid function")
     }
 
     override fun visitIdentifier(expression: Identifier): Any {
@@ -101,6 +104,14 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
                 return IdentifierResult(key, value)
             }
         }
-        return FailureResult("Variable not found")
+        return InterpreterException("Variable not found")
+    }
+
+    private fun getType(value: Any): String {
+        return when (value) {
+            is Number -> "number"
+            is String -> "string"
+            else -> "unknown"
+        }
     }
 }

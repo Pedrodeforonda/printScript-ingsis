@@ -12,7 +12,7 @@ class BinaryOperationParser(private val precedence: Int) : Infix {
 
     override fun parse(parser: Parser, left: Node, token: Token): Node {
         val right = parser.parseExpression(precedence)
-        return BinaryNode(left, myToken, right)
+        return BinaryNode(left, myToken, right, myToken.getPosition())
     }
 
     fun updateToken(type: Token) {

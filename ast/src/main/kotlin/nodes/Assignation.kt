@@ -1,8 +1,9 @@
 package nodes
 
 import ExpressionVisitor
+import Position
 
-class Assignation(private val declaration: Node, private val value: Node) : Node {
+class Assignation(private val declaration: Node, private val value: Node, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitAssignment(this)
     }
@@ -13,6 +14,10 @@ class Assignation(private val declaration: Node, private val value: Node) : Node
 
     fun getValue(): Node {
         return value
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {

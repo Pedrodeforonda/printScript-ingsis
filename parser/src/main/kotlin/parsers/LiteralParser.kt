@@ -15,6 +15,7 @@ class LiteralParser : Prefix {
                 TokenType.STRING_LITERAL -> token.getCharArray()
                 else -> throw ParseException("Invalid literal type")
             },
+            token.getPosition(),
         )
     }
 }
