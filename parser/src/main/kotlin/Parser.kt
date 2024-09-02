@@ -9,7 +9,7 @@ import parsers.LiteralParser
 import parsers.Prefix
 import parsers.PrefixOperatorParser
 
-class Parser(private val tokens: List<Token>) {
+class Parser(private val tokens: Iterator<Token>) {
     private val prefixParsers = mutableMapOf<TokenType, Prefix>()
     private val infixParsers = mutableMapOf<TokenType, Infix>()
 
@@ -27,8 +27,7 @@ class Parser(private val tokens: List<Token>) {
         registerPrefix(TokenType.CALL_FUNC, FunCallParser())
     }
 
-    private var currentToken: Token = tokens[0]
-    private var currentIndex = 0
+    private var currentToken: Token = tokens.next()
 
     private fun registerPrefix(tokenType: TokenType, parser: Prefix) {
         prefixParsers[tokenType] = parser
@@ -59,32 +58,19 @@ class Parser(private val tokens: List<Token>) {
         return left
     }
 
-    fun parseExpressions(): List<Node> {
-        val expressions = mutableListOf<Node>()
-
+    fun parseExpressions(): Sequence<Node> = sequence {
         while (hasNextToken()) {
-            expressions.add(parseExpression())
-            if (currentToken.getType() == TokenType.SEMICOLON && !hasNextToken()) {
-                val errors = checkExpressions(expressions)
-                if (errors.isNotEmpty()) {
-                    throw ParseException(errors.joinToString("\n") { it.message.toString() })
-                }
-                return expressions
+            val result: Node = parseExpression()
+            if (checkExpressions(result).isEmpty()) {
+                yield(result)
+            } else {
+                throw ParseException(checkExpressions(result).first().message!!)
             }
-            if (currentToken.getType() == TokenType.SEMICOLON) {
-                consume()
-            }
+            if (currentToken.getType() == TokenType.SEMICOLON && hasNextToken()) consume()
         }
-
-        val errors = checkExpressions(expressions)
-        if (errors.isNotEmpty()) {
-            throw ParseException(errors.joinToString("\n") { it.message.toString() })
-        }
-
-        return expressions
     }
 
-    private fun hasNextToken(): Boolean = currentIndex < tokens.size - 1
+    private fun hasNextToken(): Boolean = tokens.hasNext()
 
     private fun getPrecedence(): Int {
         val infixParser = infixParsers[currentToken.getType()]
@@ -92,33 +78,26 @@ class Parser(private val tokens: List<Token>) {
     }
 
     fun consume(): Token {
-        val token = currentToken
-        currentToken = tokens.getOrNull(++currentIndex) ?: throw ParseException(
-            "Unexpected end of input",
-        )
-        return token
-    }
-
-    fun lookAhead(offset: Int): Token {
-        return tokens.getOrNull(currentIndex + offset + 1) ?: throw ParseException(
-            "Unexpected end of input",
-        )
+        try {
+            currentToken = tokens.next()
+        } catch (e: NoSuchElementException) {
+            throw ParseException("Unexpected end of input")
+        }
+        return currentToken
     }
 
     fun getCurrentToken(): Token {
         return currentToken
     }
 
-    fun checkExpressions(expressions: List<Node>): MutableList<Error> {
+    private fun checkExpressions(expression: Node): MutableList<Error> {
         val variables = HashMap<String, String>()
         val visitor = ExpressionCheckerVisitor(variables)
         val result: MutableList<Error> = ArrayList()
-        expressions.forEach { expression ->
-            val checkResult = expression.accept(visitor)
-            if (checkResult is CheckAstResult) {
-                if (!checkResult.isPass()) {
-                    result.add(Error(checkResult.getMessage()))
-                }
+        val checkResult = expression.accept(visitor)
+        if (checkResult is CheckAstResult) {
+            if (!checkResult.isPass()) {
+                result.add(Error(checkResult.getMessage()))
             }
         }
         return result

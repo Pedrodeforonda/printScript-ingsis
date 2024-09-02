@@ -1,14 +1,19 @@
 package nodes
 
 import ExpressionVisitor
+import Position
 
-class Literal(private val value: Any) : Node {
+class Literal(private val value: Any, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitLiteral(this)
     }
 
     fun getValue(): Any {
         return value
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {

@@ -2,11 +2,13 @@ package nodes
 
 import DeclarationKeyWord
 import ExpressionVisitor
+import Position
 
 class Declaration(
     private val name: String,
     private val type: String,
     private val declarationKeyWord: DeclarationKeyWord,
+    private val pos: Position,
 ) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitDeclaration(this)
@@ -22,6 +24,10 @@ class Declaration(
 
     fun getDeclarationKeyWord(): DeclarationKeyWord {
         return declarationKeyWord
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,14 +1,19 @@
 package nodes
 
 import ExpressionVisitor
+import Position
 
-class Identifier(private val name: String) : Node {
+class Identifier(private val name: String, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitIdentifier(this)
     }
 
     fun getName(): String {
         return name
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {
