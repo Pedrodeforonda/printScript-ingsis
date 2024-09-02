@@ -11,10 +11,6 @@ class LinterTest {
 
     private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
 
-    private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
-
-    private val strategyMap = mapOf("camelCase" to CamelStrategy(), "snake_case" to SnakeStrategy())
-
     @Test
     fun testCheckIdentifier() {
         val config = LinterConfig("camelCase", true)
