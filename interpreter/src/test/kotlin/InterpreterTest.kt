@@ -11,6 +11,7 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
@@ -25,7 +26,7 @@ class InterpreterTest {
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
             Literal("Pedro"),
         )
-        interpreter.interpret(listOf(stringAssignation))
+        interpreter.interpret(sequenceOf(stringAssignation))
 
         assertEquals("Pedro", interpreter.getVariableMap()[Pair("name", "string")])
 
@@ -33,7 +34,7 @@ class InterpreterTest {
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD),
             Literal(10),
         )
-        interpreter.interpret(listOf(numberAssignation))
+        interpreter.interpret(sequenceOf(numberAssignation))
 
         assertEquals(10, interpreter.getVariableMap()[Pair("num", "number")])
     }
@@ -49,7 +50,7 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(stringAssignation, callNode))
+        interpreter.interpret(sequenceOf(stringAssignation, callNode))
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -62,7 +63,7 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(numberAssignation, callNode2))
+        interpreter.interpret(sequenceOf(numberAssignation, callNode2))
 
         assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -75,7 +76,7 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -85,7 +86,7 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode2))
+        interpreter.interpret(sequenceOf(callNode2))
 
         assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -98,7 +99,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("30", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -115,7 +116,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("Hello World", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -132,7 +133,7 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("Diego10", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -146,7 +147,7 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode2))
+        interpreter.interpret(sequenceOf(callNode2))
 
         assertEquals("10Diego", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -163,7 +164,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("5", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -180,7 +181,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("50", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -197,7 +198,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode))
+        interpreter.interpret(sequenceOf(callNode))
 
         assertEquals("2", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -229,7 +230,7 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(listOf(callNode, callNode2, callNode3, callNode4))
+        interpreter.interpret(sequenceOf(callNode, callNode2, callNode3, callNode4))
 
         assertEquals("30 5 50 2", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -244,8 +245,26 @@ class InterpreterTest {
             Identifier("name"),
             Literal("el nene"),
         )
-        interpreter.interpret(listOf(stringAssignation, stringReAssignation))
+        interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
 
         assertEquals("el nene", interpreter.getVariableMap()[Pair("name", "string")])
+    }
+
+    @Test
+    fun testFailingReAssignation() {
+        val stringAssignation = Assignation(
+            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD),
+            Literal("Pedro"),
+        )
+        val stringReAssignation = Assignation(
+            Identifier("name"),
+            Literal(7),
+        )
+
+        val error = assertThrows<InterpreterException> {
+            interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
+        }
+
+        assertEquals(error.message, "Invalid type: expected string, but got Int on variable name")
     }
 }
