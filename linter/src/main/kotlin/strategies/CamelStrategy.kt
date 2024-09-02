@@ -8,4 +8,8 @@ class CamelStrategy : IdentifierStrategy {
     override fun checkIdentifier(identifier: String): Boolean {
         return camelCasePattern.matcher(identifier).matches()
     }
+
+    override fun getIdentifierType(): String {
+        return "camelCase"
+    }
 }

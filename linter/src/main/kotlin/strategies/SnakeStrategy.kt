@@ -8,4 +8,8 @@ class SnakeStrategy : IdentifierStrategy {
     override fun checkIdentifier(identifier: String): Boolean {
         return snakeCasePattern.matcher(identifier).matches()
     }
+
+    override fun getIdentifierType(): String {
+        return "snake_case"
+    }
 }
