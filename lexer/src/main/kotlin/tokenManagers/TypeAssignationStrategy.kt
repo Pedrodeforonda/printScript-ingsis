@@ -14,7 +14,7 @@ class TypeAssignationStrategy : TokenStrategy {
                 newLexer.getText(),
                 newLexer.getTokenStrategies(),
                 newLexer.getPos(),
-                newLexer.getLexerPosition().nextColumn(),
+                newLexer.getLexerPosition(),
                 newLexer.getTokens() + Token(":", tokenType, initialPosition),
             )
         }

@@ -45,7 +45,7 @@ class LexerTest {
             Token("string", TokenType.STRING_TYPE, Position(1, 8)),
             Token("=", TokenType.ASSIGNATION, Position(1, 15)),
             Token("monos", TokenType.STRING_LITERAL, Position(1, 17)),
-            Token(";", TokenType.SEMICOLON, Position(1, 22)),
+            Token(";", TokenType.SEMICOLON, Position(1, 24)),
         )
 
         assertEquals(expectedTokens, actualTokens)

@@ -8,7 +8,7 @@ class TestFormatter {
     fun test() {
         val inputStream: InputStream? = this::class.java.classLoader.getResourceAsStream("input.txt")
         val outputPath = "src/test/resources/output.txt"
-        val formatter = Formatter()
+        val formatter = MainFormatter()
 
         if (inputStream == null) {
             throw IllegalStateException("Resource 'input.txt' not found.")
@@ -16,9 +16,9 @@ class TestFormatter {
 
         val inputText = inputStream.bufferedReader().use { it.readText() }
 
-        val config = loadConfig("src/test/resources/rules.json")
+        val standardConfig = loadConfig<FormatterConfigReader>("src/test/resources/rules.json")
 
-        val formattedText = formatter.formatCode(inputText, config)
+        val formattedText = formatter.formatCode(inputText, standardConfig)
 
         File(outputPath).writeText(formattedText)
     }

@@ -20,7 +20,6 @@
         </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="$PROJECT_DIR$/../../../../Gradle/gradle-8.7" />
-        <option name="gradleJvm" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -30,7 +29,6 @@
             <option value="$PROJECT_DIR$/buildSrc/linter" />
             <option value="$PROJECT_DIR$/buildSrc/token" />
             <option value="$PROJECT_DIR$/cli" />
-            <option value="$PROJECT_DIR$/clii" />
             <option value="$PROJECT_DIR$/formatter" />
             <option value="$PROJECT_DIR$/interpreter" />
             <option value="$PROJECT_DIR$/lexer" />
