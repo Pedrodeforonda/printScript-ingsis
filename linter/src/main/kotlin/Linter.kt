@@ -1,24 +1,14 @@
 package main.kotlin
 
-import main.kotlin.strategies.ClassicLinterStrategies
 import main.kotlin.strategies.IdentifierStrategy
 import org.example.ClassicTokenStrategies
 import org.example.Lexer
 import java.io.File
 import java.util.regex.Pattern
 
-class Linter(private val config: LinterConfig, private val strategies: ClassicLinterStrategies) {
+class Linter(private val config: LinterConfig, private val strategies: Map<String, IdentifierStrategy>) {
 
-    private var identifierStrategy: IdentifierStrategy = strategies.identifierStrategies[0]
-
-    init {
-        for (strategy in strategies.identifierStrategies) {
-            if (config.identifierFormat == strategy.getIdentifierType()) {
-                identifierStrategy = strategy
-                break
-            }
-        }
-    }
+    private val identifierStrategy: IdentifierStrategy = strategies[config.identifierFormat]!!
 
     fun checkIdentifierStrategies(identifier: String): Boolean {
         return identifierStrategy.checkIdentifier(identifier)
