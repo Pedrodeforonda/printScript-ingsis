@@ -24,7 +24,8 @@ class InterpreterTest {
     fun testAssignation() {
         val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
-            Literal("Pedro", Position(0, 0)), Position(0, 0),
+            Literal("Pedro", Position(0, 0)),
+            Position(0, 0),
         )
         interpreter.interpret(sequenceOf(stringAssignation))
 
@@ -32,7 +33,8 @@ class InterpreterTest {
 
         val numberAssignation = Assignation(
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
-            Literal(10, Position(0, 0)), Position(0, 0),
+            Literal(10, Position(0, 0)),
+            Position(0, 0),
         )
         interpreter.interpret(sequenceOf(numberAssignation))
 
@@ -43,7 +45,8 @@ class InterpreterTest {
     fun testPrintVariable() {
         val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
-            Literal("Pedro", Position(0, 0)), Position(0, 0),
+            Literal("Pedro", Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(Identifier("name", Position(0, 0))), Position(0, 0))
 
@@ -56,7 +59,8 @@ class InterpreterTest {
 
         val numberAssignation = Assignation(
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
-            Literal(10, Position(0, 0)), Position(0, 0),
+            Literal(10, Position(0, 0)),
+            Position(0, 0),
         )
         val callNode2 = CallNode("println", listOf(Identifier("num", Position(0, 0))), Position(0, 0))
 
@@ -93,7 +97,13 @@ class InterpreterTest {
 
     @Test
     fun testSum() {
-        val sum = BinaryNode(Literal(10, Position(0, 0)), Token("+", TokenType.PLUS, Position(0, 0)), Literal(20, Position(0, 0)), Position(0, 0))
+        val sum =
+            BinaryNode(
+                Literal(10, Position(0, 0)),
+                Token("+", TokenType.PLUS, Position(0, 0)),
+                Literal(20, Position(0, 0)),
+                Position(0, 0),
+            )
         val callNode = CallNode("println", listOf(sum), Position(0, 0))
 
         val outContent = ByteArrayOutputStream()
@@ -109,7 +119,8 @@ class InterpreterTest {
         val concatenation = BinaryNode(
             Literal("Hello", Position(0, 0)),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal(" World", Position(0, 0)), Position(0, 0),
+            Literal(" World", Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(concatenation), Position(0, 0))
 
@@ -126,7 +137,8 @@ class InterpreterTest {
         val concatenation = BinaryNode(
             Literal("Diego", Position(0, 0)),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal(10, Position(0, 0)), Position(0, 0),
+            Literal(10, Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(concatenation), Position(0, 0))
 
@@ -140,7 +152,8 @@ class InterpreterTest {
         val concatenation2 = BinaryNode(
             Literal(10, Position(0, 0)),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal("Diego", Position(0, 0)), Position(0, 0),
+            Literal("Diego", Position(0, 0)),
+            Position(0, 0),
         )
         val callNode2 = CallNode("println", listOf(concatenation2), Position(0, 0))
 
@@ -157,7 +170,8 @@ class InterpreterTest {
         val subtraction = BinaryNode(
             Literal(10, Position(0, 0)),
             Token("-", TokenType.MINUS, Position(0, 0)),
-            Literal(5, Position(0, 0)), Position(0, 0),
+            Literal(5, Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(subtraction), Position(0, 0))
 
@@ -174,7 +188,8 @@ class InterpreterTest {
         val multiplication = BinaryNode(
             Literal(10, Position(0, 0)),
             Token("*", TokenType.ASTERISK, Position(0, 0)),
-            Literal(5, Position(0, 0)), Position(0, 0),
+            Literal(5, Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(multiplication), Position(0, 0))
 
@@ -191,7 +206,8 @@ class InterpreterTest {
         val division = BinaryNode(
             Literal(10, Position(0, 0)),
             Token("/", TokenType.SLASH, Position(0, 0)),
-            Literal(5, Position(0, 0)), Position(0, 0),
+            Literal(5, Position(0, 0)),
+            Position(0, 0),
         )
         val callNode = CallNode("println", listOf(division), Position(0, 0))
 
@@ -206,21 +222,45 @@ class InterpreterTest {
     @Test
     fun testPrintOperations() {
         val sum = BinaryNode(
-            BinaryNode(Literal(10, Position(0, 0)), Token("+", TokenType.PLUS, Position(0, 0)), Literal(20, Position(0, 0)), Position(0, 0)),
+            BinaryNode(
+                Literal(10, Position(0, 0)),
+                Token("+", TokenType.PLUS, Position(0, 0)),
+                Literal(20, Position(0, 0)),
+                Position(0, 0),
+            ),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal(" ", Position(0, 0)), Position(0, 0),
+            Literal(" ", Position(0, 0)),
+            Position(0, 0),
         )
         val sub = BinaryNode(
-            BinaryNode(Literal(10, Position(0, 0)), Token("-", TokenType.MINUS, Position(0, 0)), Literal(5, Position(0, 0)), Position(0, 0)),
+            BinaryNode(
+                Literal(10, Position(0, 0)),
+                Token("-", TokenType.MINUS, Position(0, 0)),
+                Literal(5, Position(0, 0)),
+                Position(0, 0),
+            ),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal(" ", Position(0, 0)), Position(0, 0),
+            Literal(" ", Position(0, 0)),
+            Position(0, 0),
         )
         val mul = BinaryNode(
-            BinaryNode(Literal(10, Position(0, 0)), Token("*", TokenType.ASTERISK, Position(0, 0)), Literal(5, Position(0, 0)), Position(0, 0)),
+            BinaryNode(
+                Literal(10, Position(0, 0)),
+                Token("*", TokenType.ASTERISK, Position(0, 0)),
+                Literal(5, Position(0, 0)),
+                Position(0, 0),
+            ),
             Token("+", TokenType.PLUS, Position(0, 0)),
-            Literal(" ", Position(0, 0)), Position(0, 0),
+            Literal(" ", Position(0, 0)),
+            Position(0, 0),
         )
-        val div = BinaryNode(Literal(10, Position(0, 0)), Token("/", TokenType.SLASH, Position(0, 0)), Literal(5, Position(0, 0)), Position(0, 0))
+        val div =
+            BinaryNode(
+                Literal(10, Position(0, 0)),
+                Token("/", TokenType.SLASH, Position(0, 0)),
+                Literal(5, Position(0, 0)),
+                Position(0, 0),
+            )
 
         val callNode = CallNode("println", listOf(sum), Position(0, 0))
         val callNode2 = CallNode("println", listOf(sub), Position(0, 0))
@@ -239,11 +279,13 @@ class InterpreterTest {
     fun testReAssignation() {
         val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
-            Literal("Pedro", Position(0, 0)), Position(0, 0),
+            Literal("Pedro", Position(0, 0)),
+            Position(0, 0),
         )
         val stringReAssignation = Assignation(
             Identifier("name", Position(0, 0)),
-            Literal("el nene", Position(0, 0)), Position(0, 0),
+            Literal("el nene", Position(0, 0)),
+            Position(0, 0),
         )
         interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
 
@@ -254,11 +296,13 @@ class InterpreterTest {
     fun testFailingReAssignation() {
         val stringAssignation = Assignation(
             Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
-            Literal("Pedro", Position(0, 0)), Position(0, 0),
+            Literal("Pedro", Position(0, 0)),
+            Position(0, 0),
         )
         val stringReAssignation = Assignation(
             Identifier("name", Position(0, 0)),
-            Literal(7, Position(0, 0)), Position(0, 0),
+            Literal(7, Position(0, 0)),
+            Position(0, 0),
         )
 
         val error = assertThrows<InterpreterException> {

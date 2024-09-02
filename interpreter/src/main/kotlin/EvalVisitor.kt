@@ -3,6 +3,7 @@ package org.example
 import DeclarationResult
 import ExpressionVisitor
 import IdentifierResult
+import InterpreterException
 import LiteralResult
 import Result
 import SuccessResult
@@ -75,8 +76,8 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
         }
 
         throw InterpreterException(
-            "Invalid type: expected $type, but got ${right.value::class.simpleName} on variable $name," +
-                    " at line ${expression.getPos().getLine()} column ${expression.getPos().getColumn()}",
+            "Invalid type: expected $type, but got ${getType(right.value)} on variable $name," +
+                " at line ${expression.getPos().getLine()} column ${expression.getPos().getColumn()}",
         )
     }
 
@@ -104,5 +105,13 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             }
         }
         return InterpreterException("Variable not found")
+    }
+
+    private fun getType(value: Any): String {
+        return when (value) {
+            is Number -> "number"
+            is String -> "string"
+            else -> "unknown"
+        }
     }
 }

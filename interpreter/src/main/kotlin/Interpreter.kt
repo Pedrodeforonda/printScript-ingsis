@@ -20,5 +20,3 @@ class Interpreter {
         return variableMap
     }
 }
-
-class InterpreterException(message: String) : RuntimeException(message)
