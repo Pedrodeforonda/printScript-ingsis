@@ -16,9 +16,6 @@ class Linter {
             if (identifierFormat.getFormatName() == config.identifierFormat) {
                 errors.addAll(IdentifierFormatRule(identifierFormat).lintCode(tokens))
             }
-            else {
-                errors.add("Invalid identifier format: ${config.identifierFormat}")
-            }
         }
         if (config.restrictPrintln) {
             errors.addAll(PrintlnRestrictionRule().lintCode(tokens))

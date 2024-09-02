@@ -2,7 +2,7 @@ package main.kotlin.identifierFormats
 
 import java.util.regex.Pattern
 
-class SnakeCase: IdentifierFormat {
+class SnakeCase : IdentifierFormat {
 
     override fun getPattern(): Pattern {
         return Pattern.compile("^[a-z]+(_[a-z]+)*$")

@@ -12,8 +12,8 @@ class PrintlnRestrictionRule : LinterRule {
             if (printlnArgumentIsInvalid(printlnArgumentTokens)) {
                 errors.add(
                     "Invalid argument in println" +
-                            " at line ${printlnArgumentTokens[0].getPosition().getLine()}" +
-                            " column ${printlnArgumentTokens[0].getPosition().getColumn()}",
+                        " at line ${printlnArgumentTokens[0].getPosition().getLine()}" +
+                        " column ${printlnArgumentTokens[0].getPosition().getColumn()}",
                 )
             }
         }

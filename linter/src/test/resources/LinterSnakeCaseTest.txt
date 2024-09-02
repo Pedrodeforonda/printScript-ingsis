@@ -1,1 +1,3 @@
-let a_a: string = "monos";
+let a_b: string = "monos";
+let c_d: string = "monitos";
+println(a_b + c_d);
