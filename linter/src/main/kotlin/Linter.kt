@@ -1,45 +1,52 @@
 package main.kotlin
 
 import Token
-import main.kotlin.identifierFormats.IdentifierFormats
-import main.kotlin.rules.IdentifierFormatRule
-import main.kotlin.rules.PrintlnRestrictionRule
+import TokenType
+import main.kotlin.rules.LinterRules
 
-class Linter(private val tokens: Iterator<Token>) {
+class Linter {
 
-    private var currentToken: Token = tokens.next()
-
-    fun lint(config: LinterConfig): List<String> {
+    fun lint(tokens: Sequence<Token>, config: LinterConfig): List<String> {
         val errors = mutableListOf<String>()
-        val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifierFormat }
+        var insidePrintln = false
+        var isFirstTokenAfterPrintln = false
 
-        while (tokens.hasNext()) {
-            if (identifierFormat != null) {
-                if (currentToken.getType() == TokenType.IDENTIFIER) {
-                    errors.addAll(IdentifierFormatRule(identifierFormat).lintCode(currentToken))
-                }
+        tokens.forEach { token ->
+            if (token.getType() == TokenType.CALL_FUNC && token.getText() == "println") {
+                insidePrintln = true
+                isFirstTokenAfterPrintln = true
+                return@forEach // Skip the println token
             }
-            else if (config.restrictPrintln) {
-                if (currentToken.getType() == TokenType.CALL_FUNC && currentToken.getCharArray() == "println") {
-                    if (currentToken.getType() == TokenType.LEFT_PAREN) {
-                        currentToken = tokens.next()
-                        while (currentToken.getType() != TokenType.RIGHT_PAREN) {
+            if (token.getType() == TokenType.RIGHT_PAREN && insidePrintln) {
+                insidePrintln = false
+                isFirstTokenAfterPrintln = false
+            }
 
-                        }
-                        errors.addAll(PrintlnRestrictionRule().lintCode(currentToken))
-                    }
+            for (rule in LinterRules().rules) {
+                errors.addAll(rule.lintCode(token, config))
+            }
+
+            if (insidePrintln) {
+                if (isFirstTokenAfterPrintln) {
+                    if (token.getType() == TokenType.LEFT_PAREN) {
+                        isFirstTokenAfterPrintln = false
+                        return@forEach // Skip the left paren token from the println
+                    } else throw RuntimeException("Unexpected token after println: ${token.getText()}")
+                }
+                if (config.restrictPrintln && printlnRestrictionIsNotFollowed(token)) {
+                    errors.add(
+                        "Invalid println: ${token.getText()}" +
+                                " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}"
+                    )
                 }
             }
         }
+
         return errors
     }
 
-    private fun goToNextToken(): Token {
-        try {
-            currentToken = tokens.next()
-        } catch (e: NoSuchElementException) {
-            throw RuntimeException("Unexpected end of input")
-        }
-        return currentToken
+    private fun printlnRestrictionIsNotFollowed(token: Token): Boolean {
+        return token.getType() != TokenType.STRING_LITERAL && token.getType() != TokenType.NUMBER_LITERAL &&
+                token.getType() != TokenType.IDENTIFIER
     }
 }
