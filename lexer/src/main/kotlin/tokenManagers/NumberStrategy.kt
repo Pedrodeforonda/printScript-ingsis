@@ -6,24 +6,20 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class NumberStrategy : TokenStrategy {
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
+        val currentChar = lexer.getChar() ?: return null
 
-    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
-        if (lexer.getChar() == null) { return lexer }
-        if (lexer.getChar()!!.isDigit() || lexer.getChar() == '.') {
-            var myresult = result
-            myresult += lexer.getChar()
-            val newLexer = lexer.goToNextPos()
-            if (buildToken(newLexer, myresult, initialPosition) != newLexer) {
-                return buildToken(newLexer, myresult, initialPosition)
-            }
-            return Lexer(
-                newLexer.getText(),
-                newLexer.getTokenStrategies(),
-                newLexer.getPos(),
-                newLexer.getLexerPosition(),
-                newLexer.getTokens() + Token(myresult, TokenType.NUMBER_LITERAL, initialPosition),
-            )
+        if (currentChar.isDigit() || currentChar == '.') {
+            val newResult = result + currentChar
+            lexer.goToNextPos()
+            return buildToken(lexer, newResult, initialPosition)
         }
-        return lexer
+
+        return if (result.isNotEmpty()) {
+            lexer.goToPreviousPos()
+            Token(result, TokenType.NUMBER_LITERAL, initialPosition)
+        } else {
+            null
+        }
     }
 }

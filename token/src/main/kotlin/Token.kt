@@ -3,7 +3,7 @@ class Token(
     private val type: TokenType,
     private val position: Position,
 ) {
-    fun getCharArray(): String {
+    fun getText(): String {
         return string
     }
 

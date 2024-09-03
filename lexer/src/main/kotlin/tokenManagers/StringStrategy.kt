@@ -6,58 +6,21 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class StringStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
-        if (lexer.getChar() == null) return lexer
-        if (lexer.getChar()!!.isLetter() || (
-                (lexer.getChar() == '_' || lexer.getChar()!!.isDigit()) &&
-                    result.isNotEmpty()
-                )
-        ) {
-            var newResult = result
-            newResult += lexer.getChar()
-            val newLexer = lexer.goToNextPos() // crea un nuevo lexer en la pos +1
-            if (buildToken(newLexer, newResult, initialPosition) == newLexer) {
-                return when (newResult) {
-                    "let" -> Lexer(
-                        lexer.getText(),
-                        lexer.getTokenStrategies(),
-                        lexer.getPos() + 1,
-                        newLexer.getLexerPosition(),
-                        lexer.getTokens() + Token(newResult, TokenType.LET_KEYWORD, initialPosition),
-                    )
-                    "string" -> Lexer(
-                        lexer.getText(),
-                        lexer.getTokenStrategies(),
-                        lexer.getPos() + 1,
-                        newLexer.getLexerPosition(),
-                        lexer.getTokens() + Token(newResult, TokenType.STRING_TYPE, initialPosition),
-                    )
-                    "number" -> Lexer(
-                        lexer.getText(),
-                        lexer.getTokenStrategies(),
-                        lexer.getPos() + 1,
-                        newLexer.getLexerPosition(),
-                        lexer.getTokens() + Token(newResult, TokenType.NUMBER_TYPE, initialPosition),
-                    )
-                    "println" -> Lexer(
-                        lexer.getText(),
-                        lexer.getTokenStrategies(),
-                        lexer.getPos() + 1,
-                        newLexer.getLexerPosition(),
-                        lexer.getTokens() + Token(newResult, TokenType.CALL_FUNC, initialPosition),
-                    )
-                    else -> Lexer(
-                        lexer.getText(),
-                        lexer.getTokenStrategies(),
-                        lexer.getPos() + 1,
-                        newLexer.getLexerPosition(),
-                        lexer.getTokens() + Token(newResult, TokenType.IDENTIFIER, initialPosition),
-                    )
-                }
-            } else {
-                return buildToken(newLexer, newResult, initialPosition)
-            }
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
+        val currentChar = lexer.getChar() ?: return null
+
+        if (currentChar.isLetter() || (currentChar == '_' || currentChar.isDigit()) && result.isNotEmpty()) {
+            val newResult = result + currentChar
+            lexer.goToNextPos()
+            return buildToken(lexer, newResult, initialPosition)
         }
-        return lexer
+        if (result.isNotEmpty()) lexer.goToPreviousPos()
+        return when (result) {
+            "let" -> Token(result, TokenType.LET_KEYWORD, initialPosition)
+            "string" -> Token(result, TokenType.STRING_TYPE, initialPosition)
+            "number" -> Token(result, TokenType.NUMBER_TYPE, initialPosition)
+            "println" -> Token(result, TokenType.CALL_FUNC, initialPosition)
+            else -> if (result.isNotEmpty()) Token(result, TokenType.IDENTIFIER, initialPosition) else null
+        }
     }
 }

@@ -6,26 +6,25 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class StringLiteralStrategy : TokenStrategy {
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
+        val currentChar = lexer.getChar() ?: return null
 
-    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
-        if (lexer.getChar() == '\'' || lexer.getChar() == '"') {
-            var result = ""
-            var newLexer = lexer.goToNextPos()
-            while (newLexer.getChar() != null &&
-                (newLexer.getChar() != '\'' && newLexer.getChar() != '"')
-            ) {
-                result += newLexer.getChar()
-                newLexer = newLexer.goToNextPos()
-            }
-            newLexer = newLexer.goToNextPos()
-            return Lexer(
-                newLexer.getText(),
-                newLexer.getTokenStrategies(),
-                newLexer.getPos(),
-                newLexer.getLexerPosition(),
-                newLexer.getTokens() + Token(result, TokenType.STRING_LITERAL, initialPosition),
-            )
+        if (currentChar == '"') {
+            lexer.goToNextPos()
+            return buildStringLiteral(lexer, "", initialPosition)
         }
-        return lexer
+        return null
+    }
+
+    private fun buildStringLiteral(lexer: Lexer, result: String, initialPosition: Position): Token? {
+        val currentChar = lexer.getChar() ?: return null
+
+        return if (currentChar == '"') {
+            Token(result, TokenType.STRING_LITERAL, initialPosition)
+        } else {
+            val newResult = result + currentChar
+            lexer.goToNextPos()
+            buildStringLiteral(lexer, newResult, initialPosition)
+        }
     }
 }
