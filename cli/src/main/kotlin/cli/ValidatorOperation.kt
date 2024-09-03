@@ -20,15 +20,18 @@ class ValidatorOperation : CliktCommand(
         .file(mustExist = true)
 
     override fun run() {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get(sourceFile.absolutePath))
-        val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenStrategies())
-        val tokens: List<Token> = lexer.tokenizeAll(lexer)
-        val parser = Parser(tokens)
         try {
-            parser.parseExpressions()
+            val byteArr: ByteArray = Files.readAllBytes(Paths.get(sourceFile.absolutePath))
+            val text: String = byteArr.toString(Charsets.UTF_8)
+            val lexer = Lexer(text, ClassicTokenStrategies())
+            val tokens: Iterator<Token> = lexer.tokenizeAll(lexer).listIterator()
+            val parser = Parser(tokens)
+            val result = parser.parseExpressions().iterator()
+            while (result.hasNext()) {
+                result.next()
+            }
         } catch (e: ParseException) {
-            e.printStackTrace()
+            println(e.message)
         }
     }
 }

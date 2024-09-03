@@ -11,7 +11,7 @@ class Runner {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get(path))
         val lexer = Lexer(byteArr.toString(Charsets.UTF_8), ClassicTokenStrategies())
         val tokens: List<Token> = lexer.tokenizeAll(lexer)
-        val parser = Parser(tokens)
+        val parser = Parser(tokens.listIterator())
         val ast = parser.parseExpressions()
         val interpreter = Interpreter()
         interpreter.interpret(ast)

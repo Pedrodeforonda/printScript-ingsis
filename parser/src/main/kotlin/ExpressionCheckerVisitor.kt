@@ -46,23 +46,18 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
     }
 
     override fun visitAssignment(expression: Assignation): Any {
-        val (name, type) = if (expression.getDeclaration() is Identifier) {
-            val identifierName = (expression.getDeclaration() as Identifier).getName()
-            val type = variableTypeMap[identifierName] ?: return CheckAstResult(
-                false,
-                "variable $identifierName does not exist",
-                "not defined",
-            )
-            Pair(identifierName, type)
-        } else {
-            val declaration = expression.getDeclaration() as Declaration
-            val isError: CheckAstResult = declaration.accept(this) as CheckAstResult
-            if (!isError.isPass()) {
-                return CheckAstResult(false, isError.getMessage(), "Declaration")
-            }
-            Pair(declaration.getName(), declaration.getType())
+        if (expression.getDeclaration() is Identifier) {
+            return CheckAstResult(true, "", "Identifier")
         }
+        val declaration = expression.getDeclaration() as Declaration
+        val isError: CheckAstResult = declaration.accept(this) as CheckAstResult
+        if (!isError.isPass()) {
+            return CheckAstResult(false, isError.getMessage(), "Declaration")
+        }
+        Pair(declaration.getName(), declaration.getType())
         val value = expression.getValue()
+        val type = declaration.getType()
+        val name = declaration.getName()
         val valueResult = value.accept(this) as CheckAstResult
         if (!valueResult.isPass()) {
             return CheckAstResult(
@@ -74,7 +69,9 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         if (valueResult.getResultType() != type) {
             return CheckAstResult(
                 false,
-                "Invalid type: expected $type got ${valueResult.getResultType()} on variable $name",
+                "Invalid type: expected $type on variable $name," +
+                    " but got ${valueResult.getResultType()} at" +
+                    " line ${expression.getPos().getLine()}: column ${expression.getPos().getColumn()}",
                 "Assignation",
             )
         }

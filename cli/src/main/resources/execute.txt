@@ -1,4 +1,4 @@
 let a: string = 12 + "hola";
 let b: string = 4 + "mundo";
-a = 2 + " hola";
+a = 2;
 println("Result: " + a);

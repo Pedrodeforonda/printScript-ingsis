@@ -1,8 +1,9 @@
 package nodes
 
 import ExpressionVisitor
+import Position
 
-class CallNode(private val func: String, private val arguments: List<Node>) : Node {
+class CallNode(private val func: String, private val arguments: List<Node>, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitCallExp(this)
     }
@@ -13,6 +14,10 @@ class CallNode(private val func: String, private val arguments: List<Node>) : No
 
     fun getArguments(): List<Node> {
         return arguments
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {
