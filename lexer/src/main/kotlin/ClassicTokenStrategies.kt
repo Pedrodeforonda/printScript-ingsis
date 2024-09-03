@@ -1,6 +1,6 @@
 package org.example
-
 import org.example.tokenManagers.AssignationStrategy
+import org.example.tokenManagers.CommaStrategy
 import org.example.tokenManagers.LeftParenStrategy
 import org.example.tokenManagers.NumberStrategy
 import org.example.tokenManagers.OperatorStrategy
@@ -10,12 +10,8 @@ import org.example.tokenManagers.StringLiteralStrategy
 import org.example.tokenManagers.StringStrategy
 import org.example.tokenManagers.TypeAssignationStrategy
 
-class ClassicTokenStrategies {
-    fun getStrategies(): List<TokenStrategy> {
-        return listOfStrategies
-    }
-
-    private var listOfStrategies = listOf(
+data class ClassicTokenStrategies(
+    val listOfStrategies: List<TokenStrategy> = listOf(
         AssignationStrategy(),
         NumberStrategy(),
         OperatorStrategy(),
@@ -25,5 +21,6 @@ class ClassicTokenStrategies {
         TypeAssignationStrategy(),
         LeftParenStrategy(),
         RightParenStrategy(),
-    )
-}
+        CommaStrategy(),
+    ),
+)

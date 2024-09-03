@@ -20,9 +20,9 @@ class IdentifierFormatRule(private val identifierFormat: IdentifierFormat) : Lin
     private fun checkFormatErrors(token: Token): List<String> {
         val errors = mutableListOf<String>()
         // if the identifier token does not match the pattern of the identifier format
-        if (!identifierFormat.getPattern().matcher(token.getCharArray()).matches()) {
+        if (!identifierFormat.getPattern().matcher(token.getText()).matches()) {
             errors.add(
-                "Invalid identifier: ${token.getCharArray()}" +
+                "Invalid identifier: ${token.getText()}" +
                     " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}",
             )
         }

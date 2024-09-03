@@ -23,7 +23,7 @@ class PrintlnRestrictionRule : LinterRule {
     /*private fun getListsOfPrintlnArgumentTokens(tokens: Sequence<Token>): List<List<Token>> {
         val listsOfPrintlnArgumentTokens = mutableListOf<List<Token>>()
         for ((index, token) in tokens.withIndex()) {
-            if (token.getType() == TokenType.CALL_FUNC && token.getCharArray() == "println") {
+            if (token.getType() == TokenType.CALL_FUNC && token.getText() == "println") {
                 if (tokens[index + 1].getType() == TokenType.LEFT_PAREN) {
                     val printlnArgumentTokens = mutableListOf<Token>()
                     var i = index + 2

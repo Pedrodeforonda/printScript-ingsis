@@ -11,8 +11,8 @@ class LiteralParser : Prefix {
         parser.consume()
         return Literal(
             when (token.getType()) {
-                TokenType.NUMBER_LITERAL -> token.getCharArray().toInt()
-                TokenType.STRING_LITERAL -> token.getCharArray()
+                TokenType.NUMBER_LITERAL -> token.getText().toInt()
+                TokenType.STRING_LITERAL -> token.getText()
                 else -> throw ParseException("Invalid literal type")
             },
             token.getPosition(),
