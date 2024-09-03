@@ -31,12 +31,14 @@ class Linter {
                     if (token.getType() == TokenType.LEFT_PAREN) {
                         isFirstTokenAfterPrintln = false
                         return@forEach // Skip the left paren token from the println
-                    } else throw RuntimeException("Unexpected token after println: ${token.getText()}")
+                    } else {
+                        throw RuntimeException("Unexpected token after println: ${token.getText()}")
+                    }
                 }
                 if (config.restrictPrintln && printlnRestrictionIsNotFollowed(token)) {
                     errors.add(
                         "Invalid println: ${token.getText()}" +
-                                " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}"
+                            " at line ${token.getPosition().getLine()} column ${token.getPosition().getColumn()}",
                     )
                 }
             }
@@ -47,6 +49,6 @@ class Linter {
 
     private fun printlnRestrictionIsNotFollowed(token: Token): Boolean {
         return token.getType() != TokenType.STRING_LITERAL && token.getType() != TokenType.NUMBER_LITERAL &&
-                token.getType() != TokenType.IDENTIFIER
+            token.getType() != TokenType.IDENTIFIER
     }
 }

@@ -12,7 +12,7 @@ class IdentifierFormatRule() : LinterRule {
         if (token.getType() == TokenType.IDENTIFIER) {
             val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifierFormat }
             if (identifierFormat != null) {
-                    errors.addAll(checkFormatErrors(token, identifierFormat))
+                errors.addAll(checkFormatErrors(token, identifierFormat))
             }
         }
         return errors
