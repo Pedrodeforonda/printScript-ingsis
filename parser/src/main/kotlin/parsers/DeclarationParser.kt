@@ -43,8 +43,8 @@ class DeclarationParser : Prefix {
         parser.consume()
         val letKeword: DeclarationKeyWord = DeclarationKeyWord.LET_KEYWORD
         return Declaration(
-            identifierToken.getCharArray(),
-            type.getCharArray(),
+            identifierToken.getText(),
+            type.getText(),
             letKeword,
         )
     }

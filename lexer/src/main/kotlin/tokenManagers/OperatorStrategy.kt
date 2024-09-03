@@ -6,24 +6,19 @@ import org.example.Lexer
 import org.example.TokenStrategy
 
 class OperatorStrategy : TokenStrategy {
-    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Lexer {
-        val currentChar = lexer.getChar()
-        val tokenType = when (currentChar) {
-            '+' -> TokenType.PLUS
-            '-' -> TokenType.MINUS
-            '*' -> TokenType.ASTERISK
-            '/' -> TokenType.SLASH
-            else -> TokenType.NULL_TYPE
+    override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
+        if (lexer.getChar() == '+') {
+            return Token("+", TokenType.PLUS, initialPosition)
         }
-        if (tokenType != TokenType.NULL_TYPE) {
-            return Lexer(
-                lexer.getText(),
-                lexer.getTokenStrategies(),
-                lexer.getPos() + 1,
-                lexer.getLexerPosition().nextColumn(),
-                lexer.getTokens() + Token(currentChar.toString(), tokenType, initialPosition),
-            )
+        if (lexer.getChar() == '-') {
+            return Token("-", TokenType.MINUS, initialPosition)
         }
-        return lexer
+        if (lexer.getChar() == '*') {
+            return Token("*", TokenType.ASTERISK, initialPosition)
+        }
+        if (lexer.getChar() == '/') {
+            return Token("/", TokenType.SLASH, initialPosition)
+        }
+        return null
     }
 }

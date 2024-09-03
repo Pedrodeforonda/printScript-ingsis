@@ -8,6 +8,6 @@ import nodes.Node
 class IdentifierParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         parser.consume()
-        return Identifier(token.getCharArray())
+        return Identifier(token.getText())
     }
 }

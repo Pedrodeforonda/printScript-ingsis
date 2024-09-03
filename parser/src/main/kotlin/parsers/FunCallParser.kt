@@ -9,7 +9,7 @@ import nodes.Node
 class FunCallParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         val arguments = mutableListOf<Node>()
-        val function = CallNode(token.getCharArray(), arguments)
+        val function = CallNode(token.getText(), arguments)
         val leftParen: Token = parser.lookAhead(0)
         parser.consume()
         if (leftParen.getType() != TokenType.LEFT_PAREN) {

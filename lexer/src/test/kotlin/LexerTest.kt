@@ -1,6 +1,6 @@
-import org.example.ClassicTokenStrategies
 import org.example.Lexer
 import org.junit.jupiter.api.Test
+import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.assertEquals
@@ -13,8 +13,9 @@ class LexerTest {
             Paths.get("src/test/resources/assigneNumber.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll(lexer)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader)
+        val actualTokens = lexer.tokenizeAll(lexer).toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -35,8 +36,9 @@ class LexerTest {
             Paths.get("src/test/resources/assigneString.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll(lexer)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader)
+        val actualTokens = lexer.tokenizeAll(lexer).toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -57,8 +59,9 @@ class LexerTest {
             Paths.get("src/test/resources/assigneOperation.txt"),
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll(lexer)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader)
+        val actualTokens = lexer.tokenizeAll(lexer).toList()
 
         val expectedTokens = listOf(
             Token("a", TokenType.IDENTIFIER, Position(1, 1)),
@@ -76,8 +79,9 @@ class LexerTest {
     fun testTokenizeCodeLine4() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
-        val lexer = Lexer(text, ClassicTokenStrategies())
-        val actualTokens = lexer.tokenizeAll(lexer)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader)
+        val actualTokens = lexer.tokenizeAll(lexer).toList()
 
         val expectedTokens = listOf(
             Token("println", TokenType.CALL_FUNC, Position(1, 1)),
