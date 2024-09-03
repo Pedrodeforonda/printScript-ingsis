@@ -42,7 +42,6 @@ class Lexer(
         while (lexer.getChar() != null) {
             val token = updateLexer(lexer)
             if (token != null) {
-                println(token)
                 yield(token)
             }
             goToNextPos()

@@ -9,5 +9,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":token"))
+    implementation(project(":lexer"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
 }
