@@ -1,25 +1,45 @@
 package main.kotlin
 
+import Token
 import main.kotlin.identifierFormats.IdentifierFormats
 import main.kotlin.rules.IdentifierFormatRule
 import main.kotlin.rules.PrintlnRestrictionRule
-import org.example.ClassicTokenStrategies
-import org.example.Lexer
 
-class Linter {
+class Linter(private val tokens: Iterator<Token>) {
 
-    fun lint(input: String, config: LinterConfig): List<String> {
-        val lexer = Lexer(input, ClassicTokenStrategies())
-        val tokens = lexer.tokenizeAll(lexer)
+    private var currentToken: Token = tokens.next()
+
+    fun lint(config: LinterConfig): List<String> {
         val errors = mutableListOf<String>()
-        for (identifierFormat in IdentifierFormats().formats) {
-            if (identifierFormat.getFormatName() == config.identifierFormat) {
-                errors.addAll(IdentifierFormatRule(identifierFormat).lintCode(tokens))
+        val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifierFormat }
+
+        while (tokens.hasNext()) {
+            if (identifierFormat != null) {
+                if (currentToken.getType() == TokenType.IDENTIFIER) {
+                    errors.addAll(IdentifierFormatRule(identifierFormat).lintCode(currentToken))
+                }
+            }
+            else if (config.restrictPrintln) {
+                if (currentToken.getType() == TokenType.CALL_FUNC && currentToken.getCharArray() == "println") {
+                    if (currentToken.getType() == TokenType.LEFT_PAREN) {
+                        currentToken = tokens.next()
+                        while (currentToken.getType() != TokenType.RIGHT_PAREN) {
+
+                        }
+                        errors.addAll(PrintlnRestrictionRule().lintCode(currentToken))
+                    }
+                }
             }
         }
-        if (config.restrictPrintln) {
-            errors.addAll(PrintlnRestrictionRule().lintCode(tokens))
-        }
         return errors
+    }
+
+    private fun goToNextToken(): Token {
+        try {
+            currentToken = tokens.next()
+        } catch (e: NoSuchElementException) {
+            throw RuntimeException("Unexpected end of input")
+        }
+        return currentToken
     }
 }

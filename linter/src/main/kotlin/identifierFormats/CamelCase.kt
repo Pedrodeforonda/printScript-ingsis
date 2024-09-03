@@ -8,7 +8,7 @@ class CamelCase : IdentifierFormat {
         return Pattern.compile("^[a-z]+([A-Z][a-z]*)*$")
     }
 
-    override fun getFormatName(): String {
+    override fun getFormat(): String {
         return "camelCase"
     }
 }

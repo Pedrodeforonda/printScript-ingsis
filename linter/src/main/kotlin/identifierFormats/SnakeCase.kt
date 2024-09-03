@@ -8,7 +8,7 @@ class SnakeCase : IdentifierFormat {
         return Pattern.compile("^[a-z]+(_[a-z]+)*$")
     }
 
-    override fun getFormatName(): String {
+    override fun getFormat(): String {
         return "snake_case"
     }
 }

@@ -5,9 +5,11 @@ import main.kotlin.identifierFormats.IdentifierFormat
 
 class IdentifierFormatRule(private val identifierFormat: IdentifierFormat) : LinterRule {
 
-    override fun lintCode(tokens: List<Token>): List<String> {
+    override fun lintCode(token: Token): List<String> {
         val errors = mutableListOf<String>()
-        for (token in tokens) {
+        val tokens = listOf(token)
+        val tokenIterator = tokens.iterator()
+        for (token in tokenIterator) {
             if (token.getType() == TokenType.IDENTIFIER) {
                 errors.addAll(checkFormatErrors(token))
             }

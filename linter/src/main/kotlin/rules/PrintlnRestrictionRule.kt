@@ -5,9 +5,9 @@ import TokenType
 
 class PrintlnRestrictionRule : LinterRule {
 
-    override fun lintCode(tokens: List<Token>): List<String> {
+    override fun lintCode(token: Token): List<String> {
         val errors = mutableListOf<String>()
-        val listsOfPrintlnArgumentTokens = getListsOfPrintlnArgumentTokens(tokens)
+        /*val listsOfPrintlnArgumentTokens = getListsOfPrintlnArgumentTokens(listOf(token).asSequence())
         for (printlnArgumentTokens in listsOfPrintlnArgumentTokens) {
             if (printlnArgumentIsInvalid(printlnArgumentTokens)) {
                 errors.add(
@@ -16,11 +16,11 @@ class PrintlnRestrictionRule : LinterRule {
                         " column ${printlnArgumentTokens[0].getPosition().getColumn()}",
                 )
             }
-        }
+        }*/
         return errors
     }
 
-    private fun getListsOfPrintlnArgumentTokens(tokens: List<Token>): List<List<Token>> {
+    /*private fun getListsOfPrintlnArgumentTokens(tokens: Sequence<Token>): List<List<Token>> {
         val listsOfPrintlnArgumentTokens = mutableListOf<List<Token>>()
         for ((index, token) in tokens.withIndex()) {
             if (token.getType() == TokenType.CALL_FUNC && token.getCharArray() == "println") {
@@ -37,6 +37,8 @@ class PrintlnRestrictionRule : LinterRule {
         }
         return listsOfPrintlnArgumentTokens
     }
+
+     */
 
     private fun printlnArgumentIsInvalid(argumentTokens: List<Token>): Boolean {
         val type = argumentTokens[0].getType()
