@@ -6,8 +6,8 @@ import Token
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import org.example.ClassicTokenStrategies
 import org.example.Lexer
+import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -21,11 +21,10 @@ class ValidatorOperation : CliktCommand(
 
     override fun run() {
         try {
-            val byteArr: ByteArray = Files.readAllBytes(Paths.get(sourceFile.absolutePath))
-            val text: String = byteArr.toString(Charsets.UTF_8)
-            val lexer = Lexer(text, ClassicTokenStrategies())
-            val tokens: Iterator<Token> = lexer.tokenizeAll(lexer).listIterator()
-            val parser = Parser(tokens)
+            val reader: BufferedReader = Files.newBufferedReader(Paths.get(sourceFile.absolutePath))
+            val lexer = Lexer(reader)
+            val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
+            val parser = Parser(tokens.iterator())
             val result = parser.parseExpressions().iterator()
             while (result.hasNext()) {
                 result.next()

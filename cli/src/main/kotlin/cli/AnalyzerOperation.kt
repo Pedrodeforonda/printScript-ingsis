@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import main.kotlin.ConfigParser
 import main.kotlin.Linter
 import java.io.File
+import java.nio.file.Files
 
 class AnalyzerOperation : CliktCommand(
     name = "analyze",
@@ -19,7 +20,7 @@ class AnalyzerOperation : CliktCommand(
 
     override fun run() {
         val config = ConfigParser.parseConfig(configFile.absolutePath)
-        val errors = Linter().lint(sourceFile.readText(), config)
+        val errors = Linter().lint(Files.newBufferedReader(sourceFile.toPath()), config)
         if (errors.isEmpty()) {
             println("No errors found.")
         } else {

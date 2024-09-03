@@ -9,9 +9,7 @@ import java.nio.file.Paths
 class Runner {
 
     fun run(path: String) {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get(path))
-        val text: String = byteArr.toString(Charsets.UTF_8)
-        val bufferedReader: BufferedReader = text.reader().buffered()
+        val bufferedReader: BufferedReader = Files.newBufferedReader(Paths.get(path))
         val lexer = Lexer(bufferedReader)
         val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
         val parser = Parser(tokens.iterator())
