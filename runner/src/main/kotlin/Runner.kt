@@ -14,7 +14,7 @@ class Runner {
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader)
         val tokens: List<Token> = lexer.tokenizeAll(lexer).toList()
-        val parser = Parser(tokens)
+        val parser = Parser(tokens.listIterator())
         val ast = parser.parseExpressions()
         val interpreter = Interpreter()
         interpreter.interpret(ast)
