@@ -1,6 +1,6 @@
-let Rama_mono: string = "monos";
-println(Rama_mono + " ");
-let Rama_mono: string = "monitos";
-println(Rama_mono);
+let rama_mono: string = "monos";
+println(rama_mono);
+let rama_mono: string = "monitos";
+println(rama_mono);
 println(2);
 println("3");

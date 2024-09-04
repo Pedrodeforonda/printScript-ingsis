@@ -1,5 +1,7 @@
 package cli
 
+import Parser
+import Token
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
@@ -20,13 +22,18 @@ class AnalyzerOperation : CliktCommand(
 
     override fun run() {
         val config = ConfigParser.parseConfig(configFile.absolutePath)
-        val lexer = Lexer(sourceFile.inputStream().bufferedReader())
-        val tokens = lexer.tokenizeAll(lexer)
-        val errors = Linter().lint(tokens, config)
-        if (errors.isEmpty()) {
+        val lexer = Lexer(sourceFile.bufferedReader())
+        val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
+        val parser = Parser(tokens.iterator())
+        val astNodes = parser.parseExpressions()
+        val errors = Linter().lint(astNodes, config)
+        var acc = 0
+        for (error in errors) {
+            println(error)
+            acc++
+        }
+        if (acc == 0) {
             println("No errors found.")
-        } else {
-            errors.forEach { println(it) }
         }
     }
 }

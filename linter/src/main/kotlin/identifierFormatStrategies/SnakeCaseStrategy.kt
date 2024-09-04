@@ -2,13 +2,13 @@ package main.kotlin.identifierFormats
 
 import java.util.regex.Pattern
 
-class CamelCase : IdentifierFormat {
+class SnakeCaseStrategy : IdentifierFormatStrategy {
 
     override fun getPattern(): Pattern {
-        return Pattern.compile("^[a-z]+([A-Z][a-z]*)*$")
+        return Pattern.compile("^[a-z]+(_[a-z]+)*$")
     }
 
     override fun getFormat(): String {
-        return "camelCase"
+        return "snake_case"
     }
 }

@@ -1,8 +1,8 @@
 package main.kotlin.rules
 
-import Token
-import main.kotlin.LinterConfig
+import main.kotlin.LinterResult
+import nodes.Node
 
 interface LinterRule {
-    fun lintCode(token: Token, config: LinterConfig): List<String>
+    fun lintCode(node: Node): LinterResult
 }
