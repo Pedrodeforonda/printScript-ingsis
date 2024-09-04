@@ -2,7 +2,7 @@ package main.kotlin.identifierFormats
 
 import java.util.regex.Pattern
 
-interface IdentifierFormat {
+interface IdentifierFormatStrategy {
     fun getPattern(): Pattern
-    fun getFormatName(): String
+    fun getFormat(): String
 }

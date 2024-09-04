@@ -1,4 +1,4 @@
 {
-  "identifierFormat": "snake_case",
+  "identifierFormat": "camelCase",
   "restrictPrintln": true
 }

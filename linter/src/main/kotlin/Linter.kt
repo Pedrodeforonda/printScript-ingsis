@@ -1,25 +1,15 @@
 package main.kotlin
 
-import main.kotlin.identifierFormats.IdentifierFormats
-import main.kotlin.rules.IdentifierFormatRule
-import main.kotlin.rules.PrintlnRestrictionRule
-import org.example.Lexer
-import java.io.BufferedReader
+import nodes.Node
 
 class Linter {
 
-    fun lint(iterator: BufferedReader, config: LinterConfig): List<String> {
-        val lexer = Lexer(iterator)
-        val tokens = lexer.tokenizeAll(lexer)
-        val errors = mutableListOf<String>()
-        for (identifierFormat in IdentifierFormats().formats) {
-            if (identifierFormat.getFormatName() == config.identifierFormat) {
-                errors.addAll(IdentifierFormatRule(identifierFormat).lintCode(tokens.toList()))
+    fun lint(astNodes: Sequence<Node>, config: LinterConfig): Sequence<Any> = sequence {
+        for (node in astNodes) {
+            val result = node.accept(LinterVisitor(config)) as LinterResult
+            if (result.hasError()) {
+                yield(result.getMessage())
             }
         }
-        if (config.restrictPrintln) {
-            errors.addAll(PrintlnRestrictionRule().lintCode(tokens.toList()))
-        }
-        return errors
     }
 }

@@ -1,48 +1,26 @@
 package main.kotlin.rules
 
-import Token
-import TokenType
+import main.kotlin.LinterResult
+import nodes.CallNode
+import nodes.Identifier
+import nodes.Literal
+import nodes.Node
 
-class PrintlnRestrictionRule : LinterRule {
-
-    override fun lintCode(tokens: List<Token>): List<String> {
-        val errors = mutableListOf<String>()
-        val listsOfPrintlnArgumentTokens = getListsOfPrintlnArgumentTokens(tokens)
-        for (printlnArgumentTokens in listsOfPrintlnArgumentTokens) {
-            if (printlnArgumentIsInvalid(printlnArgumentTokens)) {
-                errors.add(
-                    "Invalid argument in println" +
-                        " at line ${printlnArgumentTokens[0].getPosition().getLine()}" +
-                        " column ${printlnArgumentTokens[0].getPosition().getColumn()}",
-                )
-            }
+class PrintlnRestrictionRule(private val insideResult: LinterResult) : LinterRule {
+    override fun lintCode(node: Node): LinterResult {
+        val nodeInsidePrintln = (node as CallNode).getArguments().first()
+        if (nodeInsidePrintln !is Identifier && nodeInsidePrintln !is Literal) {
+            val errorMessage = "Invalid Println in line ${node.getPos().getLine()}" +
+                " column ${node.getPos().getColumn()}"
+            return checkErrors(errorMessage)
         }
-        return errors
+        return LinterResult(insideResult.getMessage(), insideResult.hasError())
     }
 
-    private fun getListsOfPrintlnArgumentTokens(tokens: List<Token>): List<List<Token>> {
-        val listsOfPrintlnArgumentTokens = mutableListOf<List<Token>>()
-        for ((index, token) in tokens.withIndex()) {
-            if (token.getType() == TokenType.CALL_FUNC && token.getText() == "println") {
-                if (tokens[index + 1].getType() == TokenType.LEFT_PAREN) {
-                    val printlnArgumentTokens = mutableListOf<Token>()
-                    var i = index + 2
-                    while (tokens[i].getType() != TokenType.RIGHT_PAREN) {
-                        printlnArgumentTokens.add(tokens[i])
-                        i++
-                    }
-                    listsOfPrintlnArgumentTokens.add(printlnArgumentTokens)
-                }
-            }
+    private fun checkErrors(errorMessage: String): LinterResult {
+        if (insideResult.hasError()) {
+            return LinterResult(errorMessage + "\n" + insideResult.getMessage(), true)
         }
-        return listsOfPrintlnArgumentTokens
-    }
-
-    private fun printlnArgumentIsInvalid(argumentTokens: List<Token>): Boolean {
-        val type = argumentTokens[0].getType()
-        return argumentTokens.size != 1 || (
-            type != TokenType.IDENTIFIER &&
-                type != TokenType.NUMBER_LITERAL && type != TokenType.STRING_LITERAL
-            )
+        return LinterResult(errorMessage, true)
     }
 }
