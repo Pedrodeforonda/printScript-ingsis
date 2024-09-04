@@ -7,10 +7,12 @@ import java.io.BufferedReader
 class Lexer(
     private val iterator: BufferedReader,
     private var pos: Int = 0,
-    private val lexerPosition: Position = Position(1, 1),
+    private var lexerPosition: Position = Position(1, 1),
 ) {
     private val text = iterator.readText()
     private var current: Char? = text.getOrNull(pos)
+    private var lineBreak = 0
+    private var currentColumn = 0
 
     fun goToNextPos() {
         pos += 1
@@ -32,10 +34,8 @@ class Lexer(
         return current
     }
 
-    private fun nextCharNull(lexer: Lexer): Boolean { // chequea si el siguiente char es nulo
-        val nextLexer =
-            Lexer(lexer.getText(), lexer.getPos() + 1, lexerPosition)
-        return nextLexer.getChar() == null
+    private fun nextCharNull(): Boolean {
+        return text.getOrNull(pos + 1) == null
     }
 
     fun tokenizeAll(lexer: Lexer): Sequence<Token> = sequence { // funcion + imp del lexer
@@ -50,26 +50,43 @@ class Lexer(
 
     private fun updateLexer(lexer: Lexer): Token? {
         if (canSkip(lexer)) {
-            return if (!nextCharNull(lexer)) {
-                updateLexer(lexer.sumPos())
+            updateTokenPosition()
+            if (!nextCharNull()) {
+                return updateLexer(lexer.sumPos())
             } else {
-                null
+                return null
             }
         }
         for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
-            val newToken = tokenStrategy.buildToken(lexer, "", lexer.getLexerPosition())
+            val newToken = tokenStrategy.buildToken(lexer, "", lexer.tokenPosition())
             if (newToken != null) {
+                updateTokenPosition()
                 return newToken
             }
         }
         return null
     }
 
-    fun getLexerPosition(): Position {
-        return Position(1, getPos() + 1)
+    private fun tokenPosition(): Position {
+        return Position(lexerPosition.getLine(), getCurrentColumn())
     }
 
-    fun sumPos(): Lexer {
+    private fun updateTokenPosition() {
+        if (current == '\n') {
+            lexerPosition = Position(lexerPosition.getLine() + 1, 0)
+            lineBreak = pos + 1
+            currentColumn = 0
+        } else {
+            currentColumn = pos - lineBreak
+        }
+    }
+
+    private fun getCurrentColumn(): Int {
+        currentColumn = pos - lineBreak + 1
+        return currentColumn
+    }
+
+    private fun sumPos(): Lexer {
         this.goToNextPos()
         return this
     }
