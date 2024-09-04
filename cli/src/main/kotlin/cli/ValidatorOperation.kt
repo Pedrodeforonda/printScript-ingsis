@@ -1,12 +1,12 @@
 package cli
 
-import ParseException
-import Parser
-import Token
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import org.example.Lexer
+import main.ParseException
+import main.Parser
+import main.Token
+import org.example.lexer.Lexer
 import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files

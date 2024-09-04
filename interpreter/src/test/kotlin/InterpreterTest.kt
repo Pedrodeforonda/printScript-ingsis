@@ -1,18 +1,19 @@
 package org.example
 
-import DeclarationKeyWord
-import InterpreterException
-import Position
-import Token
-import TokenType
+import main.Position
+import main.Token
+import main.TokenType
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import org.example.interpreter.Interpreter
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import utils.DeclarationKeyWord
+import utils.InterpreterException
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals

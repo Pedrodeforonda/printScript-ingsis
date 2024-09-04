@@ -3,7 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import org.example.Runner
+import org.example.main.Runner
 import java.io.File
 
 class ExecutorOperation : CliktCommand(

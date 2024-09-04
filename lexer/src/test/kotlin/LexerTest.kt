@@ -1,4 +1,7 @@
-import org.example.Lexer
+import main.Position
+import main.Token
+import main.TokenType
+import org.example.lexer.Lexer
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.nio.file.Files

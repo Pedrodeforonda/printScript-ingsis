@@ -1,12 +1,12 @@
 package cli
 
-import FormatterConfigReader
-import MainFormatter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import loadConfig
-import org.example.Lexer
+import main.FormatterConfigReader
+import main.MainFormatter
+import main.loadConfig
+import org.example.lexer.Lexer
 import java.io.File
 
 class FormatterOperation : CliktCommand(

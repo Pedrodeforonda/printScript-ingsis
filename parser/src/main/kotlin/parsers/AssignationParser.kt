@@ -1,8 +1,8 @@
 package parsers
 
-import Parser
-import Precedence
-import Token
+import main.Parser
+import main.Precedence
+import main.Token
 import nodes.Assignation
 import nodes.Node
 

@@ -1,7 +1,7 @@
 package main.kotlin.rules
 
-import main.kotlin.LinterResult
 import main.kotlin.identifierFormats.IdentifierFormatStrategy
+import main.kotlin.main.LinterResult
 import nodes.Identifier
 import nodes.Node
 

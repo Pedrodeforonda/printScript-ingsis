@@ -1,3 +1,8 @@
+import main.ParseException
+import main.Parser
+import main.Position
+import main.Token
+import main.TokenType
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
@@ -6,6 +11,7 @@ import nodes.Identifier
 import nodes.Literal
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import utils.DeclarationKeyWord
 import kotlin.test.assertFailsWith
 
 public class ParserTester {

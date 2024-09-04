@@ -1,8 +1,8 @@
 package nodes
 
-import ExpressionVisitor
-import Position
-import Token
+import main.Position
+import main.Token
+import utils.ExpressionVisitor
 
 class BinaryNode(
     private val left: Node,

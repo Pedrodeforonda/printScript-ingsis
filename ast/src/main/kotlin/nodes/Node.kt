@@ -1,6 +1,6 @@
 package nodes
 
-import ExpressionVisitor
+import utils.ExpressionVisitor
 
 interface Node {
     fun accept(visitor: ExpressionVisitor): Any

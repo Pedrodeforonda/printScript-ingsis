@@ -1,7 +1,7 @@
 package nodes
 
-import ExpressionVisitor
-import Position
+import main.Position
+import utils.ExpressionVisitor
 
 class Assignation(private val declaration: Node, private val value: Node, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

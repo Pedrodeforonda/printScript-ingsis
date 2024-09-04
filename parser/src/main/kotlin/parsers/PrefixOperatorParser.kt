@@ -1,7 +1,7 @@
 package parsers
 
-import Parser
-import Token
+import main.Parser
+import main.Token
 import nodes.Node
 import nodes.PrefixExpression
 

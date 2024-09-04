@@ -1,9 +1,9 @@
 package parsers
 
-import Parser
-import Position
-import Token
-import TokenType
+import main.Parser
+import main.Position
+import main.Token
+import main.TokenType
 import nodes.BinaryNode
 import nodes.Node
 

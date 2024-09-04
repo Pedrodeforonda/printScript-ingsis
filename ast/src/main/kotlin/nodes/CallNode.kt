@@ -1,7 +1,7 @@
 package nodes
 
-import ExpressionVisitor
-import Position
+import main.Position
+import utils.ExpressionVisitor
 
 class CallNode(private val func: String, private val arguments: List<Node>, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

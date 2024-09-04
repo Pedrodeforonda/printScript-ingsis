@@ -1,7 +1,7 @@
 package nodes
 
-import ExpressionVisitor
-import Position
+import main.Position
+import utils.ExpressionVisitor
 
 class Literal(private val value: Any, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

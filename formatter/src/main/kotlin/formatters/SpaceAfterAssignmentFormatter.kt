@@ -1,9 +1,10 @@
 package formatters
 
-import Formatter
-import FormatterConfigReader
-import FormatterResult
-import Token
+import main.Formatter
+import main.FormatterConfigReader
+import main.FormatterResult
+import main.Token
+import main.TokenType
 import java.io.BufferedWriter
 
 class SpaceAfterAssignmentFormatter : Formatter {

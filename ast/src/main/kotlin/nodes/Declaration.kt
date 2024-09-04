@@ -1,8 +1,8 @@
 package nodes
 
-import DeclarationKeyWord
-import ExpressionVisitor
-import Position
+import main.Position
+import utils.DeclarationKeyWord
+import utils.ExpressionVisitor
 
 class Declaration(
     private val name: String,

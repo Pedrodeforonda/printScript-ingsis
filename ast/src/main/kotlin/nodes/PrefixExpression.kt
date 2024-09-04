@@ -1,7 +1,7 @@
 package nodes
 
-import ExpressionVisitor
-import TokenType
+import main.TokenType
+import utils.ExpressionVisitor
 
 class PrefixExpression(private val tokenType: TokenType, operand: Node) : Node {
 

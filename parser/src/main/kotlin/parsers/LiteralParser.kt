@@ -1,8 +1,9 @@
 package parsers
 
-import ParseException
-import Parser
-import Token
+import main.ParseException
+import main.Parser
+import main.Token
+import main.TokenType
 import nodes.Literal
 import nodes.Node
 

@@ -29,7 +29,7 @@ interface Expr {
 }
 class Binary {
     left: Expr
-    operator: Token
+    operator: main.Token
     right: Expr
     accept(visitor: Visitor<R>): R
 }
@@ -42,7 +42,7 @@ class Literal {
     accept(visitor: Visitor<R>): R
 }
 class Unary {
-    operator: Token
+    operator: main.Token
     right: Expr
     accept(visitor: Visitor<R>): R
 }

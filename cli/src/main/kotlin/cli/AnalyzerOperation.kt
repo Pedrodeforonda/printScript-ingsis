@@ -1,13 +1,13 @@
 package cli
 
-import Parser
-import Token
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import main.kotlin.ConfigParser
-import main.kotlin.Linter
-import org.example.Lexer
+import main.Parser
+import main.Token
+import main.kotlin.main.ConfigParser
+import main.kotlin.main.Linter
+import org.example.lexer.Lexer
 import java.io.File
 
 class AnalyzerOperation : CliktCommand(

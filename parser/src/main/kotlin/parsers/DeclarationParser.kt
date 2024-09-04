@@ -1,12 +1,12 @@
 package parsers
 
-import DeclarationKeyWord
-import ParseException
-import Parser
-import Token
-import TokenType
+import main.ParseException
+import main.Parser
+import main.Token
+import main.TokenType
 import nodes.Declaration
 import nodes.Node
+import utils.DeclarationKeyWord
 
 class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {

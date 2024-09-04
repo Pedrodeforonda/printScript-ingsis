@@ -1,4 +1,7 @@
-import org.example.Lexer
+import main.FormatterConfigReader
+import main.MainFormatter
+import main.loadConfig
+import org.example.lexer.Lexer
 import java.io.BufferedWriter
 import java.io.File
 import kotlin.test.Test

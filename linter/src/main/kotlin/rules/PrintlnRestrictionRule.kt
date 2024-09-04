@@ -1,6 +1,6 @@
 package main.kotlin.rules
 
-import main.kotlin.LinterResult
+import main.kotlin.main.LinterResult
 import nodes.CallNode
 import nodes.Identifier
 import nodes.Literal
