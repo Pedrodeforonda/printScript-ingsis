@@ -1,0 +1,4 @@
+let a: number = 12;
+let b: string = "monos";
+a = a / b;
+println(a);
