@@ -29,6 +29,10 @@ class EnforceSpacingFormatter : Formatter {
                     wasNewLine = false
                     return FormatterResult("success", false)
                 }
+                if (tokens.getType() == TokenType.STRING_LITERAL) {
+                    fileOutputWriter.write(" \"${tokens.getText()}\"")
+                    return FormatterResult("success", false)
+                }
                 fileOutputWriter.write(" ${tokens.getText()}")
                 return FormatterResult("success", false)
             }

@@ -24,7 +24,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         if (value is String) {
             return CheckAstResult(true, "", "string")
         }
-        if (value is Int) {
+        if (value is Int || value is Double) {
             return CheckAstResult(true, "", "number")
         }
         return CheckAstResult(false, "Invalid literal", "Literal")
