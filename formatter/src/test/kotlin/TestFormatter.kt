@@ -1,3 +1,4 @@
+import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
@@ -18,7 +19,7 @@ class TestFormatter {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
             File("src/test/resources/rules.json").inputStream(),
         )
-        val lexer = Lexer(File(inputPath).inputStream().bufferedReader())
+        val lexer = LexerFactory().createLexer(File(inputPath).inputStream().bufferedReader(), 1)
         val formattedText = formatter.formatCode(
             lexer.tokenizeAll(lexer),
             standardConfig,
@@ -40,7 +41,7 @@ class TestFormatter {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
             File("src/test/resources/rules2.json").inputStream(),
         )
-        val lexer = Lexer(File(inputPath).inputStream().bufferedReader())
+        val lexer = LexerFactory().createLexer(File(inputPath).inputStream().bufferedReader(), 1)
         val formattedText = formatter.formatCode(
             lexer.tokenizeAll(lexer),
             standardConfig,

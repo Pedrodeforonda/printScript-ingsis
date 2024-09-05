@@ -2,7 +2,6 @@ import lexer.LexerFactory
 import main.Position
 import main.Token
 import main.TokenType
-import org.example.lexer.Lexer
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.nio.file.Files
@@ -98,7 +97,6 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
     }
 
-
     @Test
     fun testLexerMultipleLines() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/multipleLines"))
@@ -137,7 +135,6 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
     }
 
-
     @Test
     fun testTokenizeBraces() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/braces.txt"))
@@ -148,7 +145,7 @@ class LexerTest {
 
         val expectedTokens = listOf(
             Token("{", TokenType.LEFT_BRACE, Position(1, 1)),
-            Token("}", TokenType.RIGHT_BRACE, Position(1, 3))
+            Token("}", TokenType.RIGHT_BRACE, Position(1, 3)),
         )
 
         assertEquals(expectedTokens, actualTokens)
@@ -171,7 +168,7 @@ class LexerTest {
             Token("}", TokenType.RIGHT_BRACE, Position(1, 10)),
             Token("else", TokenType.ELSE_KEYWORD, Position(1, 12)),
             Token("{", TokenType.LEFT_BRACE, Position(1, 17)),
-            Token("}", TokenType.RIGHT_BRACE, Position(1, 19))
+            Token("}", TokenType.RIGHT_BRACE, Position(1, 19)),
         )
 
         assertEquals(expectedTokens, actualTokens)
@@ -195,8 +192,8 @@ class LexerTest {
             Token("isFalse", TokenType.IDENTIFIER, Position(1, 28)),
             Token("=", TokenType.ASSIGNATION, Position(1, 36)),
             Token("false", TokenType.BOOLEAN_TYPE, Position(1, 38)),
-            Token(";", TokenType.SEMICOLON, Position(1, 43))
+            Token(";", TokenType.SEMICOLON, Position(1, 43)),
         )
 
         assertEquals(expectedTokens, actualTokens)
-}}
+    } }

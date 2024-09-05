@@ -1,6 +1,7 @@
 package org.example.main
 
 import InterpreterResult
+import lexer.LexerFactory
 import main.Parser
 import main.Token
 import org.example.interpreter.Interpreter
@@ -13,7 +14,7 @@ class Runner {
 
     fun run(path: String) {
         val bufferedReader: BufferedReader = Files.newBufferedReader(Paths.get(path))
-        val lexer = Lexer(bufferedReader)
+        val lexer = LexerFactory().createLexer(bufferedReader, 1)
         val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
         val parser = Parser(tokens.iterator())
         val ast = parser.parseExpressions()
