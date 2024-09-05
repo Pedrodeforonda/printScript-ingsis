@@ -24,4 +24,5 @@ enum class TokenType {
     ELSE_KEYWORD,
     BOOLEAN_LITERAL,
     BOOLEAN_TYPE,
+    CONST_KEYWORD,
 }

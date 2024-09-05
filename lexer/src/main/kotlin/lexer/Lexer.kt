@@ -1,11 +1,13 @@
 package org.example.lexer
 
+import lexer.StrategyList
 import main.Position
 import main.Token
 import java.io.BufferedReader
 
 class Lexer(
     private val iterator: BufferedReader,
+    private val strategyList: StrategyList,
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
@@ -21,13 +23,6 @@ class Lexer(
 
     private fun canSkip(lexer: Lexer): Boolean {
         return lexer.getChar()!!.isWhitespace() || lexer.getChar() == '\r' || lexer.getChar() == '\n'
-    }
-
-    fun getPos(): Int {
-        return pos
-    }
-    fun getText(): BufferedReader {
-        return iterator
     }
 
     fun getChar(): Char? {
@@ -57,7 +52,7 @@ class Lexer(
                 return null
             }
         }
-        for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
+        for (tokenStrategy in strategyList.getStrategies()) {
             val newToken = tokenStrategy.buildToken(lexer, "", lexer.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()

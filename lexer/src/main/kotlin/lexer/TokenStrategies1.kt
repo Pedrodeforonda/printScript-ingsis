@@ -1,5 +1,6 @@
-package org.example.lexer
-import lexer.StrategyList
+package lexer
+
+import org.example.lexer.TokenStrategy
 import org.example.tokenManagers.AssignationStrategy
 import org.example.tokenManagers.CommaStrategy
 import org.example.tokenManagers.LeftParenStrategy
@@ -8,24 +9,28 @@ import org.example.tokenManagers.OperatorStrategy
 import org.example.tokenManagers.RightParenStrategy
 import org.example.tokenManagers.SemicolonStrategy
 import org.example.tokenManagers.StringLiteralStrategy
-import org.example.tokenManagers.StringStrategy
 import org.example.tokenManagers.TypeAssignationStrategy
+import tokenManagers.LeftBraceStrategy
+import tokenManagers.RightBraceStrategy
+import tokenManagers.StringStrategy1
 
-data class ClassicTokenStrategies(
-    val listOfStrategies: List<TokenStrategy> = listOf(
+data class TokenStrategies1(
+    val list: List<TokenStrategy> = listOf(
         AssignationStrategy(),
         NumberStrategy(),
         OperatorStrategy(),
         SemicolonStrategy(),
-        StringStrategy(),
+        StringStrategy1(),
         StringLiteralStrategy(),
         TypeAssignationStrategy(),
         LeftParenStrategy(),
         RightParenStrategy(),
         CommaStrategy(),
+        LeftBraceStrategy(),
+        RightBraceStrategy(),
     ),
 ) : StrategyList {
     override fun getStrategies(): List<TokenStrategy> {
-        return listOfStrategies
+        return list
     }
 }
