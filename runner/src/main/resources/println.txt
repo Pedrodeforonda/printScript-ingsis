@@ -1,3 +1,2 @@
-let someNumber: number = 1;
-let someString: string = "hello world ";
-println(someString + someNumber);
+let pi: number =  3.14159;
+let radius: number = 10;
