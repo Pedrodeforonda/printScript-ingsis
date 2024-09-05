@@ -21,7 +21,7 @@ class AnalyzerOperation : CliktCommand(
         .file(mustExist = true)
 
     override fun run() {
-        val config = ConfigParser.parseConfig(configFile.absolutePath)
+        val config = ConfigParser.parseConfig(configFile.inputStream())
         val lexer = Lexer(sourceFile.bufferedReader())
         val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
         val parser = Parser(tokens.iterator())
@@ -29,7 +29,7 @@ class AnalyzerOperation : CliktCommand(
         val errors = Linter().lint(astNodes, config)
         var acc = 0
         for (error in errors) {
-            println(error)
+            println(error.getMessage())
             acc++
         }
         if (acc == 0) {
