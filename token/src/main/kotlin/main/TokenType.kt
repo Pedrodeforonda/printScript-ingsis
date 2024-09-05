@@ -18,7 +18,6 @@ enum class TokenType {
     MINUS,
     SLASH,
     ASTERISK,
-    NULL_TYPE,
     LEFT_BRACE,
-    RIGHT_BRACE,
+    RIGHT_BRACE
 }
