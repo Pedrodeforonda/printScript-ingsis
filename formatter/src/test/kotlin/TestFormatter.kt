@@ -2,7 +2,6 @@ import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
-import org.example.lexer.Lexer
 import java.io.BufferedWriter
 import java.io.File
 import kotlin.test.Test
