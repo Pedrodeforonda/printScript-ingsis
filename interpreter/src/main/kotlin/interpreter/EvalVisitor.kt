@@ -99,6 +99,7 @@ class EvalVisitor(
                 printlnCollector.addPrint(result.value.toString())
                 return SuccessResult("Printed")
             }
+            printlnCollector.addPrint((result as LiteralResult).value.toString())
             println((result as LiteralResult).value)
             return SuccessResult("Printed")
         }
