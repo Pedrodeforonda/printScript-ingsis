@@ -19,4 +19,6 @@ enum class TokenType {
     SLASH,
     ASTERISK,
     NULL_TYPE,
+    LEFT_BRACE,
+    RIGHT_BRACE,
 }
