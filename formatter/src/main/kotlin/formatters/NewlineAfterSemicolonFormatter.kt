@@ -14,7 +14,13 @@ class NewlineAfterSemicolonFormatter : Formatter {
         fileOutputWriter: BufferedWriter,
     ): FormatterResult {
         if (tokens.getType() == TokenType.SEMICOLON) {
-            fileOutputWriter.write(";\n")
+            fileOutputWriter.write(";")
+            if (config.newLineAfterSemiColon == null) {
+                return FormatterResult("fail", true)
+            }
+            if (config.newLineAfterSemiColon) {
+                fileOutputWriter.newLine()
+            }
             return FormatterResult("success", false)
         }
         return FormatterResult("fail", true)

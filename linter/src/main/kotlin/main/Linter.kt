@@ -1,14 +1,19 @@
 package main.kotlin.main
 
-import nodes.Node
+import utils.ParsingResult
 
 class Linter {
 
-    fun lint(astNodes: Sequence<Node>, config: LinterConfig): Sequence<Any> = sequence {
+    fun lint(astNodes: Sequence<ParsingResult>, config: LinterConfig): Sequence<Any> = sequence {
         for (node in astNodes) {
-            val result = node.accept(LinterVisitor(config)) as LinterResult
-            if (result.hasError()) {
-                yield(result.getMessage())
+            if (!node.hasError()) {
+                val result = node.getAst().accept(LinterVisitor(config)) as LinterResult
+                if (result.hasError()) {
+                    yield(result)
+                }
+            }
+            if (node.hasError()) {
+                yield(LinterResult(node.getError().message!!, true))
             }
         }
     }
