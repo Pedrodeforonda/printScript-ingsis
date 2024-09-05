@@ -1,4 +1,4 @@
-
+package utils
 class InterpreterResult(private val println: String?, private val exception: Exception?) {
 
     fun hasPrintln(): Boolean {

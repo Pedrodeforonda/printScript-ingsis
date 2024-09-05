@@ -1,6 +1,6 @@
 package org.example.interpreter
 
-import InterpreterResult
+import utils.InterpreterResult
 import utils.ParsingResult
 import utils.PrintlnCollector
 
