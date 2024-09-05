@@ -13,6 +13,9 @@ class SpaceBeforeAssignmentFormatter : Formatter {
         config: FormatterConfigReader,
         fileOutputWriter: BufferedWriter,
     ): FormatterResult {
+        if (config.spaceBeforeAssignment == null) {
+            return FormatterResult("fail", hasError = true, hasNext = true)
+        }
         if (tokens.getType() == TokenType.ASSIGNATION) {
             if (config.spaceBeforeAssignment) {
                 fileOutputWriter.write(" ")

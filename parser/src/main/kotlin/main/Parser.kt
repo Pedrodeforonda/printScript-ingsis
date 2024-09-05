@@ -10,6 +10,7 @@ import parsers.Infix
 import parsers.LiteralParser
 import parsers.Prefix
 import parsers.PrefixOperatorParser
+import utils.ParsingResult
 
 class Parser(private val tokens: Iterator<Token>) {
     private val prefixParsers = mutableMapOf<TokenType, Prefix>()
@@ -60,13 +61,19 @@ class Parser(private val tokens: Iterator<Token>) {
         return left
     }
 
-    fun parseExpressions(): Sequence<Node> = sequence {
+    fun parseExpressions(): Sequence<ParsingResult> = sequence {
         while (hasNextToken()) {
-            val result: Node = parseExpression()
-            if (checkExpressions(result).isEmpty()) {
-                yield(result)
-            } else {
-                throw ParseException(checkExpressions(result).first().message!!)
+            try {
+                val result: Node = parseExpression()
+                if (checkExpressions(result).isEmpty()) {
+                    yield(ParsingResult(result, null))
+                } else {
+                    yield(ParsingResult(null, ParseException(checkExpressions(result)[0].message!!)))
+                    while (currentToken.getType() != TokenType.SEMICOLON && hasNextToken()) consume()
+                }
+            } catch (e: ParseException) {
+                yield(ParsingResult(null, e))
+                while (currentToken.getType() != TokenType.SEMICOLON && hasNextToken()) consume()
             }
             if (currentToken.getType() == TokenType.SEMICOLON && hasNextToken()) consume()
         }

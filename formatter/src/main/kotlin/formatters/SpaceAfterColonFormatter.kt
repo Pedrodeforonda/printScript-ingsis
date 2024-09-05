@@ -13,6 +13,9 @@ class SpaceAfterColonFormatter : Formatter {
         config: FormatterConfigReader,
         fileOutputWriter: BufferedWriter,
     ): FormatterResult {
+        if (config.spaceAfterColon == null) {
+            return FormatterResult("fail", true)
+        }
         if (tokens.getType() == TokenType.TYPE_ASSIGNATION) {
             if (config.spaceAfterColon) {
                 fileOutputWriter.write(" ")

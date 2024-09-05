@@ -1,5 +1,6 @@
 package org.example.main
 
+import InterpreterResult
 import main.Parser
 import main.Token
 import org.example.interpreter.Interpreter
@@ -17,6 +18,9 @@ class Runner {
         val parser = Parser(tokens.iterator())
         val ast = parser.parseExpressions()
         val interpreter = Interpreter()
-        interpreter.interpret(ast)
+        val result: Sequence<InterpreterResult> = interpreter.interpret(ast)
+        for (interpreterResult in result) {
+            if (interpreterResult.hasException()) println(interpreterResult.getException())
+        }
     }
 }

@@ -14,6 +14,10 @@ class NewlineBeforePrintlnFormatter : Formatter {
         fileOutputWriter: BufferedWriter,
     ): FormatterResult {
         if (tokens.getType() == TokenType.CALL_FUNC) {
+            if (config.linesBeforePrintln == null) {
+                fileOutputWriter.write(tokens.getText())
+                return FormatterResult("fail", true)
+            }
             val qty = config.linesBeforePrintln
             repeat(qty) {
                 fileOutputWriter.newLine()

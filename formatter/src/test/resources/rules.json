@@ -3,5 +3,6 @@
   "spaceAfterColon": true,
   "spaceBeforeAssignment": true,
   "spaceAfterAssignment": true,
-  "linesBeforePrintln": 1
+  "newLineAfterSemiColon": true,
+  "enforceSpacingBetweenTokens": true
 }

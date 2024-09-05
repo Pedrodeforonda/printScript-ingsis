@@ -7,6 +7,7 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import utils.PrintlnCollector
 import utils.DeclarationResult
 import utils.ExpressionVisitor
 import utils.IdentifierResult
@@ -15,9 +16,13 @@ import utils.LiteralResult
 import utils.Result
 import utils.SuccessResult
 
-class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>) : ExpressionVisitor {
+class EvalVisitor(
+    private var variableMap: MutableMap<Pair<String, String>, Any>,
+    private val printlnCollector: PrintlnCollector,
+) : ExpressionVisitor {
 
     override fun visitDeclaration(expression: Declaration): Any {
+        variableMap[Pair(expression.getName(), expression.getType())] = expression.getType()
         return DeclarationResult(expression.getName(), expression.getType())
     }
 
@@ -44,7 +49,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
                 TokenType.MINUS -> LiteralResult(left.toInt() - right.toInt())
                 TokenType.ASTERISK -> LiteralResult(left.toInt() * right.toInt())
                 TokenType.SLASH -> LiteralResult(left.toInt() / right.toInt())
-                else -> throw Exception("Invalid operator")
+                else -> throw InterpreterException("Invalid operator")
             }
         }
         if (left is String && right is String && operator.getType() == TokenType.PLUS) {
@@ -57,7 +62,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             return LiteralResult(left.toString() + right)
         }
 
-        return InterpreterException("Invalid operation")
+        throw InterpreterException("Invalid operation")
     }
 
     override fun visitAssignment(expression: Assignation): Any {
@@ -91,12 +96,13 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
             val result = arg[0].accept(this)
             if (result is IdentifierResult) {
                 println(result.value)
+                printlnCollector.addPrint(result.value.toString())
                 return SuccessResult("Printed")
             }
             println((result as LiteralResult).value)
             return SuccessResult("Printed")
         }
-        return InterpreterException("Invalid function")
+        throw InterpreterException("Invalid function")
     }
 
     override fun visitIdentifier(expression: Identifier): Any {
@@ -105,7 +111,7 @@ class EvalVisitor(private var variableMap: MutableMap<Pair<String, String>, Any>
                 return IdentifierResult(key, value)
             }
         }
-        return InterpreterException("Variable not found")
+        throw InterpreterException("Variable not found")
     }
 
     private fun getType(value: Any): String {

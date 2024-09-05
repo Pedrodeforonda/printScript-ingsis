@@ -1,5 +1,6 @@
 package main
 
+import formatters.EnforceSpacingFormatter
 import formatters.IsLiteral
 import formatters.NewlineAfterSemicolonFormatter
 import formatters.NewlineBeforePrintlnFormatter
@@ -10,10 +11,11 @@ import formatters.SpaceBeforeAssignmentFormatter
 import formatters.SpaceBeforeColonFormatter
 import java.io.BufferedWriter
 
-class MainFormatter(private val path: String) {
+class MainFormatter {
 
     private val formatters by lazy {
         listOf(
+            EnforceSpacingFormatter(),
             IsLiteral(),
             NewlineAfterSemicolonFormatter(),
             SpaceAroundOperatorsFormatter(),
@@ -47,6 +49,16 @@ class MainFormatter(private val path: String) {
     ): FormatterResult {
         var lastTokenWasNewline = true
         var lastTokenWasOperator = false
+        var isEnforceSpacing = false
+        if (config.enforceSpacingBetweenTokens == true) {
+            tokens.forEach {
+                for (formatter in formatters) {
+                    val result = formatter.formatCode(it, config, fileOutputWriter)
+                    break
+                }
+            }
+            return FormatterResult("Formatted successfully", false)
+        }
 
         tokens.forEach { token ->
             val isIgnore = token.getType() == TokenType.LEFT_PAREN ||
