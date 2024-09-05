@@ -45,10 +45,26 @@ class EvalVisitor(
 
         if (left is Number && right is Number) {
             return when (operator.getType()) {
-                TokenType.PLUS -> LiteralResult(left.toInt() + right.toInt())
-                TokenType.MINUS -> LiteralResult(left.toInt() - right.toInt())
-                TokenType.ASTERISK -> LiteralResult(left.toInt() * right.toInt())
-                TokenType.SLASH -> LiteralResult(left.toInt() / right.toInt())
+                TokenType.PLUS -> LiteralResult(
+                    if (left is Double || right is Double) {
+                        left.toDouble() + right.toDouble()
+                    } else left.toInt() + right.toInt(),
+                )
+                TokenType.MINUS -> LiteralResult(
+                    if (left is Double || right is Double) {
+                        left.toDouble() - right.toDouble()
+                    } else left.toInt() - right.toInt(),
+                )
+                TokenType.ASTERISK -> LiteralResult(
+                    if (left is Double || right is Double) {
+                        left.toDouble() * right.toDouble()
+                    } else left.toInt() * right.toInt(),
+                )
+                TokenType.SLASH -> LiteralResult(
+                    if (left is Double || right is Double) {
+                        left.toDouble() / right.toDouble()
+                    } else left.toInt() / right.toInt(),
+                )
                 else -> throw InterpreterException("Invalid operator")
             }
         }
