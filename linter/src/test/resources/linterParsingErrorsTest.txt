@@ -1,0 +1,5 @@
+let a_a: string = "monos";
+let c_d: string = "monitos";
+printlna_a);
+println(c_d);
+println(a_a;

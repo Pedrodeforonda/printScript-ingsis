@@ -1,0 +1,3 @@
+let a_B: string = "monos";
+let cd_: string = "monitos";
+println(aB + cd);
