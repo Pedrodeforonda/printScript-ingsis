@@ -1,5 +1,6 @@
 package org.example
 
+import InterpreterResult
 import main.Position
 import main.Token
 import main.TokenType
@@ -9,18 +10,24 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.Node
 import org.example.interpreter.Interpreter
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import utils.DeclarationKeyWord
 import utils.InterpreterException
+import utils.ParsingResult
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class InterpreterTest {
 
     private val interpreter = Interpreter()
+
+    private fun nodeToParsingResult(node: Node): ParsingResult {
+        return ParsingResult(node, null)
+    }
 
     @Test
     fun testAssignation() {
@@ -29,7 +36,10 @@ class InterpreterTest {
             Literal("Pedro", Position(0, 0)),
             Position(0, 0),
         )
-        interpreter.interpret(sequenceOf(stringAssignation))
+
+        val result = nodeToParsingResult(stringAssignation)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("Pedro", interpreter.getVariableMap()[Pair("name", "string")])
 
@@ -38,7 +48,10 @@ class InterpreterTest {
             Literal(10, Position(0, 0)),
             Position(0, 0),
         )
-        interpreter.interpret(sequenceOf(numberAssignation))
+
+        val result2 = nodeToParsingResult(numberAssignation)
+        val interpreterResult2 = interpreter.interpret(sequenceOf(result2))
+        interpreterResult2.toList()
 
         assertEquals(10, interpreter.getVariableMap()[Pair("num", "number")])
     }
@@ -55,7 +68,10 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(stringAssignation, callNode))
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
+        interpreterResult.toList()
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -69,7 +85,11 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(numberAssignation, callNode2))
+        val result3 = nodeToParsingResult(numberAssignation)
+        val result4 = nodeToParsingResult(callNode2)
+
+        val interpreterResult2 = interpreter.interpret(sequenceOf(result3, result4))
+        interpreterResult2.toList()
 
         assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -82,7 +102,9 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -92,7 +114,9 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode2))
+        val result2 = nodeToParsingResult(callNode2)
+        val interpreterResult2 = interpreter.interpret(sequenceOf(result2))
+        interpreterResult2.toList()
 
         assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -111,7 +135,9 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("30", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -129,7 +155,9 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("Hello World", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -147,7 +175,9 @@ class InterpreterTest {
         var outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("Diego10", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -162,7 +192,9 @@ class InterpreterTest {
         outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode2))
+        val result2 = nodeToParsingResult(callNode2)
+        val interpreterResult2 = interpreter.interpret(sequenceOf(result2))
+        interpreterResult2.toList()
 
         assertEquals("10Diego", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -180,7 +212,9 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("5", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -198,7 +232,9 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("50", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -216,7 +252,9 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode))
+        val result = nodeToParsingResult(callNode)
+        val interpreterResult = interpreter.interpret(sequenceOf(result))
+        interpreterResult.toList()
 
         assertEquals("2", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -272,7 +310,13 @@ class InterpreterTest {
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
 
-        interpreter.interpret(sequenceOf(callNode, callNode2, callNode3, callNode4))
+        val result = nodeToParsingResult(callNode)
+        val result2 = nodeToParsingResult(callNode2)
+        val result3 = nodeToParsingResult(callNode3)
+        val result4 = nodeToParsingResult(callNode4)
+
+        val interpreterResult = interpreter.interpret(sequenceOf(result, result2, result3, result4))
+        interpreterResult.toList()
 
         assertEquals("30 5 50 2", outContent.toString().replace(System.lineSeparator(), ""))
     }
@@ -289,7 +333,11 @@ class InterpreterTest {
             Literal("el nene", Position(0, 0)),
             Position(0, 0),
         )
-        interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
+
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(stringReAssignation)
+        val resultInterpreter: Sequence<InterpreterResult> = interpreter.interpret(sequenceOf(result, result2))
+        resultInterpreter.toList()
 
         assertEquals("el nene", interpreter.getVariableMap()[Pair("name", "string")])
     }
@@ -307,10 +355,21 @@ class InterpreterTest {
             Position(0, 0),
         )
 
-        val error = assertThrows<InterpreterException> {
-            interpreter.interpret(sequenceOf(stringAssignation, stringReAssignation))
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(stringReAssignation)
+
+        val resultInterpreter: Sequence<InterpreterResult> = interpreter.interpret(sequenceOf(result, result2))
+        val errorList = ArrayList<Exception>()
+
+        for (res in resultInterpreter) {
+            if (res.hasException()) {
+                errorList.add(res.getException())
+            }
         }
 
+        assertTrue { errorList.size > 0 }
+
+        val error = errorList[0] as InterpreterException
         assertEquals(
             error.message,
             "Invalid type: expected string, but got number on variable name, at line 0 column 0",

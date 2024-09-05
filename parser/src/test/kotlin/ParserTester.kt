@@ -9,10 +9,11 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.Node
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
-import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 public class ParserTester {
     @Test
@@ -26,7 +27,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = sequenceOf(
             Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
         ).toList()
@@ -48,7 +53,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
             Assignation(Identifier("a", Position(1, 5)), Literal(1, Position(2, 1)), Position(2, 3)),
@@ -69,7 +78,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -98,7 +111,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -125,7 +142,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -156,7 +177,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -189,7 +214,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -227,7 +256,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             Assignation(
                 Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
@@ -265,11 +298,16 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val error = assertFailsWith<ParseException> {
-            parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        val errors = ArrayList<Exception>()
+        for (results in parsingResults) {
+            if (!results.hasError()) {
+                result.add(results.getAst())
+            } else errors.add(results.getError())
         }
 
-        println(error.message!!)
+        assertTrue { errors.size > 0 }
     }
 
     @Test
@@ -283,7 +321,11 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val result = parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+        }
         val expected = listOf(
             CallNode("println", listOf(Identifier("a", Position(1, 9))), Position(1, 1)),
         )
@@ -300,9 +342,15 @@ public class ParserTester {
         )
 
         val parser = Parser(tokens.listIterator())
-        val error = assertFailsWith<ParseException> {
-            parser.parseExpressions().toList()
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        val errors = ArrayList<Exception>()
+        for (results in parsingResults) {
+            if (!results.hasError()) {
+                result.add(results.getAst())
+            } else errors.add(results.getError())
         }
+        val error = errors[0] as ParseException
         assertEquals(
             error.message,
             "Syntax Error at 1, 11" +

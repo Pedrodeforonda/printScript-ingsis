@@ -7,12 +7,12 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
-import utils.PrintlnCollector
 import utils.DeclarationResult
 import utils.ExpressionVisitor
 import utils.IdentifierResult
 import utils.InterpreterException
 import utils.LiteralResult
+import utils.PrintlnCollector
 import utils.Result
 import utils.SuccessResult
 

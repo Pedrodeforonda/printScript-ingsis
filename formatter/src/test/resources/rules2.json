@@ -4,5 +4,5 @@
   "spaceBeforeAssignment": true,
   "spaceAfterAssignment": true,
   "newLineAfterSemiColon": true,
-  "enforceSpacingBetweenTokens": false
+  "enforceSpacingBetweenTokens": true
 }
