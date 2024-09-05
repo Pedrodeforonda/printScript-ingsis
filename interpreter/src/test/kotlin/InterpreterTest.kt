@@ -1,6 +1,5 @@
 package org.example
 
-import InterpreterResult
 import main.Position
 import main.Token
 import main.TokenType
@@ -15,6 +14,7 @@ import org.example.interpreter.Interpreter
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
 import utils.InterpreterException
+import utils.InterpreterResult
 import utils.ParsingResult
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

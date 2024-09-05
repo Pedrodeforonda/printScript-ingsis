@@ -6,6 +6,7 @@ import main.Parser
 import main.Token
 import org.example.interpreter.Interpreter
 import org.example.lexer.Lexer
+import utils.InterpreterResult
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Paths

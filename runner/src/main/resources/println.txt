@@ -1,3 +1,2 @@
-let result: number;
-result = 5;
-println(result);
+let pi: number =  3.14159;
+let radius: number = 10;
