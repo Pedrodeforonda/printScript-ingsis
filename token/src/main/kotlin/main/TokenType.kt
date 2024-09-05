@@ -19,5 +19,9 @@ enum class TokenType {
     SLASH,
     ASTERISK,
     LEFT_BRACE,
-    RIGHT_BRACE
+    RIGHT_BRACE,
+    IF_KEYWORD,
+    ELSE_KEYWORD,
+    BOOLEAN_LITERAL,
+    BOOLEAN_TYPE,
 }
