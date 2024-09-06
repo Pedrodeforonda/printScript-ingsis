@@ -2,22 +2,30 @@ package org.example.lexer
 
 import main.Position
 import main.Token
+import utils.PercentageCollector
 import java.io.BufferedReader
 
 class Lexer(
     private val iterator: BufferedReader,
+    private val streamByteLength: Int,
+    private val percentageColector: PercentageCollector,
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
     private var current: Char? = iterator.read().toChar()
     private var lineBreak = 0
     private var currentColumn = 0
+    init {
+        percentageColector.updateTotalBytes(streamByteLength)
+        percentageColector.updateReadBytes(1)
+    }
 
     fun goToNextPos() {
         pos += 1
         val read = iterator.read()
         if (read != -1) {
             current = read.toChar()
+            percentageColector.updateReadBytes(1)
         } else {
             current = null
         }
@@ -40,6 +48,7 @@ class Lexer(
 
     private fun nextCharNull(): Boolean {
         val read = iterator.read()
+        percentageColector.updateReadBytes(1)
         current = read.toChar()
         if (read == -1) {
             current = null
