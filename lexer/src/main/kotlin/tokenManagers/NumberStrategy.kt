@@ -17,7 +17,6 @@ class NumberStrategy : TokenStrategy {
         }
 
         return if (result.isNotEmpty()) {
-            lexer.goToPreviousPos()
             Token(result, TokenType.NUMBER_LITERAL, initialPosition)
         } else {
             null

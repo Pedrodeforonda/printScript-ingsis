@@ -15,7 +15,7 @@ class StringStrategy : TokenStrategy {
             lexer.goToNextPos()
             return buildToken(lexer, newResult, initialPosition)
         }
-        if (result.isNotEmpty()) lexer.goToPreviousPos()
+
         return when (result) {
             "let" -> Token(result, TokenType.LET_KEYWORD, initialPosition)
             "string" -> Token(result, TokenType.STRING_TYPE, initialPosition)

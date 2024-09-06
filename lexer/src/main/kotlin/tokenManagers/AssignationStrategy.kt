@@ -9,6 +9,7 @@ import org.example.lexer.TokenStrategy
 class AssignationStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
         if (lexer.getChar() == '=') {
+            lexer.goToNextPos()
             return Token("=", TokenType.ASSIGNATION, initialPosition)
         }
         return null
