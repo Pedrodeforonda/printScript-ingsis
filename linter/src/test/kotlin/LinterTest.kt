@@ -1,5 +1,6 @@
 import main.Parser
 import main.Token
+import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
 import main.kotlin.main.LinterConfig
 import org.example.lexer.Lexer
@@ -11,8 +12,31 @@ import kotlin.io.path.Path
 class LinterTest {
 
     @Test
+    fun testConfigParser() {
+        val input = Files.newInputStream(Path("src/test/resources/linterRulesTest.json"))
+        val config = ConfigParser.parseConfig(input)
+
+        assertTrue(config.identifier_format == "" && !config.restrictPrintln)
+
+        val input2 = Files.newInputStream(Path("src/test/resources/linterRulesTest2.json"))
+        val config2 = ConfigParser.parseConfig(input2)
+
+        assertTrue(config2.identifier_format == "camel case" && !config2.restrictPrintln)
+
+        val input3 = Files.newInputStream(Path("src/test/resources/linterRulesTest3.json"))
+        val config3 = ConfigParser.parseConfig(input3)
+
+        assertTrue(config3.identifier_format == "snake case" && config3.restrictPrintln)
+
+        val input4 = Files.newInputStream(Path("src/test/resources/linterRulesTest4.json"))
+        val config4 = ConfigParser.parseConfig(input4)
+
+        assertTrue(config4.identifier_format == "" && config4.restrictPrintln)
+    }
+
+    @Test
     fun testCamelCaseRule() {
-        val config = LinterConfig("camelCase", false)
+        val config = LinterConfig("camel case", false)
 
         val input = Files.newBufferedReader(Path("src/test/resources/linterCamelCaseTest.txt"))
         val lexer = Lexer(input)
@@ -35,7 +59,7 @@ class LinterTest {
 
     @Test
     fun testSnakeCaseRule() {
-        val config = LinterConfig("snake_case", false)
+        val config = LinterConfig("snake case", false)
 
         val input = Files.newBufferedReader(Path("src/test/resources/linterSnakeCaseTest.txt"))
         val lexer = Lexer(input)
@@ -81,7 +105,7 @@ class LinterTest {
 
     @Test
     fun testParsingErrorsCase() {
-        val config = LinterConfig("camelCase", false)
+        val config = LinterConfig("camel case", false)
 
         val input = Files.newBufferedReader(Path("src/test/resources/linterParsingErrorsTest.txt"))
         val lexer = Lexer(input)

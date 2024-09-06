@@ -9,6 +9,6 @@ class SnakeCaseStrategy : IdentifierFormatStrategy {
     }
 
     override fun getFormat(): String {
-        return "snake_case"
+        return "snake case"
     }
 }

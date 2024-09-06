@@ -47,7 +47,7 @@ class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
     }
 
     override fun visitIdentifier(expression: Identifier): LinterResult {
-        val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifierFormat }
+        val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifier_format }
         if (identifierFormat != null) {
             return IdentifierFormatRule(identifierFormat).lintCode(expression)
         }
