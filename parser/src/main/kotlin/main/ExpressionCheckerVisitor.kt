@@ -6,6 +6,7 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.ReadInput
 import utils.ExpressionVisitor
 
 class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, String>) : ExpressionVisitor {
@@ -99,5 +100,9 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
             return CheckAstResult(false, "Variable $variableName is not declared", "Identifier")
         }
         return CheckAstResult(true, "", "Identifier")
+    }
+
+    override fun visitReadInput(expression: ReadInput): Any {
+        TODO("Not yet implemented")
     }
 }

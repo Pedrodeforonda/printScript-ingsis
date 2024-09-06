@@ -1,0 +1,2 @@
+let a: string = readInput("mensaje: ");
+let b: number = readInput(a);

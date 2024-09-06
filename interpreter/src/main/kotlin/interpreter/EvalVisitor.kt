@@ -7,6 +7,7 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.ReadInput
 import utils.DeclarationResult
 import utils.ExpressionVisitor
 import utils.IdentifierResult
@@ -129,6 +130,10 @@ class EvalVisitor(
             }
         }
         throw InterpreterException("Variable not found")
+    }
+
+    override fun visitReadInput(expression: ReadInput): Any {
+        TODO("Not yet implemented")
     }
 
     private fun getType(value: Any): String {
