@@ -2,7 +2,13 @@ package main.kotlin.main
 
 import main.Position
 import main.kotlin.rules.IdentifierFormatRule
-import nodes.*
+import nodes.Assignation
+import nodes.BinaryNode
+import nodes.CallNode
+import nodes.Declaration
+import nodes.Identifier
+import nodes.Literal
+import nodes.ReadInput
 import rules.PrintlnRestrictionRule
 import rules.ReadInputRestrictionRule
 import utils.ExpressionVisitor
