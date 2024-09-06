@@ -25,6 +25,7 @@ class Interpreter {
                 printlnCollector.yieldPrints().forEach {
                     yield(InterpreterResult(it, null))
                 }
+                printlnCollector.clearPrints()
             } else if (exp.hasError()) {
                 yield(InterpreterResult(null, exp.getError()))
             }
