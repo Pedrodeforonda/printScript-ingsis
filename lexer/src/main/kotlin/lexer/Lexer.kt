@@ -57,6 +57,9 @@ class Lexer(
             if (current == '\n') {
                 goToNextPos()
             }
+            if (token == null) {
+                goToNextPos()
+            }
         }
     }
 

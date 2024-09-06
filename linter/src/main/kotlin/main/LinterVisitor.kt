@@ -2,13 +2,15 @@ package main.kotlin.main
 
 import main.Position
 import main.kotlin.rules.IdentifierFormatRule
-import main.kotlin.rules.PrintlnRestrictionRule
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.ReadInput
+import rules.PrintlnRestrictionRule
+import rules.ReadInputRestrictionRule
 import utils.ExpressionVisitor
 
 class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
@@ -52,6 +54,14 @@ class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
             return IdentifierFormatRule(identifierFormat).lintCode(expression)
         }
         return LinterResult(null, false)
+    }
+
+    override fun visitReadInput(expression: ReadInput): Any {
+        val argumentResult = expression.getArgument().accept(this) as LinterResult
+        if (config.restrictReadInput) {
+            return ReadInputRestrictionRule(argumentResult).lintCode(expression)
+        }
+        return LinterResult(argumentResult.getMessage(), argumentResult.hasError())
     }
 
     private fun checkErrors(left: LinterResult, right: LinterResult): LinterResult {
