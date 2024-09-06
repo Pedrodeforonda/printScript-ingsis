@@ -9,14 +9,18 @@ class Lexer(
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
-    private val text = iterator.readText()
-    private var current: Char? = text.getOrNull(pos)
+    private var current: Char? = iterator.read().toChar()
     private var lineBreak = 0
     private var currentColumn = 0
 
     fun goToNextPos() {
         pos += 1
-        current = text.getOrNull(pos)
+        val read = iterator.read()
+        if (read != -1) {
+            current = read.toChar()
+        } else {
+            current = null
+        }
     }
 
     private fun canSkip(lexer: Lexer): Boolean {
@@ -35,7 +39,13 @@ class Lexer(
     }
 
     private fun nextCharNull(): Boolean {
-        return text.getOrNull(pos + 1) == null
+        val read = iterator.read()
+        current = read.toChar()
+        if (read == -1) {
+            current = null
+            return true
+        }
+        return false
     }
 
     fun tokenizeAll(lexer: Lexer): Sequence<Token> = sequence { // funcion + imp del lexer
@@ -44,7 +54,9 @@ class Lexer(
             if (token != null) {
                 yield(token)
             }
-            goToNextPos()
+            if (current == '\n') {
+                goToNextPos()
+            }
         }
     }
 
@@ -52,7 +64,8 @@ class Lexer(
         if (canSkip(lexer)) {
             updateTokenPosition()
             if (!nextCharNull()) {
-                return updateLexer(lexer.sumPos())
+                sumPos()
+                return updateLexer(lexer)
             } else {
                 return null
             }
@@ -86,13 +99,7 @@ class Lexer(
         return currentColumn
     }
 
-    private fun sumPos(): Lexer {
-        this.goToNextPos()
-        return this
-    }
-
-    fun goToPreviousPos() {
-        pos -= 1
-        current = text.getOrNull(pos)
+    private fun sumPos() {
+        pos += 1
     }
 }
