@@ -11,11 +11,13 @@ import nodes.Identifier
 import nodes.Literal
 import nodes.Node
 import org.example.interpreter.Interpreter
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
 import utils.InterpreterException
 import utils.InterpreterResult
 import utils.ParsingResult
+import utils.PercentageCollector
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
@@ -23,10 +25,16 @@ import kotlin.test.assertTrue
 
 class InterpreterTest {
 
-    private val interpreter = Interpreter()
+    private val collector = PercentageCollector()
+    private val interpreter = Interpreter(collector)
 
     private fun nodeToParsingResult(node: Node): ParsingResult {
         return ParsingResult(node, null)
+    }
+
+    @BeforeEach
+    fun resetPercentageCollector() {
+        collector.reset()
     }
 
     @Test

@@ -8,6 +8,7 @@ import main.Token
 import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
 import org.example.lexer.Lexer
+import utils.PercentageCollector
 import java.io.File
 
 class AnalyzerOperation : CliktCommand(
@@ -21,8 +22,10 @@ class AnalyzerOperation : CliktCommand(
         .file(mustExist = true)
 
     override fun run() {
+        val length = sourceFile.inputStream().available()
+        val collector = PercentageCollector()
         val config = ConfigParser.parseConfig(configFile.inputStream())
-        val lexer = Lexer(sourceFile.bufferedReader())
+        val lexer = Lexer(sourceFile.bufferedReader(), length, collector)
         val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
         val parser = Parser(tokens.iterator())
         val astNodes = parser.parseExpressions()
