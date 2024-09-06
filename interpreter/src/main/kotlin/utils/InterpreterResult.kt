@@ -1,5 +1,9 @@
 package utils
-class InterpreterResult(private val println: String?, private val exception: Exception?) {
+class InterpreterResult(
+    private val println: String?,
+    private val exception: Exception?,
+    private val percentageProcessed: Double,
+) {
 
     fun hasPrintln(): Boolean {
         return println != null
@@ -15,5 +19,9 @@ class InterpreterResult(private val println: String?, private val exception: Exc
 
     fun getException(): Exception {
         return exception!!
+    }
+
+    fun getPercentageProcessed(): Double {
+        return percentageProcessed
     }
 }
