@@ -1,8 +1,8 @@
 package main
 
-import java.io.BufferedWriter
+import java.io.Writer
 
 interface Formatter {
 
-    fun formatCode(tokens: Token, config: FormatterConfigReader, fileOutputWriter: BufferedWriter): FormatterResult
+    fun formatCode(tokens: Token, config: FormatterConfigReader, fileOutputWriter: Writer): FormatterResult
 }

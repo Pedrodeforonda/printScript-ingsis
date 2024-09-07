@@ -1,8 +1,3 @@
 {
-  "spaceBeforeColon": true,
-  "spaceAfterColon": true,
-  "spaceBeforeAssignment": true,
-  "spaceAfterAssignment": true,
-  "newLineAfterSemiColon": true,
-  "enforceSpacingBetweenTokens": true
+  "mandatory-single-space-separation": true
 }

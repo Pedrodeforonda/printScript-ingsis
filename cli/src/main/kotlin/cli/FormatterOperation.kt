@@ -27,7 +27,7 @@ class FormatterOperation : CliktCommand(
         val collector = PercentageCollector()
         val config = configLoader.loadConfig<FormatterConfigReader>(configFile.inputStream())
         val lexer: Lexer = Lexer(sourceFile.inputStream().bufferedReader(), length, collector)
-        val tokens = lexer.tokenizeAll(lexer)
+        val tokens = lexer.tokenize()
         val outputWriter = File(outputPath).bufferedWriter()
         val formattedText = MainFormatter().formatCode(tokens, config, outputWriter)
         outputWriter.close()

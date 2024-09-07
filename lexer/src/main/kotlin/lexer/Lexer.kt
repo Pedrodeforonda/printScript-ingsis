@@ -16,6 +16,7 @@ class Lexer(
     private var lineBreak = 0
     private var currentColumn = 0
     init {
+        percentageColector.reset()
         percentageColector.updateTotalBytes(streamByteLength)
         percentageColector.updateReadBytes(1)
     }
@@ -31,8 +32,8 @@ class Lexer(
         }
     }
 
-    private fun canSkip(lexer: Lexer): Boolean {
-        return lexer.getChar()!!.isWhitespace() || lexer.getChar() == '\r' || lexer.getChar() == '\n'
+    private fun canSkip(): Boolean {
+        return this.getChar()!!.isWhitespace() || this.getChar() == '\r' || this.getChar() == '\n'
     }
 
     fun getPos(): Int {
@@ -57,9 +58,9 @@ class Lexer(
         return false
     }
 
-    fun tokenizeAll(lexer: Lexer): Sequence<Token> = sequence { // funcion + imp del lexer
-        while (lexer.getChar() != null) {
-            val token = updateLexer(lexer)
+    fun tokenize(): Sequence<Token> = sequence { // funcion + imp del lexer
+        while (this@Lexer.getChar() != null) {
+            val token = updateLexer()
             if (token != null) {
                 yield(token)
             }
@@ -72,18 +73,18 @@ class Lexer(
         }
     }
 
-    private fun updateLexer(lexer: Lexer): Token? {
-        if (canSkip(lexer)) {
+    private fun updateLexer(): Token? {
+        if (canSkip()) {
             updateTokenPosition()
             if (!nextCharNull()) {
                 sumPos()
-                return updateLexer(lexer)
+                return updateLexer()
             } else {
                 return null
             }
         }
         for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
-            val newToken = tokenStrategy.buildToken(lexer, "", lexer.tokenPosition())
+            val newToken = tokenStrategy.buildToken(this, "", this.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()
                 return newToken
