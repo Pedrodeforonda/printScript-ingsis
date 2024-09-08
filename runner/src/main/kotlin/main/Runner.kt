@@ -1,7 +1,7 @@
 package org.example.main
 
+import interpreter.Interpreter
 import main.Parser
-import org.example.interpreter.Interpreter
 import org.example.lexer.Lexer
 import utils.InterpreterResult
 import utils.PercentageCollector

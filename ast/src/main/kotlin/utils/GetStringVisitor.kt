@@ -5,35 +5,45 @@ import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
+import nodes.IfNode
 import nodes.Literal
 import nodes.ReadInput
+import nodes.ReadEnv
 
 class GetStringVisitor : ExpressionVisitor {
-    override fun visitDeclaration(expression: Declaration): Any {
-        return "Declaration"
+    override fun visitReadEnv(expression: ReadEnv): StringResult {
+        TODO("Not yet implemented")
     }
 
-    override fun visitLiteral(expression: Literal): Any {
-        return "Literal"
+    override fun visitIf(expression: IfNode): StringResult {
+        TODO("Not yet implemented")
     }
 
-    override fun visitBinaryExp(expression: BinaryNode): Any {
-        return "BinaryNode"
+    override fun visitDeclaration(expression: Declaration): StringResult {
+        return StringResult("Declaration")
     }
 
-    override fun visitAssignment(expression: Assignation): Any {
-        return "Assignation"
+    override fun visitLiteral(expression: Literal): StringResult {
+        return StringResult("Literal")
     }
 
-    override fun visitCallExp(expression: CallNode): Any {
-        return "CallNode"
+    override fun visitBinaryExp(expression: BinaryNode): StringResult {
+        return StringResult("BinaryNode")
     }
 
-    override fun visitIdentifier(expression: Identifier): Any {
-        return "Identifier"
+    override fun visitAssignment(expression: Assignation): StringResult {
+        return StringResult("Assignation")
     }
 
-    override fun visitReadInput(expression: ReadInput): Any {
-        return "ReadInput"
+    override fun visitCallExp(expression: CallNode): StringResult {
+        return StringResult("CallNode")
+    }
+
+    override fun visitIdentifier(expression: Identifier): StringResult {
+        return StringResult("Identifier")
+    }
+
+    override fun visitReadInput(expression: ReadInput): StringResult {
+        return StringResult("ReadInput")
     }
 }

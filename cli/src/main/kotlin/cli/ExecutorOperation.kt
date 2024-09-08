@@ -22,7 +22,6 @@ class ExecutorOperation : CliktCommand(
         val results: Sequence<InterpreterResult> = runner.run(inputStream, "1.0")
 
         var currentPercentage = 0.0
-
         for (result in results) {
             val output = StringBuilder()
             if (result.hasPrintln()) {

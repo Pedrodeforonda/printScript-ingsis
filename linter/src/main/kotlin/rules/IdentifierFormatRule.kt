@@ -1,9 +1,9 @@
-package main.kotlin.rules
+package rules
 
-import main.kotlin.identifierFormats.IdentifierFormatStrategy
-import main.kotlin.main.LinterResult
+import identifierFormatStrategies.IdentifierFormatStrategy
 import nodes.Identifier
 import nodes.Node
+import utils.LinterResult
 
 class IdentifierFormatRule(private val identifierFormat: IdentifierFormatStrategy) : LinterRule {
 

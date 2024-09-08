@@ -1,4 +1,4 @@
-package org.example.interpreter
+package interpreter
 
 import utils.InterpreterResult
 import utils.ParsingResult

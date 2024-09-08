@@ -1,8 +1,8 @@
+import main.ConfigParser
+import main.LinterConfig
 import main.Parser
 import main.Token
-import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
-import main.kotlin.main.LinterConfig
 import org.example.lexer.Lexer
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

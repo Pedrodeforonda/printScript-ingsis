@@ -1,5 +1,6 @@
 package org.example
 
+import interpreter.Interpreter
 import main.Position
 import main.Token
 import main.TokenType
@@ -10,7 +11,6 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
 import nodes.Node
-import org.example.interpreter.Interpreter
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord

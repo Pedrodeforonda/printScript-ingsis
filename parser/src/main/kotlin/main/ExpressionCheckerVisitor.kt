@@ -5,12 +5,23 @@ import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
+import nodes.IfNode
 import nodes.Literal
+import nodes.ReadEnv
 import nodes.ReadInput
+import utils.CheckAstResult
 import utils.ExpressionVisitor
+import utils.Result
 
 class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, String>) : ExpressionVisitor {
-    override fun visitDeclaration(expression: Declaration): CheckAstResult {
+    override fun visitReadEnv(expression: ReadEnv): CheckAstResult {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitIf(expression: IfNode): CheckAstResult {
+        TODO("Not yet implemented")
+    }
+    override fun visitDeclaration(expression: Declaration): Result {
         val variableName = expression.getName()
         val variableType = expression.getType()
         if (variableTypeMap.containsKey(variableName)) {
@@ -49,7 +60,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         return CheckAstResult(true, "", "number")
     }
 
-    override fun visitAssignment(expression: Assignation): Any {
+    override fun visitAssignment(expression: Assignation): CheckAstResult {
         if (expression.getDeclaration() is Identifier) {
             return CheckAstResult(true, "", "Identifier")
         }
@@ -82,7 +93,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         return CheckAstResult(true, "", valueResult.getResultType())
     }
 
-    override fun visitCallExp(expression: CallNode): Any {
+    override fun visitCallExp(expression: CallNode): CheckAstResult {
         val functionName = expression.getFunc()
         val arguments = expression.getArguments()
         if (functionName != "println") {
@@ -102,7 +113,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         return CheckAstResult(true, "", "Identifier")
     }
 
-    override fun visitReadInput(expression: ReadInput): Any {
+    override fun visitReadInput(expression: ReadInput): CheckAstResult {
         TODO("Not yet implemented")
     }
 }

@@ -3,9 +3,9 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
+import main.ConfigParser
 import main.Parser
 import main.Token
-import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
 import org.example.lexer.Lexer
 import utils.PercentageCollector

@@ -7,13 +7,17 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
 import nodes.ReadInput
+import nodes.ReadEnv
+import nodes.IfNode
 
 interface ExpressionVisitor {
-    fun visitDeclaration(expression: Declaration): Any
-    fun visitLiteral(expression: Literal): Any
-    fun visitBinaryExp(expression: BinaryNode): Any
-    fun visitAssignment(expression: Assignation): Any
-    fun visitCallExp(expression: CallNode): Any
-    fun visitIdentifier(expression: Identifier): Any
-    fun visitReadInput(expression: ReadInput): Any
+    fun visitReadEnv(expression: ReadEnv): Result
+    fun visitIf(expression: IfNode): Result
+    fun visitDeclaration(expression: Declaration): Result
+    fun visitLiteral(expression: Literal): Result
+    fun visitBinaryExp(expression: BinaryNode): Result
+    fun visitAssignment(expression: Assignation): Result
+    fun visitCallExp(expression: CallNode): Result
+    fun visitIdentifier(expression: Identifier): Result
+    fun visitReadInput(expression: ReadInput): Result
 }

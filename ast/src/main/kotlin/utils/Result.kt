@@ -10,4 +10,36 @@ data class LiteralResult(val value: Any) : Result
 
 data class SuccessResult(val message: String) : Result
 
-class InterpreterException(override val message: String) : RuntimeException(message)
+data class StringResult(val value: String) : Result
+
+class CheckAstResult(private val isPassed: Boolean, private val message: String, private val resultType: String) :
+    Result {
+
+    fun isPass(): Boolean {
+        return isPassed
+    }
+
+    fun getMessage(): String {
+        return message
+    }
+
+    fun getResultType(): String {
+        return resultType
+    }
+}
+
+class LinterResult(
+    private val message: String?,
+    private val hasError: Boolean,
+) : Result {
+
+    fun hasError(): Boolean {
+        return hasError
+    }
+
+    fun getMessage(): String {
+        return message ?: ""
+    }
+}
+
+class InterpreterException(override val message: String) : RuntimeException(message), Result

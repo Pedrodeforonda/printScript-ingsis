@@ -1,42 +1,23 @@
 package main
 
 import nodes.Node
-import parsers.AssignationParser
 import parsers.BinaryOperationParser
-import parsers.DeclarationParser
-import parsers.FunCallParser
-import parsers.IdentifierParser
 import parsers.Infix
-import parsers.LiteralParser
 import parsers.Prefix
-import parsers.PrefixOperatorParser
+import utils.CheckAstResult
 import utils.ParsingResult
 
 class Parser(private val tokens: Iterator<Token>) {
     private val prefixParsers = mutableMapOf<TokenType, Prefix>()
     private val infixParsers = mutableMapOf<TokenType, Infix>()
 
-    init {
-        registerPrefix(TokenType.LET_KEYWORD, DeclarationParser())
-        registerPrefix(TokenType.IDENTIFIER, IdentifierParser())
-        registerPrefix(TokenType.MINUS, PrefixOperatorParser())
-        registerPrefix(TokenType.STRING_LITERAL, LiteralParser())
-        registerPrefix(TokenType.NUMBER_LITERAL, LiteralParser())
-        registerInfix(TokenType.ASSIGNATION, AssignationParser())
-        registerInfix(TokenType.PLUS, BinaryOperationParser(Precedence.SUM))
-        registerInfix(TokenType.MINUS, BinaryOperationParser(Precedence.SUM))
-        registerInfix(TokenType.SLASH, BinaryOperationParser(Precedence.PRODUCT))
-        registerInfix(TokenType.ASTERISK, BinaryOperationParser(Precedence.PRODUCT))
-        registerPrefix(TokenType.CALL_FUNC, FunCallParser())
-    }
-
     private var currentToken: Token = tokens.next()
 
-    private fun registerPrefix(tokenType: TokenType, parser: Prefix) {
+    internal fun registerPrefix(tokenType: TokenType, parser: Prefix) {
         prefixParsers[tokenType] = parser
     }
 
-    private fun registerInfix(tokenType: TokenType, parser: Infix) {
+    internal fun registerInfix(tokenType: TokenType, parser: Infix) {
         infixParsers[tokenType] = parser
     }
 

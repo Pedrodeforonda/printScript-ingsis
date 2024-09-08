@@ -1,4 +1,4 @@
-package main.kotlin.main
+package main
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

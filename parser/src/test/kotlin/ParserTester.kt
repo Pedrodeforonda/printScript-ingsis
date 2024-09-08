@@ -60,7 +60,11 @@ public class ParserTester {
         }
         val expected = listOf(
             Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
-            Assignation(Identifier("a", Position(1, 5)), Literal(1, Position(2, 1)), Position(2, 3)),
+            Assignation(
+                Identifier("a", Position(1, 5)),
+                Literal(1, Position(2, 1), TokenType.NUMBER_TYPE),
+                Position(2, 3),
+            ),
         )
         assertEquals(expected, result)
     }
