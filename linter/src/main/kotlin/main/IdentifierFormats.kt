@@ -1,8 +1,8 @@
-package main.kotlin.main
+package main
 
-import main.kotlin.identifierFormats.CamelCaseStrategy
-import main.kotlin.identifierFormats.IdentifierFormatStrategy
-import main.kotlin.identifierFormats.SnakeCaseStrategy
+import identifierFormatStrategies.CamelCaseStrategy
+import identifierFormatStrategies.IdentifierFormatStrategy
+import identifierFormatStrategies.SnakeCaseStrategy
 
 data class IdentifierFormats(
     val formats: List<IdentifierFormatStrategy> = listOf(CamelCaseStrategy(), SnakeCaseStrategy()),

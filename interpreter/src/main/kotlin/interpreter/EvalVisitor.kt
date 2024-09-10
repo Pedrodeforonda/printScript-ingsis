@@ -1,4 +1,4 @@
-package org.example.interpreter
+package interpreter
 
 import main.TokenType
 import nodes.Assignation
@@ -6,7 +6,9 @@ import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
+import nodes.IfNode
 import nodes.Literal
+import nodes.ReadEnv
 import nodes.ReadInput
 import utils.DeclarationResult
 import utils.ExpressionVisitor
@@ -21,17 +23,24 @@ class EvalVisitor(
     private var variableMap: MutableMap<Pair<String, String>, Any>,
     private val printlnCollector: PrintlnCollector,
 ) : ExpressionVisitor {
+    override fun visitReadEnv(expression: ReadEnv): Result {
+        TODO("Not yet implemented")
+    }
 
-    override fun visitDeclaration(expression: Declaration): Any {
+    override fun visitIf(expression: IfNode): Result {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitDeclaration(expression: Declaration): Result {
         variableMap[Pair(expression.getName(), expression.getType())] = Unit
         return DeclarationResult(expression.getName(), expression.getType())
     }
 
-    override fun visitLiteral(expression: Literal): Any {
+    override fun visitLiteral(expression: Literal): Result {
         return LiteralResult(expression.getValue())
     }
 
-    override fun visitBinaryExp(expression: BinaryNode): Any {
+    override fun visitBinaryExp(expression: BinaryNode): Result {
         val operator = expression.getOperator()
         val leftResult = expression.getLeft().accept(this)
         val rightResult = expression.getRight().accept(this)
@@ -82,7 +91,7 @@ class EvalVisitor(
         throw InterpreterException("Invalid operation")
     }
 
-    override fun visitAssignment(expression: Assignation): Any {
+    override fun visitAssignment(expression: Assignation): Result {
         val left = expression.getDeclaration().accept(this) as Result
         val (name, type) = if (left is DeclarationResult) {
             Pair(left.name, left.type)
@@ -104,7 +113,7 @@ class EvalVisitor(
         )
     }
 
-    override fun visitCallExp(expression: CallNode): Any {
+    override fun visitCallExp(expression: CallNode): Result {
         if (expression.getFunc() == "println") {
             val arg = expression.getArguments()
             if (arg.size != 1) {
@@ -123,7 +132,7 @@ class EvalVisitor(
         throw InterpreterException("Invalid function")
     }
 
-    override fun visitIdentifier(expression: Identifier): Any {
+    override fun visitIdentifier(expression: Identifier): Result {
         for ((key, value) in variableMap) {
             if (key.first == expression.getName()) {
                 return IdentifierResult(key, value)
@@ -132,7 +141,7 @@ class EvalVisitor(
         throw InterpreterException("Variable not found")
     }
 
-    override fun visitReadInput(expression: ReadInput): Any {
+    override fun visitReadInput(expression: ReadInput): Result {
         TODO("Not yet implemented")
     }
 

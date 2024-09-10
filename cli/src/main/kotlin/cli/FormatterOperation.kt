@@ -3,10 +3,10 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
+import lexer.Lexer
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
-import org.example.lexer.Lexer
 import utils.PercentageCollector
 import java.io.File
 

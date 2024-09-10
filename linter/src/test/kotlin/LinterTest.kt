@@ -1,9 +1,10 @@
+import lexer.Lexer
+import main.ConfigParser
+import main.LinterConfig
 import main.Parser
+import main.ParserFactory
 import main.Token
-import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
-import main.kotlin.main.LinterConfig
-import org.example.lexer.Lexer
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,6 +19,10 @@ class LinterTest {
     @BeforeEach
     fun resetPercentageCollector() {
         collector.reset()
+    }
+
+    fun createParser1(tokens: Sequence<Token>): Parser {
+        return ParserFactory().createParser("1.0", tokens.iterator())
     }
 
     @Test
@@ -51,7 +56,7 @@ class LinterTest {
         val size = Files.newInputStream(Path("src/test/resources/linterCamelCaseTest.txt")).available()
         val lexer = Lexer(input, size, collector)
         val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = Parser(tokens.iterator())
+        val parser = createParser1(tokens)
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config).toList()
 
@@ -61,7 +66,7 @@ class LinterTest {
         val length = Files.newInputStream(Path("src/test/resources/linterCamelCaseTest2.txt")).available()
         val lexer2 = Lexer(input2, length, collector)
         val tokens2: Sequence<Token> = lexer2.tokenize()
-        val parser2 = Parser(tokens2.iterator())
+        val parser2 = createParser1(tokens2)
         val astNodes2 = parser2.parseExpressions()
         val errors2 = Linter().lint(astNodes2, config).toList()
 
@@ -76,7 +81,7 @@ class LinterTest {
         val size = Files.newInputStream(Path("src/test/resources/linterSnakeCaseTest.txt")).available()
         val lexer = Lexer(input, size, collector)
         val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = Parser(tokens.iterator())
+        val parser = createParser1(tokens)
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config).toList()
 
@@ -86,7 +91,7 @@ class LinterTest {
         val length = Files.newInputStream(Path("src/test/resources/linterSnakeCaseTest2.txt")).available()
         val lexer2 = Lexer(input2, length, collector)
         val tokens2: Sequence<Token> = lexer2.tokenize()
-        val parser2 = Parser(tokens2.iterator())
+        val parser2 = createParser1(tokens2)
         val astNodes2 = parser2.parseExpressions()
         val errors2 = Linter().lint(astNodes2, config).toList()
 
@@ -101,7 +106,7 @@ class LinterTest {
         val length = Files.newInputStream(Path("src/test/resources/linterPrintlnRestrictionTest.txt")).available()
         val lexer = Lexer(input, length, collector)
         val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = Parser(tokens.iterator())
+        val parser = createParser1(tokens)
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config).toList()
 
@@ -111,7 +116,7 @@ class LinterTest {
         val size = Files.newInputStream(Path("src/test/resources/linterPrintlnRestrictionTest2.txt")).available()
         val lexer2 = Lexer(input2, size, collector)
         val tokens2: Sequence<Token> = lexer2.tokenize()
-        val parser2 = Parser(tokens2.iterator())
+        val parser2 = createParser1(tokens2)
         val astNodes2 = parser2.parseExpressions()
         val errors2 = Linter().lint(astNodes2, config).toList()
 
@@ -126,7 +131,7 @@ class LinterTest {
         val size = Files.newInputStream(Path("src/test/resources/linterParsingErrorsTest.txt")).available()
         val lexer = Lexer(input, size, collector)
         val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = Parser(tokens.iterator())
+        val parser = createParser1(tokens)
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config).toList()
 

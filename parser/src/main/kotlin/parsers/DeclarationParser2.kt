@@ -8,7 +8,7 @@ import nodes.Declaration
 import nodes.Node
 import utils.DeclarationKeyWord
 
-class DeclarationParser : Prefix {
+class DeclarationParser2 : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         val letToken: Token = token
 
@@ -27,7 +27,9 @@ class DeclarationParser : Prefix {
             )
         }
         val type = parser.consume()
-        if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE) {
+        if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE &&
+            type.getType() != TokenType.BOOLEAN_TYPE
+        ) {
             throw ParseException(
                 "Semantic Error at ${type.getPosition().getLine()}, ${type.getPosition().getColumn()} Expected type",
             )

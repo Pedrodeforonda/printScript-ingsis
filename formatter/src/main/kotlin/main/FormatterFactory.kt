@@ -1,6 +1,6 @@
 package main
 
-import org.example.lexer.Lexer
+import lexer.Lexer
 import utils.PercentageCollector
 import java.io.InputStream
 import java.io.Writer

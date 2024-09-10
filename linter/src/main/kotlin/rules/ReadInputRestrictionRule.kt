@@ -1,16 +1,16 @@
 package rules
 
-import main.kotlin.main.LinterResult
-import main.kotlin.rules.LinterRule
 import nodes.Node
 import nodes.ReadInput
 import utils.GetStringVisitor
+import utils.LinterResult
+import utils.StringResult
 
 class ReadInputRestrictionRule(private val argumentResult: LinterResult) : LinterRule {
     override fun lintCode(node: Node): LinterResult {
         val nodeInsideReadInput = (node as ReadInput).getArgument()
-        val nodeInsideReadInputType = nodeInsideReadInput.accept(GetStringVisitor())
-        if (nodeInsideReadInputType != "Identifier" && nodeInsideReadInputType != "Literal") {
+        val nodeInsideReadInputType = nodeInsideReadInput.accept(GetStringVisitor()) as StringResult
+        if (nodeInsideReadInputType.value != "Identifier" && nodeInsideReadInputType.value != "Literal") {
             val errorMessage = "Invalid readInput in line ${node.getPos().getLine()}" +
                 " column ${node.getPos().getColumn()}"
             return checkErrors(errorMessage)
