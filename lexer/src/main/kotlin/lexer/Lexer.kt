@@ -2,7 +2,6 @@ package lexer
 
 import main.Position
 import main.Token
-import org.example.lexer.ClassicTokenStrategies
 import utils.PercentageCollector
 import java.io.BufferedReader
 
@@ -10,6 +9,7 @@ class Lexer(
     private val iterator: BufferedReader,
     private val streamByteLength: Int,
     private val percentageColector: PercentageCollector,
+    private val strategies: StrategyList,
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
@@ -77,7 +77,7 @@ class Lexer(
                 return null
             }
         }
-        for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
+        for (tokenStrategy in strategies.getStrategies()) {
             val newToken = tokenStrategy.buildToken(this, "", this.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()

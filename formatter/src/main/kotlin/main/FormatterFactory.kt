@@ -1,6 +1,6 @@
 package main
 
-import lexer.Lexer
+import lexer.LexerFactory
 import utils.PercentageCollector
 import java.io.InputStream
 import java.io.Writer
@@ -11,7 +11,8 @@ class FormatterFactory {
         val formatter = MainFormatter()
         val configLoader = ConfigLoader()
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(config)
-        val lexer = Lexer(inputStream.bufferedReader(), inputStream.available(), PercentageCollector())
+        val collector = PercentageCollector()
+        val lexer = LexerFactory().createLexer(inputStream, version, collector)
         val formattedText = formatter.formatCode(lexer.tokenize(), standardConfig, writer)
     }
 }

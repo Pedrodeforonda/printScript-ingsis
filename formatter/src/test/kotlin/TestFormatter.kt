@@ -2,6 +2,7 @@ import lexer.Lexer
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
+import org.example.lexer.ClassicTokenStrategies
 import org.junit.jupiter.api.BeforeEach
 import utils.PercentageCollector
 import java.io.BufferedWriter
@@ -32,6 +33,7 @@ class TestFormatter {
                 File(inputPath).inputStream().bufferedReader(),
                 File(inputPath).inputStream().available(),
                 percentageCollector,
+                ClassicTokenStrategies(),
             )
         val formattedText = formatter.formatCode(
             lexer.tokenize(),
@@ -59,6 +61,7 @@ class TestFormatter {
                 File(inputPath).inputStream().bufferedReader(),
                 File(inputPath).inputStream().available(),
                 percentageCollector,
+                ClassicTokenStrategies(),
             )
         val formattedText = formatter.formatCode(
             lexer.tokenize(),

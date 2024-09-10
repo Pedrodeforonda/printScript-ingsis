@@ -24,7 +24,7 @@ enum class TokenType {
     RIGHT_BRACE,
     IF_KEYWORD,
     ELSE_KEYWORD,
+    CONST_KEYWORD,
     READ_ENV,
     READ_INPUT,
-    NULL_TYPE,
 }
