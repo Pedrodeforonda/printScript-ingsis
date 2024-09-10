@@ -1,0 +1,10 @@
+if ( true ) {
+    let a : string = "hello";
+    println ( a );
+    let b : number = 12;
+    let c : number = 13;
+    println ( b + c );
+    println ( "true" );
+} else {
+    println ( "false" );
+}

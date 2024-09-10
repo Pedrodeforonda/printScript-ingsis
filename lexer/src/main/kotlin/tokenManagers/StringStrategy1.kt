@@ -22,12 +22,14 @@ class StringStrategy1 : TokenStrategy {
             "string" -> Token(result, TokenType.STRING_TYPE, initialPosition)
             "number" -> Token(result, TokenType.NUMBER_TYPE, initialPosition)
             "println" -> Token(result, TokenType.CALL_FUNC, initialPosition)
+            "readInput" -> Token(result, TokenType.READ_INPUT, initialPosition)
+            "readEnv" -> Token(result, TokenType.READ_ENV, initialPosition)
             "if" -> Token(result, TokenType.IF_KEYWORD, initialPosition)
             "else" -> Token(result, TokenType.ELSE_KEYWORD, initialPosition)
-            "boolean" -> Token(result, TokenType.BOOLEAN_LITERAL, initialPosition)
+            "boolean" -> Token(result, TokenType.BOOLEAN_TYPE, initialPosition)
             "const" -> Token(result, TokenType.CONST_KEYWORD, initialPosition)
-            "true" -> Token(result, TokenType.BOOLEAN_TYPE, initialPosition)
-            "false" -> Token(result, TokenType.BOOLEAN_TYPE, initialPosition)
+            "true" -> Token(result, TokenType.BOOLEAN_LITERAL, initialPosition)
+            "false" -> Token(result, TokenType.BOOLEAN_LITERAL, initialPosition)
             else -> if (result.isNotEmpty()) Token(result, TokenType.IDENTIFIER, initialPosition) else null
         }
     }

@@ -1,0 +1,3 @@
+let a: string = readInput("write your name");
+let b: string = readEnv("HOME");
+let c: string = readInput(a);
