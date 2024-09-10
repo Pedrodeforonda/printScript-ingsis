@@ -1,0 +1,4 @@
+validIdentifier
+Invalid_identifier
+println(Hello)
+println(123abc)

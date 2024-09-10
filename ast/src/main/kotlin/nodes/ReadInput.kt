@@ -3,17 +3,13 @@ package nodes
 import main.Position
 import utils.ExpressionVisitor
 
-class ReadInput(private val argument: Node, private val value: Node, private val pos: Position) : Node {
+class ReadInput(private val argument: Node, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitReadInput(this)
     }
 
     fun getArgument(): Node {
         return argument
-    }
-
-    fun getValue(): Node {
-        return value
     }
 
     fun getPos(): Position {
@@ -25,8 +21,13 @@ class ReadInput(private val argument: Node, private val value: Node, private val
         if (other !is ReadInput) return false
 
         if (argument != other.argument) return false
-        if (value != other.value) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = argument.hashCode()
+        result = 31 * result + pos.hashCode()
+        return result
     }
 }

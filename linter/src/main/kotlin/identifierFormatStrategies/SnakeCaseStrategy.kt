@@ -1,4 +1,4 @@
-package main.kotlin.identifierFormats
+package identifierFormatStrategies
 
 import java.util.regex.Pattern
 

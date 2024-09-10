@@ -1,5 +1,8 @@
 package main.kotlin.main
 
+import main.LinterConfig
+import main.LinterVisitor
+import utils.LinterResult
 import utils.ParsingResult
 
 class Linter {

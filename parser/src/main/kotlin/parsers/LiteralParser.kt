@@ -10,17 +10,32 @@ import nodes.Node
 class LiteralParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         parser.consume()
-        return Literal(
-            when (token.getType()) {
-                TokenType.NUMBER_LITERAL -> if (token.getText().contains(".")) {
+
+        var stringValue: String? = null
+        var numberValue: Number? = null
+
+        when (token.getType()) {
+            TokenType.NUMBER_LITERAL -> {
+                numberValue = if (token.getText().contains(".")) {
                     token.getText().toDouble()
                 } else {
                     token.getText().toInt()
                 }
-                TokenType.STRING_LITERAL -> token.getText()
-                else -> throw ParseException("Invalid literal type")
-            },
-            token.getPosition(),
-        )
+            }
+            TokenType.STRING_LITERAL -> {
+                stringValue = token.getText()
+            }
+            else -> throw ParseException("Invalid literal type")
+        }
+
+        stringValue?.let {
+            return Literal(it, token.getPosition(), token.getType())
+        }
+
+        numberValue?.let {
+            return Literal(it, token.getPosition(), token.getType())
+        }
+
+        throw ParseException("Invalid literal type")
     }
 }

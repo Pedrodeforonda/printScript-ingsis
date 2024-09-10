@@ -1,4 +1,4 @@
-package main.kotlin.main
+package main
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

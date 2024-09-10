@@ -1,7 +1,7 @@
-package main.kotlin.rules
+package rules
 
-import main.kotlin.main.LinterResult
 import nodes.Node
+import utils.LinterResult
 
 interface LinterRule {
     fun lintCode(node: Node): LinterResult

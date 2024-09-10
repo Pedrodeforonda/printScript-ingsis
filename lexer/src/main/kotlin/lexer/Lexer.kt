@@ -1,4 +1,4 @@
-package org.example.lexer
+package lexer
 
 import main.Position
 import main.Token
@@ -9,6 +9,7 @@ class Lexer(
     private val iterator: BufferedReader,
     private val streamByteLength: Int,
     private val percentageColector: PercentageCollector,
+    private val strategies: StrategyList,
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
@@ -36,13 +37,6 @@ class Lexer(
         return this.getChar()!!.isWhitespace() || this.getChar() == '\r' || this.getChar() == '\n'
     }
 
-    fun getPos(): Int {
-        return pos
-    }
-    fun getText(): BufferedReader {
-        return iterator
-    }
-
     fun getChar(): Char? {
         return current
     }
@@ -59,8 +53,8 @@ class Lexer(
     }
 
     fun tokenize(): Sequence<Token> = sequence { // funcion + imp del lexer
-        while (this@Lexer.getChar() != null) {
-            val token = updateLexer()
+        while (current != null) {
+            val token = generateToken()
             if (token != null) {
                 yield(token)
             }
@@ -73,17 +67,17 @@ class Lexer(
         }
     }
 
-    private fun updateLexer(): Token? {
+    private fun generateToken(): Token? {
         if (canSkip()) {
             updateTokenPosition()
             if (!nextCharNull()) {
                 sumPos()
-                return updateLexer()
+                return generateToken()
             } else {
                 return null
             }
         }
-        for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
+        for (tokenStrategy in strategies.getStrategies()) {
             val newToken = tokenStrategy.buildToken(this, "", this.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()

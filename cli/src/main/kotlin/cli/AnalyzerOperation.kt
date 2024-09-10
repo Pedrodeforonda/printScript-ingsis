@@ -3,11 +3,11 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import main.Parser
+import lexer.LexerFactory
+import main.ConfigParser
+import main.ParserFactory
 import main.Token
-import main.kotlin.main.ConfigParser
 import main.kotlin.main.Linter
-import org.example.lexer.Lexer
 import utils.PercentageCollector
 import java.io.File
 
@@ -22,12 +22,12 @@ class AnalyzerOperation : CliktCommand(
         .file(mustExist = true)
 
     override fun run() {
-        val length = sourceFile.inputStream().available()
+        val src = sourceFile.inputStream()
         val collector = PercentageCollector()
         val config = ConfigParser.parseConfig(configFile.inputStream())
-        val lexer = Lexer(sourceFile.bufferedReader(), length, collector)
+        val lexer = LexerFactory().createLexer(src, "1.0", collector)
         val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = Parser(tokens.iterator())
+        val parser = ParserFactory().createParser("1.0", tokens.iterator())
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config)
         var acc = 0

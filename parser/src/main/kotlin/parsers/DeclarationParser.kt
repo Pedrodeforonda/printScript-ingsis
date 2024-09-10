@@ -11,12 +11,7 @@ import utils.DeclarationKeyWord
 class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         val letToken: Token = token
-        if (letToken.getType() != TokenType.LET_KEYWORD) {
-            throw ParseException(
-                "Semantic Error at ${letToken.getPosition().getLine()}, ${letToken.getPosition().getColumn()}" +
-                    " Expected let keyword",
-            )
-        }
+
         val identifierToken: Token = parser.consume()
         if (identifierToken.getType() != TokenType.IDENTIFIER) {
             throw ParseException(
