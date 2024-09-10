@@ -1,5 +1,6 @@
 package org.example.lexer
 
+import lexer.StrategyList
 import main.Position
 import main.Token
 import utils.PercentageCollector
@@ -9,8 +10,9 @@ class Lexer(
     private val iterator: BufferedReader,
     private val streamByteLength: Int,
     private val percentageColector: PercentageCollector,
+    private val strategies: StrategyList,
     private var pos: Int = 0,
-    private var lexerPosition: Position = Position(1, 1),
+    private var lexerPosition: Position = Position(1, 1)
 ) {
     private var current: Char? = iterator.read().toChar()
     private var lineBreak = 0
