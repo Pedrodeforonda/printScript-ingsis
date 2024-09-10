@@ -4,7 +4,6 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
 import lexer.LexerFactory
-import main.Parser
 import main.ConfigParser
 import main.ParserFactory
 import main.Token

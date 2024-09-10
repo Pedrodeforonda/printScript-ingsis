@@ -1,7 +1,5 @@
 
 import lexer.LexerFactory
-
-import lexer.Lexer
 import main.ConfigParser
 import main.LinterConfig
 import main.Parser

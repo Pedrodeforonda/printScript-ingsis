@@ -1,6 +1,5 @@
 package lexer
 
-import lexer.StrategyList
 import main.Position
 import main.Token
 import org.example.lexer.ClassicTokenStrategies

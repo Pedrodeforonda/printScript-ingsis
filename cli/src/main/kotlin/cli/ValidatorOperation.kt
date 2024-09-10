@@ -3,6 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
+import lexer.Lexer
 import lexer.LexerFactory
 import main.ParseException
 import main.Parser

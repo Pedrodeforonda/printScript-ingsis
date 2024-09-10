@@ -1,9 +1,9 @@
 package tokenManagers
 
+import lexer.Lexer
 import main.Position
 import main.Token
 import main.TokenType
-import org.example.lexer.Lexer
 import org.example.lexer.TokenStrategy
 
 class LeftBraceStrategy : TokenStrategy {

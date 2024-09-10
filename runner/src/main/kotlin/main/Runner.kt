@@ -1,7 +1,7 @@
 package org.example.main
 
-import lexer.LexerFactory
 import interpreter.Interpreter
+import lexer.LexerFactory
 import main.ParserFactory
 import utils.InterpreterResult
 import utils.PercentageCollector

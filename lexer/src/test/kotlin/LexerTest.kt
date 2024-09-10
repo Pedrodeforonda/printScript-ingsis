@@ -1,10 +1,10 @@
 
+import lexer.Lexer
 import lexer.TokenStrategies1
 import main.Position
 import main.Token
 import main.TokenType
 import org.example.lexer.ClassicTokenStrategies
-import org.example.lexer.Lexer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.PercentageCollector

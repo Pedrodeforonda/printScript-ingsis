@@ -1,7 +1,6 @@
 package lexer
 
 import org.example.lexer.ClassicTokenStrategies
-import org.example.lexer.Lexer
 import utils.PercentageCollector
 import java.io.InputStream
 

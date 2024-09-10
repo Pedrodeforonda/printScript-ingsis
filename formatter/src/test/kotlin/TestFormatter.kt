@@ -3,7 +3,6 @@ import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
 import org.example.lexer.ClassicTokenStrategies
-import org.example.lexer.Lexer
 import org.junit.jupiter.api.BeforeEach
 import utils.PercentageCollector
 import java.io.BufferedWriter
