@@ -150,6 +150,7 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
         assertEquals(100.0, percentageCollector.getPercentage())
     }
+
     @Test
     fun testTokenizeKeywords() {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/keywords.txt"))
@@ -169,9 +170,8 @@ class LexerTest {
             Token("const", TokenType.CONST_KEYWORD, Position(1, 43)),
             Token("true", TokenType.BOOLEAN_TYPE, Position(1, 49)),
             Token("false", TokenType.BOOLEAN_TYPE, Position(1, 54)),
-            Token(";", TokenType.SEMICOLON, Position(1, 59))
+            Token(";", TokenType.SEMICOLON, Position(1, 59)),
         )
-
         assertEquals(expectedTokens, actualTokens)
     }
 
@@ -187,13 +187,8 @@ class LexerTest {
             Token("myVar", TokenType.IDENTIFIER, Position(1, 1)),
             Token("anotherVar", TokenType.IDENTIFIER, Position(1, 7)),
             Token("private123", TokenType.IDENTIFIER, Position(1, 18)),
-            Token(";", TokenType.SEMICOLON, Position(1, 28))
-            )
-
+            Token(";", TokenType.SEMICOLON, Position(1, 28)),
+        )
         assertEquals(expectedTokens, actualTokens)
     }
-
-
-
-
 }
