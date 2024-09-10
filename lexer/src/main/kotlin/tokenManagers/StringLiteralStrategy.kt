@@ -21,6 +21,7 @@ class StringLiteralStrategy : TokenStrategy {
         val currentChar = lexer.getChar() ?: return null
 
         return if (currentChar == '"') {
+            lexer.goToNextPos()
             Token(result, TokenType.STRING_LITERAL, initialPosition)
         } else {
             val newResult = result + currentChar

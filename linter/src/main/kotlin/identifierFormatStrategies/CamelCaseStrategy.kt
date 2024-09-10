@@ -9,6 +9,6 @@ class CamelCaseStrategy : IdentifierFormatStrategy {
     }
 
     override fun getFormat(): String {
-        return "camelCase"
+        return "camel case"
     }
 }

@@ -7,6 +7,7 @@ import main.ParseException
 import main.Parser
 import main.Token
 import org.example.lexer.Lexer
+import utils.PercentageCollector
 import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files
@@ -21,9 +22,11 @@ class ValidatorOperation : CliktCommand(
 
     override fun run() {
         try {
+            val length = sourceFile.inputStream().available()
+            val collector = PercentageCollector()
             val reader: BufferedReader = Files.newBufferedReader(Paths.get(sourceFile.absolutePath))
-            val lexer = Lexer(reader)
-            val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
+            val lexer = Lexer(reader, length, collector)
+            val tokens: Sequence<Token> = lexer.tokenize()
             val parser = Parser(tokens.iterator())
             val result = parser.parseExpressions().iterator()
             while (result.hasNext()) {

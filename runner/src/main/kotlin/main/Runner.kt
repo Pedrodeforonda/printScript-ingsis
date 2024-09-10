@@ -1,26 +1,27 @@
 package org.example.main
 
-import InterpreterResult
-import lexer.LexerFactory
 import main.Parser
-import main.Token
 import org.example.interpreter.Interpreter
-import java.io.BufferedReader
-import java.nio.file.Files
-import java.nio.file.Paths
+import org.example.lexer.Lexer
+import utils.InterpreterResult
+import utils.PercentageCollector
+import java.io.InputStream
 
 class Runner {
 
-    fun run(path: String) {
-        val bufferedReader: BufferedReader = Files.newBufferedReader(Paths.get(path))
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
-        val parser = Parser(tokens.iterator())
-        val ast = parser.parseExpressions()
-        val interpreter = Interpreter()
-        val result: Sequence<InterpreterResult> = interpreter.interpret(ast)
-        for (interpreterResult in result) {
-            if (interpreterResult.hasException()) println(interpreterResult.getException())
+    private val percentageCollector = PercentageCollector()
+
+    fun run(src: InputStream, version: String): Sequence<InterpreterResult> = sequence {
+        if (version != "1.0") {
+            throw IllegalArgumentException("Invalid version")
         }
+
+        val lexer = Lexer(src.bufferedReader(), src.available(), percentageCollector)
+        val parser = Parser(lexer.tokenize().iterator())
+        val interpreter = Interpreter(percentageCollector)
+        val results = interpreter.interpret(parser.parseExpressions())
+        results.forEach { yield(it) }
     }
+
+    fun getPercentage() = percentageCollector.getPercentage()
 }

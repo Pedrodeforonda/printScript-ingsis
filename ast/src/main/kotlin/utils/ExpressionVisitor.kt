@@ -6,6 +6,7 @@ import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
 import nodes.Literal
+import nodes.ReadInput
 
 interface ExpressionVisitor {
     fun visitDeclaration(expression: Declaration): Any
@@ -14,4 +15,5 @@ interface ExpressionVisitor {
     fun visitAssignment(expression: Assignation): Any
     fun visitCallExp(expression: CallNode): Any
     fun visitIdentifier(expression: Identifier): Any
+    fun visitReadInput(expression: ReadInput): Any
 }

@@ -1,15 +1,14 @@
 package main
 
+import formatters.EnforceSpacingAroundEquals
 import formatters.EnforceSpacingFormatter
 import formatters.IsLiteral
 import formatters.NewlineAfterSemicolonFormatter
 import formatters.NewlineBeforePrintlnFormatter
-import formatters.SpaceAfterAssignmentFormatter
 import formatters.SpaceAfterColonFormatter
 import formatters.SpaceAroundOperatorsFormatter
-import formatters.SpaceBeforeAssignmentFormatter
 import formatters.SpaceBeforeColonFormatter
-import java.io.BufferedWriter
+import java.io.Writer
 
 class MainFormatter {
 
@@ -19,8 +18,7 @@ class MainFormatter {
             IsLiteral(),
             NewlineAfterSemicolonFormatter(),
             SpaceAroundOperatorsFormatter(),
-            SpaceBeforeAssignmentFormatter(),
-            SpaceAfterAssignmentFormatter(),
+            EnforceSpacingAroundEquals(),
             SpaceBeforeColonFormatter(),
             SpaceAfterColonFormatter(),
             NewlineBeforePrintlnFormatter(),
@@ -45,12 +43,12 @@ class MainFormatter {
     fun formatCode(
         tokens: Sequence<Token>,
         config: FormatterConfigReader,
-        fileOutputWriter: BufferedWriter,
+        fileOutputWriter: Writer,
     ): FormatterResult {
         var lastTokenWasNewline = true
         var lastTokenWasOperator = false
         var isEnforceSpacing = false
-        if (config.enforceSpacingBetweenTokens == true) {
+        if (config.enforceSpacingBetweenTokens) {
             tokens.forEach {
                 for (formatter in formatters) {
                     val result = formatter.formatCode(it, config, fileOutputWriter)

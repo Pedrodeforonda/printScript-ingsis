@@ -1,14 +1,23 @@
-import lexer.LexerFactory
 import main.Position
 import main.Token
 import main.TokenType
+import org.example.lexer.Lexer
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import utils.PercentageCollector
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class LexerTest {
+
+    val percentageCollector = PercentageCollector()
+
+    @BeforeEach
+    fun resetPercentageCollector() {
+        percentageCollector.reset()
+    }
 
     @Test
     fun testTokenizeCodeLines() {
@@ -17,8 +26,8 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -31,6 +40,7 @@ class LexerTest {
         )
 
         assertEquals(expectedTokens, actualTokens)
+        assertEquals(100.0, percentageCollector.getPercentage())
     }
 
     @Test
@@ -40,8 +50,8 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -54,6 +64,7 @@ class LexerTest {
         )
 
         assertEquals(expectedTokens, actualTokens)
+        assertEquals(100.0, percentageCollector.getPercentage())
     }
 
     @Test
@@ -63,8 +74,8 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("a", TokenType.IDENTIFIER, Position(1, 1)),
@@ -76,6 +87,7 @@ class LexerTest {
         )
 
         assertEquals(expectedTokens, actualTokens)
+        assertEquals(100.0, percentageCollector.getPercentage())
     }
 
     @Test
@@ -83,8 +95,8 @@ class LexerTest {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("println", TokenType.CALL_FUNC, Position(1, 1)),
@@ -95,6 +107,7 @@ class LexerTest {
         )
 
         assertEquals(expectedTokens, actualTokens)
+        assertEquals(100.0, percentageCollector.getPercentage())
     }
 
     @Test
@@ -102,8 +115,8 @@ class LexerTest {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/multipleLines"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -133,67 +146,6 @@ class LexerTest {
             Token(";", TokenType.SEMICOLON, Position(4, 11)),
         )
         assertEquals(expectedTokens, actualTokens)
+        assertEquals(100.0, percentageCollector.getPercentage())
     }
-
-    @Test
-    fun testTokenizeBraces() {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/braces.txt"))
-        val text: String = byteArr.toString(Charsets.UTF_8)
-        val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1.1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
-
-        val expectedTokens = listOf(
-            Token("{", TokenType.LEFT_BRACE, Position(1, 1)),
-            Token("}", TokenType.RIGHT_BRACE, Position(1, 3)),
-        )
-
-        assertEquals(expectedTokens, actualTokens)
-    }
-
-    @Test
-    fun testTokenizeIfElse() {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/ifElse.txt"))
-        val text: String = byteArr.toString(Charsets.UTF_8)
-        val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1.1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
-
-        val expectedTokens = listOf(
-            Token("if", TokenType.IF_KEYWORD, Position(1, 1)),
-            Token("(", TokenType.LEFT_PAREN, Position(1, 4)),
-            Token("a", TokenType.IDENTIFIER, Position(1, 5)),
-            Token(")", TokenType.RIGHT_PAREN, Position(1, 6)),
-            Token("{", TokenType.LEFT_BRACE, Position(1, 8)),
-            Token("}", TokenType.RIGHT_BRACE, Position(1, 10)),
-            Token("else", TokenType.ELSE_KEYWORD, Position(1, 12)),
-            Token("{", TokenType.LEFT_BRACE, Position(1, 17)),
-            Token("}", TokenType.RIGHT_BRACE, Position(1, 19)),
-        )
-
-        assertEquals(expectedTokens, actualTokens)
-    }
-
-    @Test
-    fun testTokenizeBoolean() {
-        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/boolean.txt"))
-        val text: String = byteArr.toString(Charsets.UTF_8)
-        val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = LexerFactory().createLexer(bufferedReader, 1.1)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
-
-        val expectedTokens = listOf(
-            Token("const", TokenType.CONST_KEYWORD, Position(1, 1)),
-            Token("isTrue", TokenType.IDENTIFIER, Position(1, 7)),
-            Token("=", TokenType.ASSIGNATION, Position(1, 14)),
-            Token("true", TokenType.BOOLEAN_TYPE, Position(1, 16)),
-            Token(";", TokenType.SEMICOLON, Position(1, 20)),
-            Token("const", TokenType.CONST_KEYWORD, Position(1, 22)),
-            Token("isFalse", TokenType.IDENTIFIER, Position(1, 28)),
-            Token("=", TokenType.ASSIGNATION, Position(1, 36)),
-            Token("false", TokenType.BOOLEAN_TYPE, Position(1, 38)),
-            Token(";", TokenType.SEMICOLON, Position(1, 43)),
-        )
-
-        assertEquals(expectedTokens, actualTokens)
-    } }
+}

@@ -1,12 +1,21 @@
-import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
+import org.example.lexer.Lexer
+import org.junit.jupiter.api.BeforeEach
+import utils.PercentageCollector
 import java.io.BufferedWriter
 import java.io.File
 import kotlin.test.Test
 
 class TestFormatter {
+
+    val percentageCollector = PercentageCollector()
+
+    @BeforeEach
+    fun resetPercentageCollector() {
+        percentageCollector.reset()
+    }
 
     @Test
     fun test() {
@@ -18,9 +27,14 @@ class TestFormatter {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
             File("src/test/resources/rules.json").inputStream(),
         )
-        val lexer = LexerFactory().createLexer(File(inputPath).inputStream().bufferedReader(), 1)
+        val lexer =
+            Lexer(
+                File(inputPath).inputStream().bufferedReader(),
+                File(inputPath).inputStream().available(),
+                percentageCollector,
+            )
         val formattedText = formatter.formatCode(
-            lexer.tokenizeAll(lexer),
+            lexer.tokenize(),
             standardConfig,
             outputWriter,
         )
@@ -40,9 +54,14 @@ class TestFormatter {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
             File("src/test/resources/rules2.json").inputStream(),
         )
-        val lexer = LexerFactory().createLexer(File(inputPath).inputStream().bufferedReader(), 1)
+        val lexer =
+            Lexer(
+                File(inputPath).inputStream().bufferedReader(),
+                File(inputPath).inputStream().available(),
+                percentageCollector,
+            )
         val formattedText = formatter.formatCode(
-            lexer.tokenizeAll(lexer),
+            lexer.tokenize(),
             standardConfig,
             outputWriter,
         )

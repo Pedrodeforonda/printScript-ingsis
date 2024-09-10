@@ -13,5 +13,9 @@ class PrintlnCollector {
         }
     }
 
+    fun clearPrints() {
+        prints.clear()
+    }
+
     fun hasPrints(): Boolean = prints.isNotEmpty()
 }

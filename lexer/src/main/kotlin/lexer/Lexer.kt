@@ -1,28 +1,46 @@
 package org.example.lexer
 
-import lexer.StrategyList
 import main.Position
 import main.Token
+import utils.PercentageCollector
 import java.io.BufferedReader
 
 class Lexer(
     private val iterator: BufferedReader,
-    private val strategyList: StrategyList,
+    private val streamByteLength: Int,
+    private val percentageColector: PercentageCollector,
     private var pos: Int = 0,
     private var lexerPosition: Position = Position(1, 1),
 ) {
-    private val text = iterator.readText()
-    private var current: Char? = text.getOrNull(pos)
+    private var current: Char? = iterator.read().toChar()
     private var lineBreak = 0
     private var currentColumn = 0
+    init {
+        percentageColector.reset()
+        percentageColector.updateTotalBytes(streamByteLength)
+        percentageColector.updateReadBytes(1)
+    }
 
     fun goToNextPos() {
         pos += 1
-        current = text.getOrNull(pos)
+        val read = iterator.read()
+        if (read != -1) {
+            current = read.toChar()
+            percentageColector.updateReadBytes(1)
+        } else {
+            current = null
+        }
     }
 
-    private fun canSkip(lexer: Lexer): Boolean {
-        return lexer.getChar()!!.isWhitespace() || lexer.getChar() == '\r' || lexer.getChar() == '\n'
+    private fun canSkip(): Boolean {
+        return this.getChar()!!.isWhitespace() || this.getChar() == '\r' || this.getChar() == '\n'
+    }
+
+    fun getPos(): Int {
+        return pos
+    }
+    fun getText(): BufferedReader {
+        return iterator
     }
 
     fun getChar(): Char? {
@@ -30,30 +48,43 @@ class Lexer(
     }
 
     private fun nextCharNull(): Boolean {
-        return text.getOrNull(pos + 1) == null
+        val read = iterator.read()
+        percentageColector.updateReadBytes(1)
+        current = read.toChar()
+        if (read == -1) {
+            current = null
+            return true
+        }
+        return false
     }
 
-    fun tokenizeAll(lexer: Lexer): Sequence<Token> = sequence { // funcion + imp del lexer
-        while (lexer.getChar() != null) {
-            val token = updateLexer(lexer)
+    fun tokenize(): Sequence<Token> = sequence { // funcion + imp del lexer
+        while (this@Lexer.getChar() != null) {
+            val token = updateLexer()
             if (token != null) {
                 yield(token)
             }
-            goToNextPos()
+            if (current == '\n') {
+                goToNextPos()
+            }
+            if (token == null) {
+                goToNextPos()
+            }
         }
     }
 
-    private fun updateLexer(lexer: Lexer): Token? {
-        if (canSkip(lexer)) {
+    private fun updateLexer(): Token? {
+        if (canSkip()) {
             updateTokenPosition()
             if (!nextCharNull()) {
-                return updateLexer(lexer.sumPos())
+                sumPos()
+                return updateLexer()
             } else {
                 return null
             }
         }
-        for (tokenStrategy in strategyList.getStrategies()) {
-            val newToken = tokenStrategy.buildToken(lexer, "", lexer.tokenPosition())
+        for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
+            val newToken = tokenStrategy.buildToken(this, "", this.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()
                 return newToken
@@ -81,13 +112,7 @@ class Lexer(
         return currentColumn
     }
 
-    private fun sumPos(): Lexer {
-        this.goToNextPos()
-        return this
-    }
-
-    fun goToPreviousPos() {
-        pos -= 1
-        current = text.getOrNull(pos)
+    private fun sumPos() {
+        pos += 1
     }
 }

@@ -5,13 +5,13 @@ import main.FormatterConfigReader
 import main.FormatterResult
 import main.Token
 import main.TokenType
-import java.io.BufferedWriter
+import java.io.Writer
 
 class SpaceAroundOperatorsFormatter : Formatter {
     override fun formatCode(
         tokens: Token,
         config: FormatterConfigReader,
-        fileOutputWriter: BufferedWriter,
+        fileOutputWriter: Writer,
     ): FormatterResult {
         val isOperator = tokens.getType() == TokenType.PLUS ||
             tokens.getType() == TokenType.MINUS ||
@@ -19,6 +19,10 @@ class SpaceAroundOperatorsFormatter : Formatter {
             tokens.getType() == TokenType.SLASH
 
         if (isOperator) {
+            if (!config.enforceSpaceSurroundingOperators) {
+                fileOutputWriter.write(tokens.getText())
+                return FormatterResult("success", false)
+            }
             fileOutputWriter.write(" ${tokens.getText()} ")
             return FormatterResult("success", false)
         }

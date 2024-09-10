@@ -7,6 +7,7 @@ import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
 import org.example.lexer.Lexer
+import utils.PercentageCollector
 import java.io.File
 
 class FormatterOperation : CliktCommand(
@@ -22,9 +23,11 @@ class FormatterOperation : CliktCommand(
     override fun run() {
         val outputPath = "src/main/resources/formattedCode.txt"
         val configLoader = ConfigLoader()
+        val length = sourceFile.inputStream().available()
+        val collector = PercentageCollector()
         val config = configLoader.loadConfig<FormatterConfigReader>(configFile.inputStream())
-        val lexer: Lexer = Lexer(sourceFile.inputStream().bufferedReader())
-        val tokens = lexer.tokenizeAll(lexer)
+        val lexer: Lexer = Lexer(sourceFile.inputStream().bufferedReader(), length, collector)
+        val tokens = lexer.tokenize()
         val outputWriter = File(outputPath).bufferedWriter()
         val formattedText = MainFormatter().formatCode(tokens, config, outputWriter)
         outputWriter.close()
