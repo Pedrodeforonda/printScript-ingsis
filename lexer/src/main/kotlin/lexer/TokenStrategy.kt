@@ -1,5 +1,6 @@
 package org.example.lexer
 
+import lexer.Lexer
 import main.Position
 import main.Token
 

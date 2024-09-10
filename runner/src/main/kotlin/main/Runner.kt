@@ -1,8 +1,8 @@
 package org.example.main
 
 import interpreter.Interpreter
-import main.Parser
-import org.example.lexer.Lexer
+import lexer.Lexer
+import main.ParserFactory
 import utils.InterpreterResult
 import utils.PercentageCollector
 import java.io.InputStream
@@ -17,7 +17,7 @@ class Runner {
         }
 
         val lexer = Lexer(src.bufferedReader(), src.available(), percentageCollector)
-        val parser = Parser(lexer.tokenize().iterator())
+        val parser = ParserFactory().createParser(version, lexer.tokenize().iterator())
         val interpreter = Interpreter(percentageCollector)
         val results = interpreter.interpret(parser.parseExpressions())
         results.forEach { yield(it) }

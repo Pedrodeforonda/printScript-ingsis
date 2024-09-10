@@ -9,8 +9,6 @@ import nodes.ReadInput
 
 class ReadInputParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
-        parser.consume()
-
         if (parser.consume().getType() != TokenType.LEFT_PAREN) {
             throw ParseException(
                 "Syntax Error at ${token.getPosition().getLine()}, ${token.getPosition().getColumn()}" +
@@ -18,6 +16,7 @@ class ReadInputParser : Prefix {
             )
         }
 
+        parser.consume()
         val message = parser.parseExpression()
         var type: String? = null
 
@@ -45,7 +44,7 @@ class ReadInputParser : Prefix {
             }
         }
 
-        if (parser.consume().getType() != TokenType.RIGHT_PAREN) {
+        if (parser.getCurrentToken().getType() != TokenType.RIGHT_PAREN) {
             throw ParseException(
                 "Syntax Error at ${token.getPosition().getLine()}, ${token.getPosition().getColumn()}" +
                     " Expected right parenthesis",

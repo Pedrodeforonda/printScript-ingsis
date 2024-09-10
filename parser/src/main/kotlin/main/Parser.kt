@@ -50,17 +50,31 @@ class Parser(private val tokens: Iterator<Token>) {
                     yield(ParsingResult(result, null))
                 } else {
                     yield(ParsingResult(null, ParseException(checkExpressions(result)[0].message!!)))
-                    while (currentToken.getType() != TokenType.SEMICOLON && hasNextToken()) consume()
+                    while (
+                        currentToken.getType() != TokenType.SEMICOLON &&
+                        currentToken.getType() != TokenType.RIGHT_BRACE &&
+                        hasNextToken()
+                        ) consume()
                 }
             } catch (e: ParseException) {
                 yield(ParsingResult(null, e))
-                while (currentToken.getType() != TokenType.SEMICOLON && hasNextToken()) consume()
+                while (
+                    currentToken.getType() != TokenType.SEMICOLON &&
+                    currentToken.getType() != TokenType.RIGHT_BRACE &&
+                    hasNextToken()
+                    ) consume()
             }
-            if (currentToken.getType() == TokenType.SEMICOLON && hasNextToken()) consume()
+            if ((
+                    currentToken.getType() == TokenType.SEMICOLON ||
+                        currentToken.getType() == TokenType.RIGHT_BRACE
+                    ) && hasNextToken()
+            ) {
+                consume()
+            }
         }
     }
 
-    private fun hasNextToken(): Boolean = tokens.hasNext()
+    fun hasNextToken(): Boolean = tokens.hasNext()
 
     private fun getPrecedence(): Int {
         val infixParser = infixParsers[currentToken.getType()]

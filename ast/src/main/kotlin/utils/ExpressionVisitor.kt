@@ -5,10 +5,10 @@ import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
-import nodes.Literal
-import nodes.ReadInput
-import nodes.ReadEnv
 import nodes.IfNode
+import nodes.Literal
+import nodes.ReadEnv
+import nodes.ReadInput
 
 interface ExpressionVisitor {
     fun visitReadEnv(expression: ReadEnv): Result

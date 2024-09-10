@@ -11,13 +11,6 @@ import nodes.Node
 class IfParser : Prefix {
 
     override fun parse(parser: Parser, token: Token): Node {
-        if (token.getType() != TokenType.IF_KEYWORD) {
-            throw ParseException(
-                "Expected IF_KEYWORD, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
-                }, column ${token.getPosition().getColumn()}",
-            )
-        }
         if (parser.consume().getType() != TokenType.LEFT_PAREN) {
             throw ParseException(
                 "Expected LEFT_PARENTHESIS, got ${token.getType()} at line ${
@@ -25,6 +18,7 @@ class IfParser : Prefix {
                 }, column ${token.getPosition().getColumn()}",
             )
         }
+        parser.consume()
         val condition = parser.parseExpression()
         when (condition) {
             is Literal -> {
@@ -45,7 +39,7 @@ class IfParser : Prefix {
                 )
             }
         }
-        if (parser.consume().getType() != TokenType.RIGHT_PAREN) {
+        if (parser.getCurrentToken().getType() != TokenType.RIGHT_PAREN) {
             throw ParseException(
                 "Expected RIGHT_PARENTHESIS, got ${token.getType()} at line ${
                     token.getPosition().getLine()
@@ -54,12 +48,12 @@ class IfParser : Prefix {
         }
         val ifBody: ArrayList<Node> = getBody(parser, token)
 
+        if (!parser.hasNextToken()) {
+            return IfNode(condition, ifBody, ArrayList(), token.getPosition())
+        }
+
         if (parser.consume().getType() != TokenType.ELSE_KEYWORD) {
-            throw ParseException(
-                "Expected ELSE_KEYWORD, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
-                }, column ${token.getPosition().getColumn()}",
-            )
+            return IfNode(condition, ifBody, ArrayList(), token.getPosition())
         }
 
         val elseBody: ArrayList<Node> = getBody(parser, token)
@@ -76,19 +70,20 @@ class IfParser : Prefix {
             )
         }
 
+        parser.consume()
         val ifBody: ArrayList<Node> = ArrayList()
         while (parser.getCurrentToken().getType() != TokenType.RIGHT_BRACE) {
             ifBody.add(parser.parseExpression())
-            val consumed = parser.consume()
-            if (consumed.getType() == TokenType.RIGHT_BRACE) {
-                break
-            }
-            if (consumed.getType() != TokenType.SEMICOLON) {
+            if (parser.getCurrentToken().getType() != TokenType.SEMICOLON) {
                 throw ParseException(
                     "Expected SEMICOLON, got ${token.getType()} at line ${
                         token.getPosition().getLine()
                     }, column ${token.getPosition().getColumn()}",
                 )
+            }
+            val consumed = parser.consume()
+            if (consumed.getType() == TokenType.RIGHT_BRACE) {
+                break
             }
         }
 

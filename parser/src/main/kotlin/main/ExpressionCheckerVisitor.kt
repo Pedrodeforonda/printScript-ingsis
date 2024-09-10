@@ -15,18 +15,57 @@ import utils.Result
 
 class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, String>) : ExpressionVisitor {
     override fun visitReadEnv(expression: ReadEnv): CheckAstResult {
-        TODO("Not yet implemented")
+        return CheckAstResult(true, "", "ReadEnv")
     }
 
     override fun visitIf(expression: IfNode): CheckAstResult {
-        TODO("Not yet implemented")
+        val condition = expression.getCondition()
+        val body = expression.getThenBlock()
+        val elseBody = expression.getElseBlock()
+        val conditionResult = condition.accept(this) as CheckAstResult
+        if (!conditionResult.isPass()) {
+            return CheckAstResult(
+                false,
+                conditionResult.getMessage(),
+                conditionResult.getResultType(),
+            )
+        }
+        if (conditionResult.getResultType() != "boolean") {
+            return CheckAstResult(
+                false,
+                "Invalid type: expected boolean on condition, but got ${conditionResult.getResultType()}",
+                "If",
+            )
+        }
+        if (body != null) {
+            for (node in body) {
+                val result = node.accept(this) as CheckAstResult
+                if (!result.isPass()) {
+                    return CheckAstResult(
+                        false,
+                        result.getMessage(),
+                        result.getResultType(),
+                    )
+                }
+            }
+        }
+        if (elseBody != null) {
+            for (node in elseBody) {
+                val result = node.accept(this) as CheckAstResult
+                if (!result.isPass()) {
+                    return CheckAstResult(
+                        false,
+                        result.getMessage(),
+                        result.getResultType(),
+                    )
+                }
+            }
+        }
+        return CheckAstResult(true, "", "If")
     }
     override fun visitDeclaration(expression: Declaration): Result {
         val variableName = expression.getName()
         val variableType = expression.getType()
-        if (variableTypeMap.containsKey(variableName)) {
-            return CheckAstResult(false, "Variable $variableName is already declared", "Declaration")
-        }
         variableTypeMap[variableName] = variableType
         return CheckAstResult(true, "", "Declaration")
     }
@@ -38,6 +77,9 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         }
         if (value is Int || value is Double) {
             return CheckAstResult(true, "", "number")
+        }
+        if (value is Boolean) {
+            return CheckAstResult(true, "", "boolean")
         }
         return CheckAstResult(false, "Invalid literal", "Literal")
     }
@@ -114,6 +156,20 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
     }
 
     override fun visitReadInput(expression: ReadInput): CheckAstResult {
-        TODO("Not yet implemented")
+        when (val message = expression.getArgument()) {
+            is Literal -> {
+                if (message.getType() != TokenType.STRING_LITERAL) {
+                    return CheckAstResult(false, "Expected STRING_LITERAL", "ReadInput")
+                }
+                return CheckAstResult(true, "", "ReadInput")
+            }
+            is Identifier -> {
+                return CheckAstResult(true, "", "ReadInput")
+            }
+            else -> {
+                return CheckAstResult(false, "Expected STRING_LITERAL", "ReadInput")
+            }
+        }
+        return CheckAstResult(false, "type not expected", "ReadInput")
     }
 }

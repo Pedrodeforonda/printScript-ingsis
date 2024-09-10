@@ -7,8 +7,8 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
-import nodes.ReadInput
 import nodes.ReadEnv
+import nodes.ReadInput
 
 class GetStringVisitor : ExpressionVisitor {
     override fun visitReadEnv(expression: ReadEnv): StringResult {

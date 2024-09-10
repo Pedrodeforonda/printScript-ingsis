@@ -8,8 +8,6 @@ import nodes.Node
 
 class ReadEnvParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
-        parser.consume()
-
         if (parser.consume().getType() != TokenType.LEFT_PAREN) {
             throw ParseException(
                 "Syntax Error at ${token.getPosition().getLine()}, ${token.getPosition().getColumn()}" +
@@ -33,6 +31,6 @@ class ReadEnvParser : Prefix {
             )
         }
 
-        return nodes.ReadEnv(name)
+        return nodes.ReadEnv(name, token.getPosition())
     }
 }
