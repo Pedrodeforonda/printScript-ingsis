@@ -27,7 +27,7 @@ class LexerTest {
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -51,7 +51,7 @@ class LexerTest {
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
@@ -75,7 +75,7 @@ class LexerTest {
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("a", TokenType.IDENTIFIER, Position(1, 1)),
@@ -96,7 +96,7 @@ class LexerTest {
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("println", TokenType.CALL_FUNC, Position(1, 1)),
@@ -116,7 +116,7 @@ class LexerTest {
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
         val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
-        val actualTokens = lexer.tokenizeAll(lexer).toList()
+        val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
             Token("let", TokenType.LET_KEYWORD, Position(1, 1)),

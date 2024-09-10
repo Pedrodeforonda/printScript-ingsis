@@ -5,13 +5,13 @@ import main.FormatterConfigReader
 import main.FormatterResult
 import main.Token
 import main.TokenType
-import java.io.BufferedWriter
+import java.io.Writer
 
 class IsLiteral : Formatter {
     override fun formatCode(
         tokens: Token,
         config: FormatterConfigReader,
-        fileOutputWriter: BufferedWriter,
+        fileOutputWriter: Writer,
     ): FormatterResult {
         if (tokens.getType() == TokenType.STRING_LITERAL) {
             fileOutputWriter.write("\"${tokens.getText()}\"")

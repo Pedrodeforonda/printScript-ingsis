@@ -34,7 +34,7 @@ class TestFormatter {
                 percentageCollector,
             )
         val formattedText = formatter.formatCode(
-            lexer.tokenizeAll(lexer),
+            lexer.tokenize(),
             standardConfig,
             outputWriter,
         )
@@ -61,7 +61,7 @@ class TestFormatter {
                 percentageCollector,
             )
         val formattedText = formatter.formatCode(
-            lexer.tokenizeAll(lexer),
+            lexer.tokenize(),
             standardConfig,
             outputWriter,
         )

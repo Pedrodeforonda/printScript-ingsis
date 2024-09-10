@@ -66,6 +66,7 @@ ktlint {
 }
 
 tasks.named("check") {
+    dependsOn("ktlintFormat")
     dependsOn("ktlintCheck")
 }
 

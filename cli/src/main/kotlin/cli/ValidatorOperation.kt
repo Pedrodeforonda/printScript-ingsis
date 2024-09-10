@@ -26,7 +26,7 @@ class ValidatorOperation : CliktCommand(
             val collector = PercentageCollector()
             val reader: BufferedReader = Files.newBufferedReader(Paths.get(sourceFile.absolutePath))
             val lexer = Lexer(reader, length, collector)
-            val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
+            val tokens: Sequence<Token> = lexer.tokenize()
             val parser = Parser(tokens.iterator())
             val result = parser.parseExpressions().iterator()
             while (result.hasNext()) {
