@@ -2,7 +2,6 @@ package lexer
 
 import main.Position
 import main.Token
-import org.example.lexer.ClassicTokenStrategies
 import utils.PercentageCollector
 import java.io.BufferedReader
 
