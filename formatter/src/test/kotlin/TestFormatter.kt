@@ -1,3 +1,4 @@
+import lexer.Lexer
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter

@@ -7,7 +7,6 @@ import lexer.LexerFactory
 import main.ParseException
 import main.Parser
 import main.Token
-import org.example.lexer.Lexer
 import utils.PercentageCollector
 import java.io.File
 

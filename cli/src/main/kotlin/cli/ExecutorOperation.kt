@@ -22,7 +22,6 @@ class ExecutorOperation : CliktCommand(
         val results: Sequence<InterpreterResult> = runner.run(inputStream, "1.0")
 
         var currentPercentage = 0.0
-
         for (result in results) {
             val output = StringBuilder()
             if (result.hasPrintln()) {
@@ -37,7 +36,7 @@ class ExecutorOperation : CliktCommand(
                 val percentageText = "percentage: %.2f%%".format(currentPercentage)
                 val arrow = " -> "
                 if (output.isEmpty()) {
-                    print("\u001b[32m") // Set text color to green
+                    print("\u001b[32m")
                     print(percentageText)
                     print("\u001b[0m") // Reset text color to default
                 } else {

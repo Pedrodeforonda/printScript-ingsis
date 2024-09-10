@@ -1,4 +1,5 @@
 package org.example.lexer
+
 import lexer.StrategyList
 import org.example.tokenManagers.AssignationStrategy
 import org.example.tokenManagers.CommaStrategy
@@ -10,6 +11,7 @@ import org.example.tokenManagers.SemicolonStrategy
 import org.example.tokenManagers.StringLiteralStrategy
 import org.example.tokenManagers.StringStrategy
 import org.example.tokenManagers.TypeAssignationStrategy
+
 
 data class ClassicTokenStrategies(
     val listOfStrategies: List<TokenStrategy> = listOf(

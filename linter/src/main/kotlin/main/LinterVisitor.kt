@@ -1,19 +1,29 @@
-package main.kotlin.main
+package main
 
-import main.Position
-import main.kotlin.rules.IdentifierFormatRule
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
+import nodes.IfNode
 import nodes.Literal
+import nodes.ReadEnv
 import nodes.ReadInput
+import rules.IdentifierFormatRule
 import rules.PrintlnRestrictionRule
 import rules.ReadInputRestrictionRule
 import utils.ExpressionVisitor
+import utils.LinterResult
 
 class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
+    override fun visitReadEnv(expression: ReadEnv): LinterResult {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitIf(expression: IfNode): LinterResult {
+        TODO("Not yet implemented")
+    }
+
     override fun visitDeclaration(expression: Declaration): LinterResult {
         val identifier = Identifier(
             expression.getName(),
@@ -56,7 +66,7 @@ class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
         return LinterResult(null, false)
     }
 
-    override fun visitReadInput(expression: ReadInput): Any {
+    override fun visitReadInput(expression: ReadInput): LinterResult {
         val argumentResult = expression.getArgument().accept(this) as LinterResult
         if (config.restrictReadInput) {
             return ReadInputRestrictionRule(argumentResult).lintCode(expression)
