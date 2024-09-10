@@ -1,0 +1,1 @@
+myVar anotherVar private123;

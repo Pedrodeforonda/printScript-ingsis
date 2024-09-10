@@ -78,7 +78,7 @@ class Lexer(
                 return null
             }
         }
-        for (tokenStrategy in ClassicTokenStrategies().listOfStrategies) {
+        for (tokenStrategy in strategies.getStrategies()) {
             val newToken = tokenStrategy.buildToken(this, "", this.tokenPosition())
             if (newToken != null) {
                 updateTokenPosition()

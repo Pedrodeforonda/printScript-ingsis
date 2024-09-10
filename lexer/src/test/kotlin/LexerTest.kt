@@ -150,4 +150,50 @@ class LexerTest {
         assertEquals(expectedTokens, actualTokens)
         assertEquals(100.0, percentageCollector.getPercentage())
     }
+    @Test
+    fun testTokenizeKeywords() {
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/keywords.txt"))
+        val text: String = byteArr.toString(Charsets.UTF_8)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, TokenStrategies1())
+        val actualTokens = lexer.tokenize().toList()
+
+        val expectedTokens = listOf(
+            Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
+            Token("string", TokenType.STRING_TYPE, Position(1, 5)),
+            Token("number", TokenType.NUMBER_TYPE, Position(1, 12)),
+            Token("println", TokenType.CALL_FUNC, Position(1, 19)),
+            Token("if", TokenType.IF_KEYWORD, Position(1, 27)),
+            Token("else", TokenType.ELSE_KEYWORD, Position(1, 30)),
+            Token("boolean", TokenType.BOOLEAN_LITERAL, Position(1, 35)),
+            Token("const", TokenType.CONST_KEYWORD, Position(1, 43)),
+            Token("true", TokenType.BOOLEAN_TYPE, Position(1, 49)),
+            Token("false", TokenType.BOOLEAN_TYPE, Position(1, 54)),
+            Token(";", TokenType.SEMICOLON, Position(1, 59))
+        )
+
+        assertEquals(expectedTokens, actualTokens)
+    }
+
+    @Test
+    fun testTokenizeIdentifiers() {
+        val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/identifiers.txt"))
+        val text: String = byteArr.toString(Charsets.UTF_8)
+        val bufferedReader: BufferedReader = text.reader().buffered()
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, TokenStrategies1())
+        val actualTokens = lexer.tokenize().toList()
+
+        val expectedTokens = listOf(
+            Token("myVar", TokenType.IDENTIFIER, Position(1, 1)),
+            Token("anotherVar", TokenType.IDENTIFIER, Position(1, 7)),
+            Token("private123", TokenType.IDENTIFIER, Position(1, 18)),
+            Token(";", TokenType.SEMICOLON, Position(1, 28))
+            )
+
+        assertEquals(expectedTokens, actualTokens)
+    }
+
+
+
+
 }
