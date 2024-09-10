@@ -3,6 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
+import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
@@ -23,10 +24,9 @@ class FormatterOperation : CliktCommand(
     override fun run() {
         val outputPath = "src/main/resources/formattedCode.txt"
         val configLoader = ConfigLoader()
-        val length = sourceFile.inputStream().available()
         val collector = PercentageCollector()
         val config = configLoader.loadConfig<FormatterConfigReader>(configFile.inputStream())
-        val lexer: Lexer = Lexer(sourceFile.inputStream().bufferedReader(), length, collector)
+        val lexer: Lexer = LexerFactory().createLexer(sourceFile.inputStream(), "1.0", collector)
         val tokens = lexer.tokenize()
         val outputWriter = File(outputPath).bufferedWriter()
         val formattedText = MainFormatter().formatCode(tokens, config, outputWriter)

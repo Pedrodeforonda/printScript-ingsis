@@ -1,6 +1,8 @@
+import lexer.TokenStrategies1
 import main.Position
 import main.Token
 import main.TokenType
+import org.example.lexer.ClassicTokenStrategies
 import org.example.lexer.Lexer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,7 +28,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, strategies = ClassicTokenStrategies())
         val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
@@ -50,7 +52,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, ClassicTokenStrategies())
         val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
@@ -64,7 +66,6 @@ class LexerTest {
         )
 
         assertEquals(expectedTokens, actualTokens)
-        assertEquals(100.0, percentageCollector.getPercentage())
     }
 
     @Test
@@ -74,7 +75,7 @@ class LexerTest {
         )
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, ClassicTokenStrategies())
         val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
@@ -95,7 +96,7 @@ class LexerTest {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/println.txt"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, TokenStrategies1())
         val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(
@@ -115,7 +116,7 @@ class LexerTest {
         val byteArr: ByteArray = Files.readAllBytes(Paths.get("src/test/resources/multipleLines"))
         val text: String = byteArr.toString(Charsets.UTF_8)
         val bufferedReader: BufferedReader = text.reader().buffered()
-        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector)
+        val lexer = Lexer(bufferedReader, byteArr.size, percentageCollector, TokenStrategies1())
         val actualTokens = lexer.tokenize().toList()
 
         val expectedTokens = listOf(

@@ -12,7 +12,7 @@ class Lexer(
     private val percentageColector: PercentageCollector,
     private val strategies: StrategyList,
     private var pos: Int = 0,
-    private var lexerPosition: Position = Position(1, 1)
+    private var lexerPosition: Position = Position(1, 1),
 ) {
     private var current: Char? = iterator.read().toChar()
     private var lineBreak = 0

@@ -3,15 +3,13 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
+import lexer.LexerFactory
 import main.ParseException
 import main.Parser
 import main.Token
 import org.example.lexer.Lexer
 import utils.PercentageCollector
-import java.io.BufferedReader
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class ValidatorOperation : CliktCommand(
     name = "validate",
@@ -22,10 +20,8 @@ class ValidatorOperation : CliktCommand(
 
     override fun run() {
         try {
-            val length = sourceFile.inputStream().available()
             val collector = PercentageCollector()
-            val reader: BufferedReader = Files.newBufferedReader(Paths.get(sourceFile.absolutePath))
-            val lexer = Lexer(reader, length, collector)
+            val lexer: Lexer = LexerFactory().createLexer(sourceFile.inputStream(), "1.0", collector)
             val tokens: Sequence<Token> = lexer.tokenize()
             val parser = Parser(tokens.iterator())
             val result = parser.parseExpressions().iterator()

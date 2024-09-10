@@ -9,10 +9,10 @@ import org.example.tokenManagers.OperatorStrategy
 import org.example.tokenManagers.RightParenStrategy
 import org.example.tokenManagers.SemicolonStrategy
 import org.example.tokenManagers.StringLiteralStrategy
+import org.example.tokenManagers.StringStrategy1
 import org.example.tokenManagers.TypeAssignationStrategy
 import tokenManagers.LeftBraceStrategy
 import tokenManagers.RightBraceStrategy
-import tokenManagers.StringStrategy1
 
 data class TokenStrategies1(
     val list: List<TokenStrategy> = listOf(

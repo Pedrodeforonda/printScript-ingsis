@@ -1,8 +1,8 @@
 package org.example.main
 
+import lexer.LexerFactory
 import main.Parser
 import org.example.interpreter.Interpreter
-import org.example.lexer.Lexer
 import utils.InterpreterResult
 import utils.PercentageCollector
 import java.io.InputStream
@@ -16,7 +16,7 @@ class Runner {
             throw IllegalArgumentException("Invalid version")
         }
 
-        val lexer = Lexer(src.bufferedReader(), src.available(), percentageCollector)
+        val lexer = LexerFactory().createLexer(src, version, percentageCollector)
         val parser = Parser(lexer.tokenize().iterator())
         val interpreter = Interpreter(percentageCollector)
         val results = interpreter.interpret(parser.parseExpressions())
