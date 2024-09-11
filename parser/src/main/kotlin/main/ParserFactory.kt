@@ -1,16 +1,14 @@
 package main
 
-import parsers.AssignationParser
-import parsers.BinaryOperationParser
-import parsers.DeclarationParser
-import parsers.DeclarationParser2
-import parsers.FunCallParser
-import parsers.IdentifierParser
-import parsers.IfParser
-import parsers.LiteralParser
-import parsers.LiteralParser2
-import parsers.ReadEnvParser
-import parsers.ReadInputParser
+import parsers.v1.AssignationParser
+import parsers.v1.BinaryOperationParser
+import parsers.v1.DeclarationParser
+import parsers.v1.FunCallParser
+import parsers.v1.IdentifierParser
+import parsers.v1.LiteralParser
+import parsers.v2.IfParser
+import parsers.v2.ReadEnvParser
+import parsers.v2.ReadInputParser
 
 class ParserFactory {
     fun createParser(version: String, tokens: Iterator<Token>): Parser {
@@ -24,13 +22,13 @@ class ParserFactory {
             }
             "1.1" -> {
                 createFirstVersionParser(parser)
-                parser.registerPrefix(TokenType.LET_KEYWORD, DeclarationParser2())
+                parser.registerPrefix(TokenType.LET_KEYWORD, parsers.v2.DeclarationParser())
                 parser.registerPrefix(TokenType.IF_KEYWORD, IfParser())
-                parser.registerPrefix(TokenType.BOOLEAN_LITERAL, LiteralParser2())
+                parser.registerPrefix(TokenType.BOOLEAN_LITERAL, parsers.v2.LiteralParser())
                 parser.registerPrefix(TokenType.READ_ENV, ReadEnvParser())
                 parser.registerPrefix(TokenType.READ_INPUT, ReadInputParser())
-                parser.registerPrefix(TokenType.STRING_LITERAL, LiteralParser2())
-                parser.registerPrefix(TokenType.NUMBER_LITERAL, LiteralParser2())
+                parser.registerPrefix(TokenType.STRING_LITERAL, parsers.v2.LiteralParser())
+                parser.registerPrefix(TokenType.NUMBER_LITERAL, parsers.v2.LiteralParser())
             }
             else -> throw IllegalArgumentException("Unsupported version: $version")
         }

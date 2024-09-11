@@ -1,4 +1,4 @@
-package parsers
+package parsers.v2
 
 import main.ParseException
 import main.Parser
@@ -6,11 +6,12 @@ import main.Token
 import main.TokenType
 import nodes.Declaration
 import nodes.Node
+import parsers.v1.Prefix
 import utils.DeclarationKeyWord
 
 class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
-        val letToken: Token = token
+        val declarationToken: Token = token
 
         val identifierToken: Token = parser.consume()
         if (identifierToken.getType() != TokenType.IDENTIFIER) {
@@ -27,18 +28,24 @@ class DeclarationParser : Prefix {
             )
         }
         val type = parser.consume()
-        if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE) {
+        if (type.getType() != TokenType.STRING_TYPE && type.getType() != TokenType.NUMBER_TYPE &&
+            type.getType() != TokenType.BOOLEAN_TYPE
+        ) {
             throw ParseException(
                 "Semantic Error at ${type.getPosition().getLine()}, ${type.getPosition().getColumn()} Expected type",
             )
         }
         parser.consume()
-        val letKeword: DeclarationKeyWord = DeclarationKeyWord.LET_KEYWORD
+        val declarationKeyword = if (declarationToken.getType() == TokenType.LET_KEYWORD) {
+            DeclarationKeyWord.LET_KEYWORD
+        } else {
+            DeclarationKeyWord.CONST_KEYWORD
+        }
         return Declaration(
             identifierToken.getText(),
             type.getText(),
-            letKeword,
-            letToken.getPosition(),
+            declarationKeyword,
+            declarationToken.getPosition(),
         )
     }
 }

@@ -1,4 +1,4 @@
-package parsers
+package parsers.v2
 
 import main.ParseException
 import main.Parser
@@ -7,6 +7,7 @@ import main.TokenType
 import nodes.IfNode
 import nodes.Literal
 import nodes.Node
+import parsers.v1.Prefix
 
 class IfParser : Prefix {
 

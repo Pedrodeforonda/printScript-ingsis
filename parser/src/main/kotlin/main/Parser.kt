@@ -1,9 +1,9 @@
 package main
 
 import nodes.Node
-import parsers.BinaryOperationParser
-import parsers.Infix
-import parsers.Prefix
+import parsers.v1.BinaryOperationParser
+import parsers.v1.Infix
+import parsers.v1.Prefix
 import utils.CheckAstResult
 import utils.ParsingResult
 
