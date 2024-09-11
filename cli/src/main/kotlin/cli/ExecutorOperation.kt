@@ -29,9 +29,7 @@ class ExecutorOperation : CliktCommand(
         var currentPercentage = 0.0
         for (result in results) {
             val output = StringBuilder()
-            if (result.hasPrintln()) {
-                output.append(result.getPrintln())
-            }
+
             if (result.hasException()) {
                 output.append(result.getException().message)
             }

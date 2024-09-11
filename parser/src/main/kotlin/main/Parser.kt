@@ -66,7 +66,7 @@ class Parser(private val tokens: Iterator<Token>) {
                     currentToken.getType() == TokenType.SEMICOLON ||
                         currentToken.getType() == TokenType.RIGHT_BRACE
                     ) && hasNextToken()
-            ) {
+            )  {
                 consume()
             }
         }

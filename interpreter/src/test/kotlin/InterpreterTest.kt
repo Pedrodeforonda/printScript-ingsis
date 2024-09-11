@@ -81,7 +81,7 @@ class InterpreterTest {
         val result = nodeToParsingResult(stringAssignation)
         val result2 = nodeToParsingResult(callNode)
         val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
-        interpreterResult.toList()
+        val results = interpreterResult.toList()
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 

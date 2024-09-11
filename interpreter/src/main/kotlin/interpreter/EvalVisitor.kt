@@ -191,13 +191,16 @@ class EvalVisitor(
             }
             val result = arg[0].accept(this)
             if (result is IdentifierResult) {
+                println(result.value.toString())
                 printlnCollector.addPrint(result.value.toString())
                 return SuccessResult("Printed")
             }
             if (result is ReadResult) {
+                println( (result as ReadResult).value)
                 printlnCollector.addPrint(result.value)
                 return SuccessResult("Printed")
             }
+            println( (result as LiteralResult).value.toString())
             printlnCollector.addPrint((result as LiteralResult).value.toString())
             return SuccessResult("Printed")
         }
