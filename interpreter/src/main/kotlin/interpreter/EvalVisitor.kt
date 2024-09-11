@@ -8,9 +8,20 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
+import nodes.Node
 import nodes.ReadEnv
 import nodes.ReadInput
-import utils.*
+import utils.DeclarationKeyWord
+import utils.DeclarationResult
+import utils.ExpressionVisitor
+import utils.IdentifierResult
+import utils.InterpreterException
+import utils.LiteralResult
+import utils.PrintlnCollector
+import utils.ReadResult
+import utils.Result
+import utils.StringInputProvider
+import utils.SuccessResult
 
 class EvalVisitor(
     private var variableMap: MutableMap<Triple<String, String, Boolean>, Any>,
@@ -27,20 +38,36 @@ class EvalVisitor(
     }
 
     override fun visitIf(expression: IfNode): Result {
-        val condition = expression.getCondition().accept(this) as LiteralResult
-        if (condition.value !is Boolean) {
-            throw InterpreterException("Invalid condition")
+        val condition = expression.getCondition().accept(this)
+        val thenBlock = expression.getThenBlock()
+        val elseBlock = expression.getElseBlock()
+
+        if (condition is LiteralResult) {
+            executeIf(condition.value, thenBlock, elseBlock)
         }
-        if (condition.value as Boolean) {
-            for (node in expression.getThenBlock()!!) {
-                node.accept(this)
-            }
-        }
-        for (node in expression.getElseBlock()!!) {
-            node.accept(this)
+        if (condition is IdentifierResult) {
+            executeIf(condition.value, thenBlock, elseBlock)
         }
 
         return SuccessResult("If executed")
+    }
+
+    private fun executeIf(condition: Any, thenBlock: List<Node>?, elseBlock: List<Node>?) {
+        if (condition !is Boolean) {
+            throw InterpreterException("Invalid condition")
+        }
+        if (condition) {
+            if (thenBlock != null) {
+                for (node in thenBlock) {
+                    node.accept(this)
+                }
+            }
+        }
+        if (elseBlock != null) {
+            for (node in elseBlock) {
+                node.accept(this)
+            }
+        }
     }
 
     override fun visitDeclaration(expression: Declaration): Result {
@@ -134,7 +161,10 @@ class EvalVisitor(
             return SuccessResult("variable assigned")
         }
 
-        if ((type == "number" && (right as LiteralResult).value is Number) || (type == "string" && (right as LiteralResult).value is String)) {
+        if ((type == "number" && (right as LiteralResult).value is Number) ||
+            (type == "string" && (right as LiteralResult).value is String) ||
+            (type == "boolean" && (right as LiteralResult).value is Boolean)
+        ) {
             variableMap[Triple(name, type, true)] = right.value
             return SuccessResult("variable assigned")
         }

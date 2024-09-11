@@ -1,6 +1,10 @@
 package interpreter
 
-import utils.*
+import utils.InterpreterResult
+import utils.ParsingResult
+import utils.PercentageCollector
+import utils.PrintlnCollector
+import utils.StringInputProvider
 
 class Interpreter(
     private val percentageCollector: PercentageCollector,
