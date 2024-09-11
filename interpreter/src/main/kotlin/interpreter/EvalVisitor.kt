@@ -147,7 +147,7 @@ class EvalVisitor(
             left.variable
         } else (left as IdentifierResult).variable
 
-        if (!isMutable) {
+        if (left !is DeclarationResult && !isMutable) {
             throw InterpreterException("Variable $name is not mutable")
         }
 
@@ -239,6 +239,14 @@ class EvalVisitor(
     }
 
     private fun castToNumber(value: String): Number {
-        return value.toDoubleOrNull() ?: value.toIntOrNull() ?: throw InterpreterException("Invalid number format")
+        return value.toIntOrNull() ?: value.toDoubleOrNull() ?: throw InterpreterException("Invalid number format")
+    }
+
+    private fun castToBoolean(value: String): Boolean {
+        val validBooleans = setOf("true", "false")
+        if (value.lowercase() in validBooleans) {
+            return value.toBoolean()
+        }
+        throw InterpreterException("Invalid boolean format")
     }
 }
