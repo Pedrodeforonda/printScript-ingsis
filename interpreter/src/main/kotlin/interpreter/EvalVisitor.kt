@@ -153,11 +153,11 @@ class EvalVisitor(
 
         if (right is ReadResult) {
             if (type == "number") {
-                variableMap[Triple(name, type, true)] = castToNumber(right.value)
+                variableMap[Triple(name, type, isMutable)] = castToNumber(right.value)
                 return SuccessResult("variable assigned")
             }
             if (type == "boolean") {
-                variableMap[Triple(name, type, true)] =
+                variableMap[Triple(name, type, isMutable)] =
                     when (right.value) {
                         "true" -> true
                         "false" -> false
@@ -165,7 +165,7 @@ class EvalVisitor(
                     }
                 return SuccessResult("variable assigned")
             }
-            variableMap[Triple(name, type, true)] = right.value
+            variableMap[Triple(name, type, isMutable)] = right.value
             return SuccessResult("variable assigned")
         }
 
@@ -173,7 +173,7 @@ class EvalVisitor(
             (type == "string" && (right as LiteralResult).value is String) ||
             (type == "boolean" && (right as LiteralResult).value is Boolean)
         ) {
-            variableMap[Triple(name, type, true)] = right.value
+            variableMap[Triple(name, type, isMutable)] = right.value
             return SuccessResult("variable assigned")
         }
 
@@ -226,7 +226,7 @@ class EvalVisitor(
         println(message)
         val input = inputValues.input(message)
         println(input)
-        printlnCollector.addPrint(input)
+        printlnCollector.addPrint(message)
 
         return ReadResult(input)
     }
