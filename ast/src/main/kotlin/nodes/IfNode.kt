@@ -7,7 +7,7 @@ class IfNode(
     private val condition: Node,
     private val thenBlock: List<Node>?,
     private val elseBlock: List<Node>?,
-    private val position: Position,
+    private val pos: Position,
 ) : Node {
     override fun accept(visitor: ExpressionVisitor) = visitor.visitIf(this)
 
@@ -21,6 +21,10 @@ class IfNode(
 
     fun getElseBlock(): List<Node>? {
         return elseBlock
+    }
+
+    fun getPos(): Position {
+        return pos
     }
 
     override fun equals(other: Any?): Boolean {
