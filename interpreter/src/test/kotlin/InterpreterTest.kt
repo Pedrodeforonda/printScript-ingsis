@@ -13,6 +13,7 @@ import nodes.IfNode
 import nodes.Literal
 import nodes.Node
 import nodes.ReadEnv
+import nodes.ReadInput
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
@@ -536,5 +537,29 @@ class InterpreterTest {
         assertEquals("Invalid number format", error.message)
         val error2 = errorList[1] as InterpreterException
         assertEquals("Invalid boolean format", error2.message)
+    }
+
+    @Test
+    fun testReadInput() {
+        val message = Assignation(
+            Declaration("message", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            Literal("What's your name?", Position(0, 0), TokenType.STRING_LITERAL),
+            Position(0, 0),
+        )
+        val stringAssignation = Assignation(
+            Declaration("a", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadInput(Identifier("message", Position(0, 0)), Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(message)
+        val result2 = nodeToParsingResult(stringAssignation)
+
+        val inputProvider = MainStringInputProvider(listOf("Diego").iterator())
+        val interpreterForInp = Interpreter(collector, inputProvider, mapOf())
+        val interpreterResult = interpreterForInp.interpret(sequenceOf(result, result2))
+        interpreterResult.toList()
+
+        assertEquals("Diego", interpreterForInp.getVariableMap()[Triple("a", "string", true)])
     }
 }

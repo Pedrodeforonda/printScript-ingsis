@@ -196,11 +196,11 @@ class EvalVisitor(
                 return SuccessResult("Printed")
             }
             if (result is ReadResult) {
-                println( (result as ReadResult).value)
+                println((result as ReadResult).value)
                 printlnCollector.addPrint(result.value)
                 return SuccessResult("Printed")
             }
-            println( (result as LiteralResult).value.toString())
+            println((result as LiteralResult).value.toString())
             printlnCollector.addPrint((result as LiteralResult).value.toString())
             return SuccessResult("Printed")
         }
@@ -240,13 +240,5 @@ class EvalVisitor(
 
     private fun castToNumber(value: String): Number {
         return value.toIntOrNull() ?: value.toDoubleOrNull() ?: throw InterpreterException("Invalid number format")
-    }
-
-    private fun castToBoolean(value: String): Boolean {
-        val validBooleans = setOf("true", "false")
-        if (value.lowercase() in validBooleans) {
-            return value.toBoolean()
-        }
-        throw InterpreterException("Invalid boolean format")
     }
 }
