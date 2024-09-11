@@ -1,5 +1,6 @@
 package parsers.v1
 
+import main.Infix
 import main.Parser
 import main.Precedence
 import main.Token

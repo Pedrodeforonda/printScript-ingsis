@@ -2,8 +2,6 @@ package main
 
 import nodes.Node
 import parsers.v1.BinaryOperationParser
-import parsers.v1.Infix
-import parsers.v1.Prefix
 import utils.CheckAstResult
 import utils.ParsingResult
 

@@ -2,11 +2,11 @@ package parsers.v2
 
 import main.ParseException
 import main.Parser
+import main.Prefix
 import main.Token
 import main.TokenType
 import nodes.Declaration
 import nodes.Node
-import parsers.v1.Prefix
 import utils.DeclarationKeyWord
 
 class DeclarationParser : Prefix {
