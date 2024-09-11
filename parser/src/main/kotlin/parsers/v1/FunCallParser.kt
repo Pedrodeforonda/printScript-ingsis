@@ -1,4 +1,4 @@
-package parsers
+package parsers.v1
 
 import main.ParseException
 import main.Parser

@@ -1,10 +1,11 @@
-package parsers
+package parsers.v2
 
 import main.ParseException
 import main.Parser
 import main.Token
 import main.TokenType
 import nodes.Node
+import parsers.v1.Prefix
 
 class ReadEnvParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
