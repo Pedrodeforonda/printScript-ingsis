@@ -13,6 +13,6 @@ class FormatterFactory {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(config)
         val collector = PercentageCollector()
         val lexer = LexerFactory().createLexer(inputStream, version, collector)
-        val formattedText = formatter.formatCode(lexer.tokenize(), standardConfig, writer)
+        formatter.formatCode(lexer.tokenize(), standardConfig, writer)
     }
 }

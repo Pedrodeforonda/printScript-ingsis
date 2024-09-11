@@ -7,7 +7,7 @@ import main.Token
 import main.TokenType
 import java.io.Writer
 
-class NewlineBeforePrintlnFormatter : Formatter {
+class NewlineBeforePrintlnFormatter(private var indent: Int) : Formatter {
     override fun formatCode(
         tokens: Token,
         config: FormatterConfigReader,
@@ -18,9 +18,18 @@ class NewlineBeforePrintlnFormatter : Formatter {
             repeat(qty) {
                 fileOutputWriter.write("\n")
             }
+            if (qty > 0) {
+                repeat(indent) {
+                    fileOutputWriter.write(" ")
+                }
+            }
             fileOutputWriter.write(tokens.getText())
             return FormatterResult("success", false)
         }
         return FormatterResult("fail", true)
+    }
+
+    fun setIndent(indent: Int) {
+        this.indent = indent
     }
 }

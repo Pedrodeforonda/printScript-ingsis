@@ -4,6 +4,7 @@ import main.ParseException
 import main.Parser
 import main.Token
 import main.TokenType
+import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
 import nodes.Node
@@ -31,6 +32,7 @@ class IfParser : Prefix {
                     )
                 }
             }
+            is Identifier -> {}
 
             else -> {
                 throw ParseException(
