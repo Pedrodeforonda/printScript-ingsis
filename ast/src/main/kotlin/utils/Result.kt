@@ -2,11 +2,13 @@ package utils
 
 sealed interface Result
 
-data class IdentifierResult(val nameAndType: Pair<String, String>, val value: Any) : Result
+data class IdentifierResult(val variable: Triple<String, String, Boolean>, val value: Any) : Result
 
-data class DeclarationResult(val name: String, val type: String) : Result
+data class DeclarationResult(val variable: Triple<String, String, Boolean>) : Result
 
 data class LiteralResult(val value: Any) : Result
+
+data class ReadResult(val value: String) : Result
 
 data class SuccessResult(val message: String) : Result
 

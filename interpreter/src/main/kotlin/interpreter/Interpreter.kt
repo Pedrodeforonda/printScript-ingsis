@@ -4,15 +4,20 @@ import utils.InterpreterResult
 import utils.ParsingResult
 import utils.PercentageCollector
 import utils.PrintlnCollector
+import utils.StringInputProvider
 
-class Interpreter(private val percentageCollector: PercentageCollector) {
+class Interpreter(
+    private val percentageCollector: PercentageCollector,
+    private val inputValues: StringInputProvider,
+    private val envVariables: Map<String, String>,
+) {
 
-    private var variableMap = mutableMapOf<Pair<String, String>, Any>()
+    private var variableMap = mutableMapOf<Triple<String, String, Boolean>, Any>()
     private val printlnCollector = PrintlnCollector()
 
     fun interpret(astNodes: Sequence<ParsingResult>): Sequence<InterpreterResult> = sequence {
         val iterator = astNodes.iterator()
-        val evalVisitor = EvalVisitor(variableMap, printlnCollector)
+        val evalVisitor = EvalVisitor(variableMap, printlnCollector, inputValues, envVariables)
         while (iterator.hasNext()) {
             val exp = iterator.next()
             if (!exp.hasError()) {
@@ -35,7 +40,15 @@ class Interpreter(private val percentageCollector: PercentageCollector) {
         }
     }
 
-    fun getVariableMap(): Map<Pair<String, String>, Any> {
+    fun getVariableMap(): Map<Triple<String, String, Boolean>, Any> {
         return variableMap
+    }
+
+    fun getInputValues(): StringInputProvider {
+        return inputValues
+    }
+
+    fun getEnvVariables(): Map<String, String> {
+        return envVariables
     }
 }

@@ -9,13 +9,17 @@ import nodes.BinaryNode
 import nodes.CallNode
 import nodes.Declaration
 import nodes.Identifier
+import nodes.IfNode
 import nodes.Literal
 import nodes.Node
+import nodes.ReadEnv
+import nodes.ReadInput
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
 import utils.InterpreterException
 import utils.InterpreterResult
+import utils.MainStringInputProvider
 import utils.ParsingResult
 import utils.PercentageCollector
 import java.io.ByteArrayOutputStream
@@ -26,7 +30,7 @@ import kotlin.test.assertTrue
 class InterpreterTest {
 
     private val collector = PercentageCollector()
-    private val interpreter = Interpreter(collector)
+    private val interpreter = Interpreter(collector, MainStringInputProvider(iterator { }), mapOf())
 
     private fun nodeToParsingResult(node: Node): ParsingResult {
         return ParsingResult(node, null)
@@ -40,7 +44,7 @@ class InterpreterTest {
     @Test
     fun testAssignation() {
         val stringAssignation = Assignation(
-            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
+            Declaration("name", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
             Literal("Pedro", Position(0, 0), TokenType.STRING_LITERAL),
             Position(0, 0),
         )
@@ -49,7 +53,7 @@ class InterpreterTest {
         val interpreterResult = interpreter.interpret(sequenceOf(result))
         interpreterResult.toList()
 
-        assertEquals("Pedro", interpreter.getVariableMap()[Pair("name", "string")])
+        assertEquals("Pedro", interpreter.getVariableMap()[Triple("name", "string", true)])
 
         val numberAssignation = Assignation(
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
@@ -61,13 +65,13 @@ class InterpreterTest {
         val interpreterResult2 = interpreter.interpret(sequenceOf(result2))
         interpreterResult2.toList()
 
-        assertEquals(10, interpreter.getVariableMap()[Pair("num", "number")])
+        assertEquals(10, interpreter.getVariableMap()[Triple("num", "number", true)])
     }
 
     @Test
     fun testPrintVariable() {
         val stringAssignation = Assignation(
-            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
+            Declaration("name", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
             Literal("Pedro", Position(0, 0), TokenType.STRING_LITERAL),
             Position(0, 0),
         )
@@ -79,7 +83,7 @@ class InterpreterTest {
         val result = nodeToParsingResult(stringAssignation)
         val result2 = nodeToParsingResult(callNode)
         val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
-        interpreterResult.toList()
+        val results = interpreterResult.toList()
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -332,7 +336,7 @@ class InterpreterTest {
     @Test
     fun testReAssignation() {
         val stringAssignation = Assignation(
-            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
+            Declaration("name", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
             Literal("Pedro", Position(0, 0), TokenType.STRING_LITERAL),
             Position(0, 0),
         )
@@ -347,13 +351,13 @@ class InterpreterTest {
         val resultInterpreter: Sequence<InterpreterResult> = interpreter.interpret(sequenceOf(result, result2))
         resultInterpreter.toList()
 
-        assertEquals("el nene", interpreter.getVariableMap()[Pair("name", "string")])
+        assertEquals("el nene", interpreter.getVariableMap()[Triple("name", "string", true)])
     }
 
     @Test
     fun testFailingReAssignation() {
         val stringAssignation = Assignation(
-            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
+            Declaration("name", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
             Literal("Pedro", Position(0, 0), TokenType.STRING_LITERAL),
             Position(0, 0),
         )
@@ -382,5 +386,180 @@ class InterpreterTest {
             error.message,
             "Invalid type: expected string, but got number on variable name, at line 0 column 0",
         )
+    }
+
+    @Test
+    fun testFailingReAssignationImmutable() {
+        val stringAssignation = Assignation(
+            Declaration("name", "string", DeclarationKeyWord.CONST_KEYWORD, Position(0, 0)),
+            Literal("Pedro", Position(0, 0), TokenType.STRING_LITERAL),
+            Position(0, 0),
+        )
+        val stringReAssignation = Assignation(
+            Identifier("name", Position(0, 0)),
+            Literal("el nene", Position(0, 0), TokenType.STRING_LITERAL),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(stringReAssignation)
+
+        val resultInterpreter: Sequence<InterpreterResult> = interpreter.interpret(sequenceOf(result, result2))
+        val errorList = ArrayList<Exception>()
+
+        for (res in resultInterpreter) {
+            if (res.hasException()) {
+                errorList.add(res.getException())
+                println(res.getException().message)
+            }
+        }
+
+        assertTrue { errorList.size == 1 }
+
+        val error = errorList[0] as InterpreterException
+        assertEquals("Variable name is not mutable", error.message)
+    }
+
+    @Test
+    fun testIf() {
+        val assignation = Assignation(
+            Declaration("a", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            Literal(true, Position(0, 0), TokenType.BOOLEAN_LITERAL),
+            Position(0, 0),
+        )
+        val firstLine = Assignation(
+            Declaration("b", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            Literal(10, Position(0, 0), TokenType.NUMBER_LITERAL),
+            Position(0, 0),
+        )
+        val secondLine = CallNode("println", listOf(Identifier("b", Position(0, 0))), Position(0, 0))
+        val ifNode = IfNode(Identifier("a", Position(0, 0)), listOf(firstLine, secondLine), null, Position(0, 0))
+
+        var outContent = ByteArrayOutputStream()
+        System.setOut(PrintStream(outContent))
+
+        val result = nodeToParsingResult(assignation)
+        val result2 = nodeToParsingResult(ifNode)
+
+        val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
+        interpreterResult.toList()
+
+        assertEquals("10", outContent.toString().replace(System.lineSeparator(), ""))
+    }
+
+    @Test
+    fun testElse() {
+        val assignation = Assignation(
+            Declaration("a", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            Literal(false, Position(0, 0), TokenType.BOOLEAN_LITERAL),
+            Position(0, 0),
+        )
+        val firstLine =
+            CallNode("println", listOf(Literal("1", Position(0, 0), TokenType.STRING_LITERAL)), Position(0, 0))
+        val secondLine = CallNode("println", listOf(Identifier("a", Position(0, 0))), Position(0, 0))
+        val ifNode = IfNode(Identifier("a", Position(0, 0)), listOf(firstLine), listOf(secondLine), Position(0, 0))
+
+        var outContent = ByteArrayOutputStream()
+        System.setOut(PrintStream(outContent))
+
+        val result = nodeToParsingResult(assignation)
+        val result2 = nodeToParsingResult(ifNode)
+
+        val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
+        interpreterResult.toList()
+
+        assertEquals("false", outContent.toString().replace(System.lineSeparator(), ""))
+    }
+
+    @Test
+    fun testReadEnv() {
+        val stringAssignation = Assignation(
+            Declaration("env", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("a", Position(0, 0)),
+            Position(0, 0),
+        )
+        val numberAssignation = Assignation(
+            Declaration("env2", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("b", Position(0, 0)),
+            Position(0, 0),
+        )
+        val booleanAssignation = Assignation(
+            Declaration("env3", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("c", Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(numberAssignation)
+        val result3 = nodeToParsingResult(booleanAssignation)
+
+        val envVariables = mapOf("a" to "Diego", "b" to "10.0", "c" to "true")
+        val interpreterForEnv = Interpreter(collector, MainStringInputProvider(iterator { }), envVariables)
+        val interpreterResult = interpreterForEnv.interpret(sequenceOf(result, result2, result3))
+        interpreterResult.toList()
+
+        assertEquals("Diego", interpreterForEnv.getVariableMap()[Triple("env", "string", true)])
+        assertEquals(10.0, interpreterForEnv.getVariableMap()[Triple("env2", "number", true)])
+        assertEquals(true, interpreterForEnv.getVariableMap()[Triple("env3", "boolean", true)])
+    }
+
+    @Test
+    fun testFallingReadEnv() {
+        val numberAssignation = Assignation(
+            Declaration("env", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("b", Position(0, 0)),
+            Position(0, 0),
+        )
+        val booleanAssignation = Assignation(
+            Declaration("env2", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("c", Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(numberAssignation)
+        val result2 = nodeToParsingResult(booleanAssignation)
+
+        val envVariables = mapOf("b" to "p1", "c" to "truee")
+        val interpreterForEnv = Interpreter(collector, MainStringInputProvider(iterator { }), envVariables)
+        val interpreterResult = interpreterForEnv.interpret(sequenceOf(result, result2))
+        val errorList = ArrayList<Exception>()
+
+        for (res in interpreterResult) {
+            if (res.hasException()) {
+                errorList.add(res.getException())
+                println(res.getException().message)
+            }
+        }
+
+        assertTrue { errorList.size == 2 }
+
+        val error = errorList[0] as InterpreterException
+        assertEquals("Invalid number format", error.message)
+        val error2 = errorList[1] as InterpreterException
+        assertEquals("Invalid boolean format", error2.message)
+    }
+
+    @Test
+    fun testReadInput() {
+        val message = Assignation(
+            Declaration("message", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            Literal("What's your name?", Position(0, 0), TokenType.STRING_LITERAL),
+            Position(0, 0),
+        )
+        val stringAssignation = Assignation(
+            Declaration("a", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadInput(Identifier("message", Position(0, 0)), Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(message)
+        val result2 = nodeToParsingResult(stringAssignation)
+
+        val inputProvider = MainStringInputProvider(listOf("Diego").iterator())
+        val interpreterForInp = Interpreter(collector, inputProvider, mapOf())
+        val interpreterResult = interpreterForInp.interpret(sequenceOf(result, result2))
+        interpreterResult.toList()
+
+        assertEquals("Diego", interpreterForInp.getVariableMap()[Triple("a", "string", true)])
     }
 }
