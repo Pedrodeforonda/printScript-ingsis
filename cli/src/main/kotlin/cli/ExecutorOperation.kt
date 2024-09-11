@@ -20,8 +20,15 @@ class ExecutorOperation : CliktCommand(
         clearTerminal()
         val inputStream = sourceFile.inputStream()
         val runner = Runner()
-        val results: Sequence<InterpreterResult> = runner.run(inputStream, "1.0", MainStringInputProvider(iterator {
-        }), emptyMap())
+        val results: Sequence<InterpreterResult> = runner.run(
+            inputStream,
+            "1.0",
+            MainStringInputProvider(
+                iterator {
+                },
+            ),
+            emptyMap(),
+        )
 
         var currentPercentage = 0.0
         for (result in results) {

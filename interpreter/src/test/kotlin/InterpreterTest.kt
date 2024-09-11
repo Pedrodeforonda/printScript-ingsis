@@ -12,6 +12,7 @@ import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
 import nodes.Node
+import nodes.ReadEnv
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import utils.DeclarationKeyWord
@@ -408,10 +409,11 @@ class InterpreterTest {
         for (res in resultInterpreter) {
             if (res.hasException()) {
                 errorList.add(res.getException())
+                println(res.getException().message)
             }
         }
 
-        assertTrue { errorList.size > 0 }
+        assertTrue { errorList.size == 1 }
 
         val error = errorList[0] as InterpreterException
         assertEquals("Variable name is not mutable", error.message)
@@ -466,5 +468,73 @@ class InterpreterTest {
         interpreterResult.toList()
 
         assertEquals("false", outContent.toString().replace(System.lineSeparator(), ""))
+    }
+
+    @Test
+    fun testReadEnv() {
+        val stringAssignation = Assignation(
+            Declaration("env", "string", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("a", Position(0, 0)),
+            Position(0, 0),
+        )
+        val numberAssignation = Assignation(
+            Declaration("env2", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("b", Position(0, 0)),
+            Position(0, 0),
+        )
+        val booleanAssignation = Assignation(
+            Declaration("env3", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("c", Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(stringAssignation)
+        val result2 = nodeToParsingResult(numberAssignation)
+        val result3 = nodeToParsingResult(booleanAssignation)
+
+        val envVariables = mapOf("a" to "Diego", "b" to "10.0", "c" to "true")
+        val interpreterForEnv = Interpreter(collector, MainStringInputProvider(iterator { }), envVariables)
+        val interpreterResult = interpreterForEnv.interpret(sequenceOf(result, result2, result3))
+        interpreterResult.toList()
+
+        assertEquals("Diego", interpreterForEnv.getVariableMap()[Triple("env", "string", true)])
+        assertEquals(10.0, interpreterForEnv.getVariableMap()[Triple("env2", "number", true)])
+        assertEquals(true, interpreterForEnv.getVariableMap()[Triple("env3", "boolean", true)])
+    }
+
+    @Test
+    fun testFallingReadEnv() {
+        val numberAssignation = Assignation(
+            Declaration("env", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("b", Position(0, 0)),
+            Position(0, 0),
+        )
+        val booleanAssignation = Assignation(
+            Declaration("env2", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
+            ReadEnv("c", Position(0, 0)),
+            Position(0, 0),
+        )
+
+        val result = nodeToParsingResult(numberAssignation)
+        val result2 = nodeToParsingResult(booleanAssignation)
+
+        val envVariables = mapOf("b" to "p1", "c" to "truee")
+        val interpreterForEnv = Interpreter(collector, MainStringInputProvider(iterator { }), envVariables)
+        val interpreterResult = interpreterForEnv.interpret(sequenceOf(result, result2))
+        val errorList = ArrayList<Exception>()
+
+        for (res in interpreterResult) {
+            if (res.hasException()) {
+                errorList.add(res.getException())
+                println(res.getException().message)
+            }
+        }
+
+        assertTrue { errorList.size == 2 }
+
+        val error = errorList[0] as InterpreterException
+        assertEquals("Invalid number format", error.message)
+        val error2 = errorList[1] as InterpreterException
+        assertEquals("Invalid boolean format", error2.message)
     }
 }
