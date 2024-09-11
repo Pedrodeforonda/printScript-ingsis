@@ -1,4 +1,5 @@
 import lexer.Lexer
+import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
@@ -71,6 +72,28 @@ class TestFormatter {
         outputWriter.close()
         val resultingFile = File(outputPath)
         val expectedFile = File("src/test/resources/expected2.txt")
+        assert(resultingFile.readText() == expectedFile.readText())
+    }
+
+    @Test
+    fun testIfIndentation() {
+        val inputPath: String = "src/test/resources/input2.txt"
+        val outputPath = "src/test/resources/output.txt"
+        val outputWriter: BufferedWriter = File(outputPath).bufferedWriter()
+        val formatter = MainFormatter()
+        val configLoader = ConfigLoader()
+        val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
+            File("src/test/resources/rulesIfBracing.json").inputStream(),
+        )
+        val lexer = LexerFactory().createLexer(File(inputPath).inputStream(), "1.1", percentageCollector)
+        val formattedText = formatter.formatCode(
+            lexer.tokenize(),
+            standardConfig,
+            outputWriter,
+        )
+        outputWriter.close()
+        val resultingFile = File(outputPath)
+        val expectedFile = File("src/test/resources/expected3.txt")
         assert(resultingFile.readText() == expectedFile.readText())
     }
 }
