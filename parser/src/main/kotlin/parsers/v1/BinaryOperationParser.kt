@@ -1,5 +1,6 @@
-package parsers
+package parsers.v1
 
+import main.Infix
 import main.Parser
 import main.Position
 import main.Token

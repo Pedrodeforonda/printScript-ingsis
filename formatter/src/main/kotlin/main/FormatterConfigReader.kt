@@ -14,6 +14,9 @@ open class FormatterConfigReader(
     @JsonProperty("mandatory-line-break-after-statement") val newLineAfterSemiColon: Boolean = false,
     @JsonProperty("mandatory-single-space-separation") val enforceSpacingBetweenTokens: Boolean = false,
     @JsonProperty("mandatory-space-surrounding-operations")val enforceSpaceSurroundingOperators: Boolean = false,
+    @JsonProperty("if-brace-below-line") val ifBraceBelowLine: Boolean = false,
+    @JsonProperty("if-brace-same-line") val ifBraceSameLine: Boolean = !ifBraceBelowLine,
+    @JsonProperty("indent-inside-braces") val indentInsideBraces: Int = 2,
 )
 
 class ConfigLoader {

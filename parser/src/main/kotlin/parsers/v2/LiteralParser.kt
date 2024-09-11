@@ -1,13 +1,14 @@
-package parsers
+package parsers.v2
 
 import main.ParseException
 import main.Parser
+import main.Prefix
 import main.Token
 import main.TokenType
 import nodes.Literal
 import nodes.Node
 
-class LiteralParser2 : Prefix {
+class LiteralParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         parser.consume()
 

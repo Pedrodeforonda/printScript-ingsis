@@ -1,0 +1,135 @@
+@startuml
+
+<style>
+  rectangle {
+    BackgroundColor PaleGreen
+    FontColor Black
+    BorderColor DarkGreen
+    FontSize 14
+  }
+
+  interface {
+    BackgroundColor LightBlue
+    FontColor Black
+    BorderColor Navy
+    FontSize 14
+  }
+
+  enum {
+    BackgroundColor Wheat
+    FontColor Black
+    BorderColor Chocolate
+    FontSize 14
+  }
+
+  package {
+    BorderColor Black
+    BackgroundColor White
+    FontColor Black
+    FontSize 12
+    FontStyle Bold
+  }
+
+  .arrow {
+    LineColor Gray
+    FontColor Black
+    LineThickness 2
+  }
+
+  skinparam {
+    BackgroundColor Snow
+    FontName "Roboto"
+    FontSize 14
+    FontStyle Plain
+  }
+</style>
+
+' Reorganize packages for clarity
+
+package "CLI" {
+    class "CLIApp" as CLI
+}
+
+package "Runner" {
+    class "Runner" as RUN
+}
+
+package "Interpreter" {
+    class "Interpreter" as INTERP
+}
+
+package "Formatter" {
+    class "Formatter" as FORM
+    package "formatters" {
+        interface "FormatterStrategy" as FSTR
+    }
+}
+
+package "Linter" {
+    class "Linter" as LINT
+    package "rules" {
+        interface "LinterRule" as LRULE
+    }
+    package "identifierFormatStrategies" {
+        interface "IdentifierFormatStrategy" as IFS
+    }
+}
+
+package "Token" {
+    class "Token" as TOK
+    enum "TokenType" as TYP
+}
+
+package "Lexer" {
+    class "Lexer" as LEX
+    package "tokenManagers" {
+        interface "TokenStrategy" as TSTR
+    }
+}
+
+package "Parser" {
+    class "Parser" as PARS
+    enum "Precedence" as PREC
+    package "v1" {
+        class "V1Parser" as P1
+    }
+    package "v2" {
+        class "V2Parser" as P2
+    }
+}
+
+package "AST" {
+    package "nodes" {
+        class "Node" as NODE
+    }
+    package "utils" {
+        interface "ExpressionVisitor" as EVIS
+    }
+}
+
+' Relationships '
+CLI --> RUN
+RUN ---> TOK
+RUN -down-> LEX
+RUN -down-> PARS
+RUN -down-> INTERP
+CLI ---> FORM
+CLI --> LINT
+CLI --> LEX
+CLI --> PARS
+CLI --> INTERP
+CLI --> TOK
+CLI ----> NODE
+PARS -down-> TOK
+PARS -down-> NODE
+LEX -down-> TOK
+INTERP -down-> TOK
+INTERP -down-> NODE
+FORM -down-> TOK
+FORM -down-> LEX
+LINT -down-> TOK
+LINT -down-> NODE
+LINT -down-> LEX
+LINT -down-> PARS
+
+@enduml
