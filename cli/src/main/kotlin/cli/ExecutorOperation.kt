@@ -25,6 +25,7 @@ class ExecutorOperation : CliktCommand(
             InteractiveInputProvider(),
             emptyMap(),
         )
+        clearTerminal()
 
         var currentPercentage = 0.0
         for (result in results) {
@@ -54,12 +55,22 @@ class ExecutorOperation : CliktCommand(
             println(output.toString())
         }
 
+
+
         // Print final percentage in green and clear everything below it
         print("\u001b[32m") // Set text color to green
         println("percentage: 100.00%")
         print("\u001b[0m") // Reset text color to default
         clearBelow()
     }
+
+
+    private fun clearTerminal() {
+        print("\u001b[H\u001b[2J")
+        print("\u001b[3J")
+        System.out.flush()
+    }
+
 
     private fun clearBelow() {
         print("\u001b[J")

@@ -225,6 +225,7 @@ class EvalVisitor(
 
         println(message)
         val input = inputValues.input(message)
+        println(input)
         printlnCollector.addPrint(input)
 
         return ReadResult(input)
