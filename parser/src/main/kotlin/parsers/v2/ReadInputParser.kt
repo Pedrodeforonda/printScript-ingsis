@@ -51,6 +51,7 @@ class ReadInputParser : Prefix {
                     " Expected right parenthesis",
             )
         }
+        parser.consume()
 
         if (type == "Literal") {
             return ReadInput(message as nodes.Literal, token.getPosition())

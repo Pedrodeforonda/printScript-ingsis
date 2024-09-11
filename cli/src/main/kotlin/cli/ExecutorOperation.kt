@@ -3,9 +3,9 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import org.example.main.Runner
+import main.Runner
+import utils.InteractiveInputProvider
 import utils.InterpreterResult
-import utils.MainStringInputProvider
 import java.io.File
 import kotlin.math.round
 
@@ -17,11 +17,14 @@ class ExecutorOperation : CliktCommand(
         .file(mustExist = true)
 
     override fun run() {
-        clearTerminal()
         val inputStream = sourceFile.inputStream()
         val runner = Runner()
-        val results: Sequence<InterpreterResult> = runner.run(inputStream, "1.0", MainStringInputProvider(iterator {
-        }), emptyMap())
+        val results: Sequence<InterpreterResult> = runner.run(
+            inputStream,
+            "1.1",
+            InteractiveInputProvider(),
+            emptyMap(),
+        )
 
         var currentPercentage = 0.0
         for (result in results) {
@@ -42,7 +45,7 @@ class ExecutorOperation : CliktCommand(
                     print(percentageText)
                     print("\u001b[0m") // Reset text color to default
                 } else {
-                    val padding = " ".repeat(80 - output.length - percentageText.length - arrow.length)
+                    val padding = " ".repeat(20)
                     output.append(padding)
                     output.append("\u001b[32m") // Set text color to green
                     output.append(arrow)
@@ -58,12 +61,6 @@ class ExecutorOperation : CliktCommand(
         println("percentage: 100.00%")
         print("\u001b[0m") // Reset text color to default
         clearBelow()
-    }
-
-    private fun clearTerminal() {
-        print("\u001b[H\u001b[2J")
-        print("\u001b[3J")
-        System.out.flush()
     }
 
     private fun clearBelow() {
