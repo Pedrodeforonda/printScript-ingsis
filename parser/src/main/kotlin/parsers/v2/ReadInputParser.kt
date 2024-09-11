@@ -1,7 +1,8 @@
-package parsers
+package parsers.v2
 
 import main.ParseException
 import main.Parser
+import main.Prefix
 import main.Token
 import main.TokenType
 import nodes.Node
@@ -50,6 +51,7 @@ class ReadInputParser : Prefix {
                     " Expected right parenthesis",
             )
         }
+        parser.consume()
 
         if (type == "Literal") {
             return ReadInput(message as nodes.Literal, token.getPosition())

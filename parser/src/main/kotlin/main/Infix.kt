@@ -1,7 +1,5 @@
-package parsers
+package main
 
-import main.Parser
-import main.Token
 import nodes.Node
 
 interface Infix {

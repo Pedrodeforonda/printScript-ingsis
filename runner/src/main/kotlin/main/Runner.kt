@@ -1,8 +1,7 @@
-package org.example.main
+package main
 
 import interpreter.Interpreter
 import lexer.LexerFactory
-import main.ParserFactory
 import utils.InterpreterResult
 import utils.PercentageCollector
 import utils.StringInputProvider

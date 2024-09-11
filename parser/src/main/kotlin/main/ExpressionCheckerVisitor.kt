@@ -30,7 +30,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 conditionResult.getResultType(),
             )
         }
-        if (conditionResult.getResultType() != "boolean") {
+        if (conditionResult.getResultType() != "boolean" && conditionResult.getResultType() != "Identifier") {
             return CheckAstResult(
                 false,
                 "Invalid type: expected boolean on condition, but got ${conditionResult.getResultType()}",
@@ -123,7 +123,7 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 valueResult.getResultType(),
             )
         }
-        if (valueResult.getResultType() != type) {
+        if (valueResult.getResultType() != type && valueResult.getResultType() != "ReadInput") {
             return CheckAstResult(
                 false,
                 "Invalid type: expected $type on variable $name," +
@@ -149,9 +149,6 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
 
     override fun visitIdentifier(expression: Identifier): CheckAstResult {
         val variableName = expression.getName()
-        if (!variableTypeMap.containsKey(variableName)) {
-            return CheckAstResult(false, "Variable $variableName is not declared", "Identifier")
-        }
         return CheckAstResult(true, "", "Identifier")
     }
 

@@ -131,7 +131,8 @@ class LinterTest {
         for (error in errors) {
             println(error.getMessage())
         }
-        assertTrue(errors.size == 4)
+
+        assertTrue(errors.size == 5)
     }
 
     /*@Test

@@ -104,21 +104,25 @@ class EvalVisitor(
                         left.toDouble() + right.toDouble()
                     } else left.toInt() + right.toInt(),
                 )
+
                 TokenType.MINUS -> LiteralResult(
                     if (left is Double || right is Double) {
                         left.toDouble() - right.toDouble()
                     } else left.toInt() - right.toInt(),
                 )
+
                 TokenType.ASTERISK -> LiteralResult(
                     if (left is Double || right is Double) {
                         left.toDouble() * right.toDouble()
                     } else left.toInt() * right.toInt(),
                 )
+
                 TokenType.SLASH -> LiteralResult(
                     if (left is Double || right is Double) {
                         left.toDouble() / right.toDouble()
                     } else left.toInt() / right.toInt(),
                 )
+
                 else -> throw InterpreterException("Invalid operator")
             }
         }
@@ -153,7 +157,12 @@ class EvalVisitor(
                 return SuccessResult("variable assigned")
             }
             if (type == "boolean") {
-                variableMap[Triple(name, type, true)] = castToBoolean(right.value)
+                variableMap[Triple(name, type, true)] =
+                    when (right.value) {
+                        "true" -> true
+                        "false" -> false
+                        else -> throw InterpreterException("Invalid boolean format")
+                    }
                 return SuccessResult("variable assigned")
             }
             variableMap[Triple(name, type, true)] = right.value
@@ -182,17 +191,17 @@ class EvalVisitor(
             }
             val result = arg[0].accept(this)
             if (result is IdentifierResult) {
+                println(result.value.toString())
                 printlnCollector.addPrint(result.value.toString())
-                println(result.value)
                 return SuccessResult("Printed")
             }
             if (result is ReadResult) {
+                println( (result as ReadResult).value)
                 printlnCollector.addPrint(result.value)
-                println(result.value)
                 return SuccessResult("Printed")
             }
+            println( (result as LiteralResult).value.toString())
             printlnCollector.addPrint((result as LiteralResult).value.toString())
-            println(result.value)
             return SuccessResult("Printed")
         }
         throw InterpreterException("Invalid function")
@@ -208,16 +217,15 @@ class EvalVisitor(
     }
 
     override fun visitReadInput(expression: ReadInput): Result {
-        val arg = expression.getArgument().accept(this)
-        val input = inputValues.input()
-
-        if (arg is IdentifierResult) {
-            printlnCollector.addPrint(arg.value as String + " " + input)
-            println(arg.value as String + " " + input)
-        } else {
-            printlnCollector.addPrint((arg as LiteralResult).value as String + " " + input)
-            println(arg.value as String + " " + input)
+        val message = when (val arg = expression.getArgument().accept(this)) {
+            is IdentifierResult -> arg.value as String
+            is LiteralResult -> arg.value as String
+            else -> throw InterpreterException("Invalid argument")
         }
+
+        println(message)
+        val input = inputValues.input(message)
+        printlnCollector.addPrint(input)
 
         return ReadResult(input)
     }
