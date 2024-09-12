@@ -1,4 +1,4 @@
-let a: string = readInput(1);
+let a: string = readInput("1");
 let b_b: number = readInput(1 * 1);
 let c: number = readInput("mensaje" + ": ");
 let d: number = readInput("mensaje " + a);

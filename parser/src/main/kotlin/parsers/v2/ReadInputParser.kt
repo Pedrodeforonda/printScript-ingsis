@@ -41,6 +41,9 @@ class ReadInputParser : Prefix {
             is nodes.Identifier -> {
                 type = "Identifier"
             }
+            is nodes.BinaryNode -> {
+                type = "BinaryNode"
+            }
 
             is nodes.BinaryNode -> {
                 type = "BinaryNode"
@@ -63,7 +66,7 @@ class ReadInputParser : Prefix {
             )
         }
         parser.consume()
-
+        
         return when (type) {
             "Literal" -> ReadInput(message as Literal, token.getPosition())
             "Identifier" -> ReadInput(message as Identifier, token.getPosition())

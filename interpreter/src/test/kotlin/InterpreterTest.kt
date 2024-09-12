@@ -53,7 +53,7 @@ class InterpreterTest {
         val interpreterResult = interpreter.interpret(sequenceOf(result))
         interpreterResult.toList()
 
-        assertEquals("Pedro", interpreter.getVariableMap()[Triple("name", "string", true)])
+        assertEquals(Triple("Pedro", "string", true), interpreter.getVariableMap()["name"])
 
         val numberAssignation = Assignation(
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
@@ -65,7 +65,7 @@ class InterpreterTest {
         val interpreterResult2 = interpreter.interpret(sequenceOf(result2))
         interpreterResult2.toList()
 
-        assertEquals(10, interpreter.getVariableMap()[Triple("num", "number", true)])
+        assertEquals(Triple(10, "number", true), interpreter.getVariableMap()["num"])
     }
 
     @Test
@@ -83,7 +83,7 @@ class InterpreterTest {
         val result = nodeToParsingResult(stringAssignation)
         val result2 = nodeToParsingResult(callNode)
         val interpreterResult = interpreter.interpret(sequenceOf(result, result2))
-        val results = interpreterResult.toList()
+        interpreterResult.toList()
 
         assertEquals("Pedro", outContent.toString().replace(System.lineSeparator(), ""))
 
@@ -351,7 +351,7 @@ class InterpreterTest {
         val resultInterpreter: Sequence<InterpreterResult> = interpreter.interpret(sequenceOf(result, result2))
         resultInterpreter.toList()
 
-        assertEquals("el nene", interpreter.getVariableMap()[Triple("name", "string", true)])
+        assertEquals(Triple("el nene", "string", true), interpreter.getVariableMap()["name"])
     }
 
     @Test
@@ -498,9 +498,9 @@ class InterpreterTest {
         val interpreterResult = interpreterForEnv.interpret(sequenceOf(result, result2, result3))
         interpreterResult.toList()
 
-        assertEquals("Diego", interpreterForEnv.getVariableMap()[Triple("env", "string", true)])
-        assertEquals(10.0, interpreterForEnv.getVariableMap()[Triple("env2", "number", true)])
-        assertEquals(true, interpreterForEnv.getVariableMap()[Triple("env3", "boolean", true)])
+        assertEquals(Triple("Diego", "string", true), interpreterForEnv.getVariableMap()["env"])
+        assertEquals(Triple(10.0, "number", true), interpreterForEnv.getVariableMap()["env2"])
+        assertEquals(Triple(true, "boolean", true), interpreterForEnv.getVariableMap()["env3"])
     }
 
     @Test
@@ -560,6 +560,6 @@ class InterpreterTest {
         val interpreterResult = interpreterForInp.interpret(sequenceOf(result, result2))
         interpreterResult.toList()
 
-        assertEquals("Diego", interpreterForInp.getVariableMap()[Triple("a", "string", true)])
+        assertEquals(Triple("Diego", "string", true), interpreterForInp.getVariableMap()["a"])
     }
 }

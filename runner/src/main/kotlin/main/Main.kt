@@ -7,7 +7,7 @@ import java.io.File
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     val runner = Runner()
-    val file: File = File("runner/src/main/resources/println.txt")
+    val file = File("runner/src/main/resources/println.txt")
     val inputStream = file.inputStream()
     val version = "1.1"
     val inputs = File("runner/src/main/resources/inputs.txt").readLines().iterator()

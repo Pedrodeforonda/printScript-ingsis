@@ -24,7 +24,7 @@ import utils.StringInputProvider
 import utils.SuccessResult
 
 class EvalVisitor(
-    private var variableMap: MutableMap<Triple<String, String, Boolean>, Any>,
+    private var variableMap: MutableMap<String, Triple<Any, String, Boolean>>,
     private val printlnCollector: PrintlnCollector,
     private val inputValues: StringInputProvider,
     private val envVariables: Map<String, String>,
@@ -73,11 +73,11 @@ class EvalVisitor(
     override fun visitDeclaration(expression: Declaration): Result {
         val declarationKeyWord = expression.getDeclarationKeyWord()
         if (declarationKeyWord == DeclarationKeyWord.LET_KEYWORD) {
-            variableMap[Triple(expression.getName(), expression.getType(), true)] = Unit
-            return DeclarationResult(Triple(expression.getName(), expression.getType(), true))
+            variableMap[expression.getName()] = Triple(Unit, expression.getType(), true)
+            return DeclarationResult(expression.getName())
         } else {
-            variableMap[Triple(expression.getName(), expression.getType(), false)] = Unit
-            return DeclarationResult(Triple(expression.getName(), expression.getType(), false))
+            variableMap[expression.getName()] = Triple(Unit, expression.getType(), false)
+            return DeclarationResult(expression.getName())
         }
     }
 
@@ -144,9 +144,12 @@ class EvalVisitor(
         val left = expression.getDeclaration().accept(this) as Result
         val right = expression.getValue().accept(this) as Result
 
-        val (name, type, isMutable) = if (left is DeclarationResult) {
-            left.variable
-        } else (left as IdentifierResult).variable
+        val name = if (left is DeclarationResult) {
+            left.name
+        } else (left as IdentifierResult).name
+
+        val type = variableMap[name]!!.second
+        val isMutable = variableMap[name]!!.third
 
         if (left !is DeclarationResult && !isMutable) {
             throw InterpreterException("Variable $name is not mutable")
@@ -154,19 +157,19 @@ class EvalVisitor(
 
         if (right is ReadResult) {
             if (type == "number") {
-                variableMap[Triple(name, type, isMutable)] = castToNumber(right.value)
+                variableMap[name] = Triple(castToNumber(right.value), type, isMutable)
                 return SuccessResult("variable assigned")
             }
             if (type == "boolean") {
-                variableMap[Triple(name, type, isMutable)] =
+                variableMap[name] =
                     when (right.value) {
-                        "true" -> true
-                        "false" -> false
+                        "true" -> Triple(true, type, isMutable)
+                        "false" -> Triple(false, type, isMutable)
                         else -> throw InterpreterException("Invalid boolean format")
                     }
                 return SuccessResult("variable assigned")
             }
-            variableMap[Triple(name, type, isMutable)] = right.value
+            variableMap[name] = Triple(right.value, type, isMutable)
             return SuccessResult("variable assigned")
         }
 
@@ -174,7 +177,7 @@ class EvalVisitor(
             (type == "string" && (right as LiteralResult).value is String) ||
             (type == "boolean" && (right as LiteralResult).value is Boolean)
         ) {
-            variableMap[Triple(name, type, isMutable)] = right.value
+            variableMap[name] = Triple(right.value, type, isMutable)
             return SuccessResult("variable assigned")
         }
 
@@ -209,22 +212,25 @@ class EvalVisitor(
     }
 
     override fun visitIdentifier(expression: Identifier): Result {
-        for ((key, value) in variableMap) { // key = Triple(name, type, isMutable)
-            if (key.first == expression.getName()) {
-                return IdentifierResult(key, value)
+        for ((key, value) in variableMap) {
+            if (key == expression.getName()) {
+                return IdentifierResult(key, value.first)
             }
         }
         throw InterpreterException("Variable not found")
     }
 
     override fun visitReadInput(expression: ReadInput): Result {
-        val message = when (val arg = expression.getArgument().accept(this)) {
-            is IdentifierResult -> arg.value as String
-            is LiteralResult -> arg.value as String
-            else -> throw InterpreterException("Invalid argument")
+        val arg = expression.getArgument().accept(this)
+        val message = if (arg is IdentifierResult && arg.value is String) {
+            arg.value as String
+        } else if (arg is LiteralResult && arg.value is String) {
+            arg.value as String
+        } else {
+            throw InterpreterException("ReadInput argument must be a string")
         }
 
-        if (canPrint) println(message)
+        println(message)
         val input = inputValues.input(message)
         if (canPrint) println(input)
         printlnCollector.addPrint(message)
