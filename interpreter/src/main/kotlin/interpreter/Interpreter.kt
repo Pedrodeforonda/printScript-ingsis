@@ -21,6 +21,7 @@ class Interpreter(
         val evalVisitor = EvalVisitor(variableMap, printlnCollector, inputValues, envVariables, canPrint)
         while (iterator.hasNext()) {
             val exp = iterator.next()
+            // check interpreter errors
             if (!exp.hasError()) {
                 try {
                     exp.getAst().accept(evalVisitor)
@@ -33,6 +34,7 @@ class Interpreter(
                     yield(InterpreterResult(it, null, percentageCollector.getPercentage()))
                 }
                 printlnCollector.clearPrints()
+                // check parser errors
             } else if (exp.hasError()) {
                 yield(InterpreterResult(null, exp.getError(), percentageCollector.getPercentage()))
             } else {

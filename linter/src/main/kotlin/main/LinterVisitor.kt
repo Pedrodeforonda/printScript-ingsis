@@ -17,11 +17,30 @@ import utils.LinterResult
 
 class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
     override fun visitReadEnv(expression: ReadEnv): LinterResult {
-        TODO("Not yet implemented")
+        return LinterResult(null, false)
     }
 
     override fun visitIf(expression: IfNode): LinterResult {
-        TODO("Not yet implemented")
+        val conditionResult = expression.getCondition().accept(this) as LinterResult
+        val thenBlockResult = expression.getThenBlock()?.map { it.accept(this) as LinterResult }
+        val elseBlockResult = expression.getElseBlock()?.map { it.accept(this) as LinterResult }
+        val errorMessages = mutableListOf<String>()
+
+        if (conditionResult.hasError()) {
+            errorMessages.add(conditionResult.getMessage())
+        }
+        if (thenBlockResult != null && thenBlockResult.any { it.hasError() }) {
+            errorMessages.addAll(thenBlockResult.filter { it.hasError() }.map { it.getMessage() })
+        }
+        if (elseBlockResult != null && elseBlockResult.any { it.hasError() }) {
+            errorMessages.addAll(elseBlockResult.filter { it.hasError() }.map { it.getMessage() })
+        }
+
+        return if (errorMessages.isNotEmpty()) {
+            LinterResult(errorMessages.joinToString("\n"), true)
+        } else {
+            LinterResult(null, false)
+        }
     }
 
     override fun visitDeclaration(expression: Declaration): LinterResult {
