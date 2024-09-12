@@ -28,6 +28,7 @@ class EvalVisitor(
     private val printlnCollector: PrintlnCollector,
     private val inputValues: StringInputProvider,
     private val envVariables: Map<String, String>,
+    private val canPrint: Boolean = true,
 ) : ExpressionVisitor {
     override fun visitReadEnv(expression: ReadEnv): Result {
         val name = expression.getName()
@@ -191,16 +192,16 @@ class EvalVisitor(
             }
             val result = arg[0].accept(this)
             if (result is IdentifierResult) {
-                println(result.value.toString())
+                if (canPrint) println(result.value.toString())
                 printlnCollector.addPrint(result.value.toString())
                 return SuccessResult("Printed")
             }
             if (result is ReadResult) {
-                println((result as ReadResult).value)
+                if (canPrint) println((result as ReadResult).value)
                 printlnCollector.addPrint(result.value)
                 return SuccessResult("Printed")
             }
-            println((result as LiteralResult).value.toString())
+            if (canPrint) println((result as LiteralResult).value.toString())
             printlnCollector.addPrint((result as LiteralResult).value.toString())
             return SuccessResult("Printed")
         }
@@ -223,9 +224,9 @@ class EvalVisitor(
             else -> throw InterpreterException("Invalid argument")
         }
 
-        println(message)
+        if (canPrint) println(message)
         val input = inputValues.input(message)
-        println(input)
+        if (canPrint) println(input)
         printlnCollector.addPrint(message)
 
         return ReadResult(input)

@@ -10,6 +10,7 @@ class Interpreter(
     private val percentageCollector: PercentageCollector,
     private val inputValues: StringInputProvider,
     private val envVariables: Map<String, String>,
+    private val canPrint: Boolean = true,
 ) {
 
     private var variableMap = mutableMapOf<Triple<String, String, Boolean>, Any>()
@@ -17,7 +18,7 @@ class Interpreter(
 
     fun interpret(astNodes: Sequence<ParsingResult>): Sequence<InterpreterResult> = sequence {
         val iterator = astNodes.iterator()
-        val evalVisitor = EvalVisitor(variableMap, printlnCollector, inputValues, envVariables)
+        val evalVisitor = EvalVisitor(variableMap, printlnCollector, inputValues, envVariables, canPrint)
         while (iterator.hasNext()) {
             val exp = iterator.next()
             if (!exp.hasError()) {

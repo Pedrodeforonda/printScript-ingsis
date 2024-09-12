@@ -31,6 +31,7 @@ class ReadEnvParser : Prefix {
                     " Expected right parenthesis",
             )
         }
+        parser.consume()
 
         return nodes.ReadEnv(name, token.getPosition())
     }

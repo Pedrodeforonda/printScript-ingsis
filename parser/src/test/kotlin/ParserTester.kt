@@ -450,6 +450,51 @@ public class ParserTester {
     }
 
     @Test
+    fun testIfFalse() {
+        val tokens = listOf(
+            Token("if", TokenType.IF_KEYWORD, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 3)),
+            Token("false", TokenType.BOOLEAN_LITERAL, Position(1, 4)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 8)),
+            Token("{", TokenType.LEFT_BRACE, Position(1, 10)),
+            Token("let", TokenType.LET_KEYWORD, Position(2, 2)),
+            Token("a", TokenType.IDENTIFIER, Position(2, 6)),
+            Token(":", TokenType.TYPE_ASSIGNATION, Position(2, 7)),
+            Token("number", TokenType.NUMBER_TYPE, Position(2, 9)),
+            Token("=", TokenType.ASSIGNATION, Position(2, 15)),
+            Token("1", TokenType.NUMBER_LITERAL, Position(2, 17)),
+            Token(";", TokenType.SEMICOLON, Position(2, 18)),
+            Token("}", TokenType.RIGHT_BRACE, Position(3, 1)),
+        )
+
+        val parser = createParser2(tokens)
+
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+            if (results.hasError()) println(results.getError())
+        }
+
+        val expected = listOf(
+            IfNode(
+                Literal(false, Position(1, 4), TokenType.BOOLEAN_LITERAL),
+                listOf(
+                    Assignation(
+                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
+                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
+                        Position(2, 17),
+                    ),
+                ),
+                listOf(),
+                Position(1, 1),
+            ),
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun testIfElse() {
         val tokens = listOf(
             Token("if", TokenType.IF_KEYWORD, Position(1, 1)),
@@ -559,28 +604,6 @@ public class ParserTester {
         }
 
         assertTrue { errors.size > 0 }
-
-        val expected = listOf(
-            IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
-                    ),
-                ),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
-                    ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
-                ),
-                Position(1, 1),
-            ),
-        )
     }
 
     @Test
@@ -626,28 +649,6 @@ public class ParserTester {
         }
 
         assertTrue { errors.size > 0 }
-
-        val expected = listOf(
-            IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
-                    ),
-                ),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
-                    ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
-                ),
-                Position(1, 1),
-            ),
-        )
     }
 
     @Test
@@ -693,28 +694,6 @@ public class ParserTester {
         }
 
         assertTrue { errors.size > 0 }
-
-        val expected = listOf(
-            IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
-                    ),
-                ),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
-                    ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
-                ),
-                Position(1, 1),
-            ),
-        )
     }
 
     @Test
@@ -760,28 +739,6 @@ public class ParserTester {
         }
 
         assertTrue { errors.size > 0 }
-
-        val expected = listOf(
-            IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
-                    ),
-                ),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
-                    ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
-                ),
-                Position(1, 1),
-            ),
-        )
     }
 
     @Test
@@ -827,28 +784,36 @@ public class ParserTester {
         }
 
         assertTrue { errors.size > 0 }
+    }
 
-        val expected = listOf(
-            IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
-                    ),
-                ),
-                listOf(
-                    Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
-                    ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
-                ),
-                Position(1, 1),
-            ),
+    @Test
+    fun testIfNoSemiColon() {
+        val tokens = listOf(
+            Token("if", TokenType.IF_KEYWORD, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 3)),
+            Token("false", TokenType.BOOLEAN_LITERAL, Position(1, 4)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 8)),
+            Token("{", TokenType.LEFT_BRACE, Position(1, 10)),
+            Token("let", TokenType.LET_KEYWORD, Position(2, 2)),
+            Token("a", TokenType.IDENTIFIER, Position(2, 6)),
+            Token(":", TokenType.TYPE_ASSIGNATION, Position(2, 7)),
+            Token("number", TokenType.NUMBER_TYPE, Position(2, 9)),
+            Token("=", TokenType.ASSIGNATION, Position(2, 15)),
+            Token("1", TokenType.NUMBER_LITERAL, Position(2, 17)),
+            Token("}", TokenType.RIGHT_BRACE, Position(3, 1)),
         )
+
+        val parser = createParser2(tokens)
+
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        val errors = ArrayList<Exception>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+            if (results.hasError()) errors.add(results.getError())
+        }
+
+        assertTrue { errors.size > 0 }
     }
 
     @Test
@@ -925,7 +890,7 @@ public class ParserTester {
             if (results.hasError()) errors.add(results.getError())
         }
 
-        val expected = listOf(
+        listOf(
             ReadInput(Literal("insert Your Name", Position(1, 12), TokenType.STRING_LITERAL), Position(1, 1)),
         )
 

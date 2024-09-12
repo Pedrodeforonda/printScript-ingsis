@@ -1,5 +1,3 @@
-const booleanValue: boolean = false;
-if(booleanValue) {
-    println("if statement is not working correctly");
-}
-println("outside of conditional");
+const name: string = readEnv("BEST_FOOTBALL_CLUB");
+println("What is the best football club?");
+println(name);

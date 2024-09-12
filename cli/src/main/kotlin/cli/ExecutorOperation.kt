@@ -24,6 +24,7 @@ class ExecutorOperation : CliktCommand(
             "1.1",
             InteractiveInputProvider(),
             emptyMap(),
+            false,
         )
         clearTerminal()
 
@@ -33,6 +34,9 @@ class ExecutorOperation : CliktCommand(
 
             if (result.hasException()) {
                 output.append(result.getException().message)
+            }
+            if (result.hasPrintln()) {
+                output.append(result.getPrintln())
             }
             val newPercentage = round(runner.getPercentage() * 100) / 100.0
             if (newPercentage - currentPercentage >= 5) {
@@ -44,7 +48,7 @@ class ExecutorOperation : CliktCommand(
                     print(percentageText)
                     print("\u001b[0m") // Reset text color to default
                 } else {
-                    val padding = " ".repeat(20)
+                    val padding = " ".repeat(80 - output.length - percentageText.length - arrow.length)
                     output.append(padding)
                     output.append("\u001b[32m") // Set text color to green
                     output.append(arrow)

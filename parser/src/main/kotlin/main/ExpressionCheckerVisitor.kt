@@ -95,6 +95,14 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 return CheckAstResult(false, "Binary operation not supported", "invalid")
             }
         }
+        if (leftResult.getResultType() == "Boolean" || rightResult.getResultType() == "Boolean") {
+            return CheckAstResult(
+                false,
+                "Binary operation not supported between booleans",
+                "invalid",
+            )
+        }
+
         if (leftResult.getResultType() == "string" || rightResult.getResultType() == "string") {
             return CheckAstResult(true, "", "string")
         }
@@ -123,7 +131,20 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 valueResult.getResultType(),
             )
         }
-        if (valueResult.getResultType() != type && valueResult.getResultType() != "ReadInput") {
+
+        when (valueResult.getResultType()) {
+            "Identifier" -> {
+                return CheckAstResult(true, "", valueResult.getResultType())
+            }
+            "ReadInput" -> {
+                return CheckAstResult(true, "", "ReadInput")
+            }
+            "ReadEnv" -> {
+                return CheckAstResult(true, "", "ReadEnv")
+            }
+        }
+
+        if (valueResult.getResultType() != type) {
             return CheckAstResult(
                 false,
                 "Invalid type: expected $type on variable $name," +
@@ -148,7 +169,6 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
     }
 
     override fun visitIdentifier(expression: Identifier): CheckAstResult {
-        val variableName = expression.getName()
         return CheckAstResult(true, "", "Identifier")
     }
 
@@ -163,10 +183,16 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
             is Identifier -> {
                 return CheckAstResult(true, "", "ReadInput")
             }
+            is BinaryNode -> {
+                val result = message.accept(this) as CheckAstResult
+                if (!result.isPass()) {
+                    return CheckAstResult(false, result.getMessage(), "ReadInput")
+                }
+                return CheckAstResult(true, "", "ReadInput")
+            }
             else -> {
                 return CheckAstResult(false, "Expected STRING_LITERAL", "ReadInput")
             }
         }
-        return CheckAstResult(false, "type not expected", "ReadInput")
     }
 }
