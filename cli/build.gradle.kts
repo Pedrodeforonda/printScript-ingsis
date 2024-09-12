@@ -42,6 +42,8 @@ tasks.withType<Jar> {
     dependsOn(":runner:jar")
     dependsOn(":interpreter:jar")
     dependsOn(":factory:jar")
+    dependsOn(":linter:jar")
+    dependsOn(":formatter:jar")
     manifest {
         attributes["Main-Class"] = "main.AppKt"
     }
