@@ -44,11 +44,6 @@ class ReadInputParser : Prefix {
             is nodes.BinaryNode -> {
                 type = "BinaryNode"
             }
-
-            is nodes.BinaryNode -> {
-                type = "BinaryNode"
-            }
-
             else -> {
                 throw ParseException(
                     "Syntax Error at ${parser.getCurrentToken().getPosition().getLine()}," +
@@ -66,7 +61,7 @@ class ReadInputParser : Prefix {
             )
         }
         parser.consume()
-        
+
         return when (type) {
             "Literal" -> ReadInput(message as Literal, token.getPosition())
             "Identifier" -> ReadInput(message as Identifier, token.getPosition())

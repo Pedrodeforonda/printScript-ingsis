@@ -1067,4 +1067,49 @@ public class ParserTester {
 
         assertTrue { errors.size > 0 }
     }
+
+    @Test
+    fun readInputBinaryOperation() {
+        val tokens = listOf(
+            Token("let", TokenType.LET_KEYWORD, Position(1, 1)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 5)),
+            Token(":", TokenType.TYPE_ASSIGNATION, Position(1, 6)),
+            Token("number", TokenType.NUMBER_TYPE, Position(1, 8)),
+            Token("=", TokenType.ASSIGNATION, Position(1, 16)),
+            Token("read_input", TokenType.READ_INPUT, Position(1, 18)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 29)),
+            Token("Escribe tu", TokenType.STRING_LITERAL, Position(1, 30)),
+            Token("+", TokenType.PLUS, Position(1, 31)),
+            Token("Nombre", TokenType.STRING_LITERAL, Position(1, 32)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 33)),
+            Token(";", TokenType.SEMICOLON, Position(1, 34)),
+        )
+
+        val expected = listOf(
+            Assignation(
+                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                ReadInput(
+                    BinaryNode(
+                        Literal("Escribe tu", Position(1, 30), TokenType.STRING_LITERAL),
+                        Token("+", TokenType.PLUS, Position(1, 31)),
+                        Literal("Nombre", Position(1, 32), TokenType.STRING_LITERAL),
+                        Position(1, 31),
+                    ),
+                    Position(1, 18),
+                ),
+                Position(1, 1),
+            ),
+        )
+
+        val parser = createParser2(tokens)
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        val errors = ArrayList<Exception>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+            if (results.hasError()) errors.add(results.getError())
+        }
+
+        assertEquals(expected, result)
+    }
 }
