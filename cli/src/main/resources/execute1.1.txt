@@ -1,0 +1,7 @@
+let a: string = 12 + " hola";
+let b: boolean = readInput("write a bool: ");
+if ( b ) {
+    println("Hello " + a);
+} else {
+    println(readEnv("var");
+}

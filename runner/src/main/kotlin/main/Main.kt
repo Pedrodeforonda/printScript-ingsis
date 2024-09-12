@@ -1,6 +1,5 @@
-package org.example.main
+package main
 
-import main.Runner
 import utils.MainStringInputProvider
 import java.io.File
 

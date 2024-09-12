@@ -1,3 +1,0 @@
-let a_B: string = "monos";
-let cD: string = "monitos";
-let ab_: string = "monous";

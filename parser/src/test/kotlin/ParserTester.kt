@@ -350,6 +350,33 @@ public class ParserTester {
     }
 
     @Test
+    fun testNoTrailingSemiColon() {
+        val tokens = listOf(
+            Token("println", TokenType.CALL_FUNC, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 8)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 10)),
+            Token("println", TokenType.CALL_FUNC, Position(1, 1)),
+            Token("(", TokenType.LEFT_PAREN, Position(1, 8)),
+            Token("a", TokenType.IDENTIFIER, Position(1, 9)),
+            Token(")", TokenType.RIGHT_PAREN, Position(1, 10)),
+            Token(";", TokenType.SEMICOLON, Position(1, 11)),
+
+        )
+
+        val parser = createParser1(tokens)
+        val parsingResults = parser.parseExpressions().toList()
+        val result = ArrayList<Node>()
+        val errors = ArrayList<Exception>()
+        for (results in parsingResults) {
+            if (!results.hasError()) result.add(results.getAst())
+            if (results.hasError()) errors.add(results.getError())
+        }
+
+        assertTrue { errors.size > 0 }
+    }
+
+    @Test
     fun testFunctionCallFail() {
         val tokens = listOf(
             Token("println", TokenType.CALL_FUNC, Position(1, 1)),

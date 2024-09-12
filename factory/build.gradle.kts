@@ -9,8 +9,9 @@ repositories {
 
 dependencies {
     implementation(project(":token"))
+    implementation(project(":ast"))
     implementation(project(":lexer"))
     implementation(project(":parser"))
-    implementation(project(":interpreter"))
-    implementation(project(":factory"))
+    implementation(project(":formatter"))
+    implementation(project(":linter"))
 }

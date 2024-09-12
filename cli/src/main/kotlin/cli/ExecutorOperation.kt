@@ -16,15 +16,20 @@ class ExecutorOperation : CliktCommand(
     private val sourceFile: File by argument(help = "Source file to process.")
         .file(mustExist = true)
 
+    private val envFile: File by argument(help = "Environment file to use.")
+        .file(mustExist = false)
+
+    private val version: String by argument(help = "Version of the language.")
+
     override fun run() {
         val inputStream = sourceFile.inputStream()
         val runner = Runner()
+        val envMap = fileToMap(envFile)
         val results: Sequence<InterpreterResult> = runner.run(
             inputStream,
-            "1.1",
+            version,
             InteractiveInputProvider(),
-            emptyMap(),
-            false,
+            envMap,
         )
         clearTerminal()
 
@@ -58,11 +63,6 @@ class ExecutorOperation : CliktCommand(
             }
             println(output.toString())
         }
-
-        // Print final percentage in green and clear everything below it
-        print("\u001b[32m") // Set text color to green
-        println("percentage: 100.00%")
-        print("\u001b[0m") // Reset text color to default
         clearBelow()
     }
 
@@ -75,5 +75,12 @@ class ExecutorOperation : CliktCommand(
     private fun clearBelow() {
         print("\u001b[J")
         System.out.flush()
+    }
+
+    private fun fileToMap(file: File): Map<String, String> {
+        return file.readLines().associate {
+            val (key, value) = it.split("=")
+            key to value
+        }
     }
 }

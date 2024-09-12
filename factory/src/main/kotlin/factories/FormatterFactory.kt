@@ -1,6 +1,8 @@
-package main
+package factories
 
-import lexer.LexerFactory
+import main.ConfigLoader
+import main.FormatterConfigReader
+import main.MainFormatter
 import utils.PercentageCollector
 import java.io.InputStream
 import java.io.Writer

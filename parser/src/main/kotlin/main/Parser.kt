@@ -63,6 +63,21 @@ class Parser(private val tokens: Iterator<Token>) {
                     ) consume()
             }
             if ((
+                    currentToken.getType() != TokenType.SEMICOLON &&
+                        currentToken.getType() != TokenType.RIGHT_BRACE
+                    ) && hasNextToken()
+            ) {
+                yield(
+                    ParsingResult(
+                        null,
+                        ParseException(
+                            "Syntax Error At: " +
+                                "${currentToken.getPosition().getLine()}, ${currentToken.getPosition().getColumn()}",
+                        ),
+                    ),
+                )
+            }
+            if ((
                     currentToken.getType() == TokenType.SEMICOLON ||
                         currentToken.getType() == TokenType.RIGHT_BRACE
                     ) && hasNextToken()

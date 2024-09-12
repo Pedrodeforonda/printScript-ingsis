@@ -9,12 +9,11 @@ repositories {
 dependencies {
     implementation(project(":ast"))
     implementation(project(":token"))
-    implementation(project(":formatter"))
     implementation(project(":lexer"))
     implementation(project(":parser"))
-    implementation(project(":linter"))
     implementation(project(":runner"))
     implementation(project(":interpreter"))
+    implementation(project(":factory"))
     implementation("com.github.ajalt.clikt:clikt:4.4.0")
 }
 

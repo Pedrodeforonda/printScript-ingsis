@@ -10,7 +10,9 @@ class PrintlnRestrictionRule(private val insideResult: LinterResult) : LinterRul
     override fun lintCode(node: Node): LinterResult {
         val nodeInsidePrintln = (node as CallNode).getArguments().first()
         val nodeInsidePrintlnType: StringResult = nodeInsidePrintln.accept(GetStringVisitor()) as StringResult
-        if (nodeInsidePrintlnType.value != "Identifier" && nodeInsidePrintlnType.value != "Literal") {
+        if (nodeInsidePrintlnType.value != "Identifier" && nodeInsidePrintlnType.value != "Literal" &&
+            nodeInsidePrintlnType.value != "ReadInput" && nodeInsidePrintlnType.value != "ReadEnv"
+        ) {
             val errorMessage = "Invalid println in line ${node.getPos().getLine()}" +
                 " column ${node.getPos().getColumn()}"
             return checkErrors(errorMessage)

@@ -1,0 +1,8 @@
+{
+  "enforce-spacing-around-equals": true,
+  "enforce-spacing-after-colon-in-declaration": true,
+  "mandatory-space-surrounding-operations": true,
+  "mandatory-line-break-after-statement": true,
+  "line-breaks-after-println": 1,
+  "mandatory-single-space-separation": false
+}

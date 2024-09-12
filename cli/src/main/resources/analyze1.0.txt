@@ -2,4 +2,4 @@ let rama_mono: string = "monos";
 println(rama_mono);let rama_mono: string = "monitos";
 println(rama_mono);
 println(2);
-println("3");
+println("n" + "3");
