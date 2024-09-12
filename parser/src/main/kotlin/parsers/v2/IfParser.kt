@@ -79,9 +79,9 @@ class IfParser : Prefix {
             ifBody.add(parser.parseExpression())
             if (parser.getCurrentToken().getType() != TokenType.SEMICOLON) {
                 throw ParseException(
-                    "Expected SEMICOLON, got ${token.getType()} at line ${
-                        token.getPosition().getLine()
-                    }, column ${token.getPosition().getColumn()}",
+                    "Expected SEMICOLON, got ${parser.getCurrentToken().getType()} at line ${
+                        parser.getCurrentToken().getPosition().getLine()
+                    }, column ${parser.getCurrentToken().getPosition().getColumn()}",
                 )
             }
             val consumed = parser.consume()

@@ -2,7 +2,7 @@ const a: boolean = true
 const b: string = 1;
 if (a) {
   println(a);
-} else
-    println(b);
+} else {
+    println(b)
 }
 
