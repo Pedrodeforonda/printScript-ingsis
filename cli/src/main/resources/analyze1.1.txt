@@ -1,0 +1,5 @@
+let rama_mono: string = "monos";
+rama_mono = readInput("message");
+println(rama_mono);
+println(readInput("message"));
+println("n" + "3");

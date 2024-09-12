@@ -1,3 +1,0 @@
-let aB: string = "monos";
-let cd: string = "monitos";
-println(aB + cd);

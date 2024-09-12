@@ -1,5 +1,7 @@
-package lexer
+package factories
 
+import lexer.Lexer
+import lexer.TokenStrategies1
 import org.example.lexer.ClassicTokenStrategies
 import utils.PercentageCollector
 import java.io.InputStream

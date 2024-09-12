@@ -1,5 +1,5 @@
+import factories.LexerFactory
 import lexer.Lexer
-import lexer.LexerFactory
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter

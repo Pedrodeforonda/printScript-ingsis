@@ -22,6 +22,7 @@ class ParserFactory {
             }
             "1.1" -> {
                 createFirstVersionParser(parser)
+                parser.registerPrefix(TokenType.CONST_KEYWORD, parsers.v2.DeclarationParser())
                 parser.registerPrefix(TokenType.LET_KEYWORD, parsers.v2.DeclarationParser())
                 parser.registerPrefix(TokenType.IF_KEYWORD, IfParser())
                 parser.registerPrefix(TokenType.BOOLEAN_LITERAL, parsers.v2.LiteralParser())

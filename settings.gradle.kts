@@ -30,3 +30,5 @@ include(":linter")
 findProject(":linter")?.name = "linter"
 include(":cli")
 findProject(":cli")?.name = "cli"
+include("factories")
+include("factory")

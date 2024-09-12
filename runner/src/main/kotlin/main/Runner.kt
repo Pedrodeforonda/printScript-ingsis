@@ -1,7 +1,7 @@
 package main
 
+import factories.LexerFactory
 import interpreter.Interpreter
-import lexer.LexerFactory
 import utils.InterpreterResult
 import utils.PercentageCollector
 import utils.StringInputProvider

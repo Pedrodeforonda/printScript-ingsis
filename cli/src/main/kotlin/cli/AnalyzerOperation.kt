@@ -3,12 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import lexer.LexerFactory
-import main.ConfigParser
-import main.ParserFactory
-import main.Token
-import main.kotlin.main.Linter
-import utils.PercentageCollector
+import factories.LinterFactory
 import java.io.File
 
 class AnalyzerOperation : CliktCommand(
@@ -21,22 +16,17 @@ class AnalyzerOperation : CliktCommand(
     private val configFile: File by argument(help = "Config file to use.")
         .file(mustExist = true)
 
+    private val version: String by argument(help = "Version of the language.")
+
     override fun run() {
-        val src = sourceFile.inputStream()
-        val collector = PercentageCollector()
-        val config = ConfigParser.parseConfig(configFile.inputStream())
-        val lexer = LexerFactory().createLexer(src, "1.0", collector)
-        val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = ParserFactory().createParser("1.0", tokens.iterator())
-        val astNodes = parser.parseExpressions()
-        val errors = Linter().lint(astNodes, config)
+        val errors = LinterFactory().lintCode(sourceFile.inputStream(), version, configFile.inputStream())
         var acc = 0
         for (error in errors) {
             println(error.getMessage())
             acc++
         }
         if (acc == 0) {
-            println("No errors found.")
+            println("No linting errors found.")
         }
     }
 }

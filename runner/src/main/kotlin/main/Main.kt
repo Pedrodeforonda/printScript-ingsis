@@ -1,6 +1,5 @@
-package org.example.main
+package main
 
-import main.Runner
 import utils.MainStringInputProvider
 import java.io.File
 
@@ -10,7 +9,7 @@ fun main() {
     val runner = Runner()
     val file: File = File("runner/src/main/resources/println.txt")
     val inputStream = file.inputStream()
-    val version = "1.0"
+    val version = "1.1"
     val inputs = File("runner/src/main/resources/inputs.txt").readLines().iterator()
     val envFile = File("runner/src/main/resources/env.txt")
     runner.run(inputStream, version, MainStringInputProvider(inputs), fileToMap(envFile)).toList()

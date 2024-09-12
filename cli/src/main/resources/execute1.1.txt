@@ -3,5 +3,5 @@ let b: boolean = readInput("write a bool: ");
 if ( b ) {
     println("Hello " + a);
 } else {
-    println("Goodbye " + a);
+    println(readEnv("var");
 }

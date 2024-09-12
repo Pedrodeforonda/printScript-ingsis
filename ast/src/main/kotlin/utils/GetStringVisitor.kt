@@ -12,11 +12,11 @@ import nodes.ReadInput
 
 class GetStringVisitor : ExpressionVisitor {
     override fun visitReadEnv(expression: ReadEnv): StringResult {
-        TODO("Not yet implemented")
+        return StringResult("ReadEnv")
     }
 
     override fun visitIf(expression: IfNode): StringResult {
-        TODO("Not yet implemented")
+        return StringResult("IfNode")
     }
 
     override fun visitDeclaration(expression: Declaration): StringResult {

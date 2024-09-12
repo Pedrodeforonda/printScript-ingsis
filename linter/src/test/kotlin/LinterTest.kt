@@ -1,5 +1,4 @@
-
-import lexer.LexerFactory
+import factories.LexerFactory
 import main.ConfigParser
 import main.LinterConfig
 import main.Parser
@@ -15,15 +14,19 @@ import kotlin.io.path.Path
 
 class LinterTest {
 
-    val collector = PercentageCollector()
+    private val collector = PercentageCollector()
 
     @BeforeEach
     fun resetPercentageCollector() {
         collector.reset()
     }
 
-    fun createParser1(tokens: Sequence<Token>): Parser {
+    private fun createParser1(tokens: Sequence<Token>): Parser {
         return ParserFactory().createParser("1.0", tokens.iterator())
+    }
+
+    private fun createParser2(tokens: Sequence<Token>): Parser {
+        return ParserFactory().createParser("1.1", tokens.iterator())
     }
 
     @Test
@@ -135,27 +138,27 @@ class LinterTest {
         assertTrue(errors.size == 5)
     }
 
-    /*@Test
+    @Test
     fun testReadInputRestrictionRule() {
         val config = LinterConfig("", false, true)
 
-        val input = Files.newBufferedReader(Path("src/test/resources/linterReadInputRestrictionTest.txt"))
-        val lexer = Lexer(input)
-        val tokens: Sequence<Token> = lexer.tokenizeAll(lexer)
-        val parser = Parser(tokens.iterator())
+        val input = Files.newInputStream(Path("src/test/resources/linterReadInputRestrictionTest.txt"))
+        val lexer = LexerFactory().createLexer(input, "1.1", collector)
+        val tokens: Sequence<Token> = lexer.tokenize()
+        val parser = createParser2(tokens)
         val astNodes = parser.parseExpressions()
         val errors = Linter().lint(astNodes, config).toList()
 
         assertTrue(errors.isEmpty())
 
-        val input2 = Files.newBufferedReader(Path("src/test/resources/linterReadInputRestrictionTest2.txt"))
-        val lexer2 = Lexer(input2)
-        val tokens2: Sequence<Token> = lexer2.tokenizeAll(lexer2)
-        val parser2 = Parser(tokens2.iterator())
+        val input2 = Files.newInputStream(Path("src/test/resources/linterReadInputRestrictionTest2.txt"))
+        val lexer2 = LexerFactory().createLexer(input2, "1.1", collector)
+        val tokens2: Sequence<Token> = lexer2.tokenize()
+        val parser2 = createParser2(tokens2)
         val astNodes2 = parser2.parseExpressions()
         val errors2 = Linter().lint(astNodes2, config).toList()
 
         errors2.forEach { println(it.getMessage()) }
-        assertTrue(errors2.size == 7)
-    }*/
+        // assertTrue(errors2.size == 7)
+    }
 }

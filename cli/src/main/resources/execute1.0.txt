@@ -1,0 +1,3 @@
+let a: string = "monos";
+let b: number = 1;
+println(a + b);

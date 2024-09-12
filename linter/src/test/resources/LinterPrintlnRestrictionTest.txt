@@ -1,4 +1,0 @@
-let a: string = "monos";
-println(a);
-println(1);
-println("monitos");
