@@ -1,7 +1,10 @@
 let a: string = 12 + " hola";
-let b: boolean = readInput(1 + 1);
-if ( b ) {
+let b: string = readInput("Escribe tu Nombre: ");
+const c: boolean = true;
+if ( c ) {
     println("Hello " + a);
 } else {
     println(readEnv("var"));
 }
+
+println(b + "Es un puto");

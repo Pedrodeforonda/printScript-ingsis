@@ -212,10 +212,9 @@ class EvalVisitor(
     }
 
     override fun visitIdentifier(expression: Identifier): Result {
-        for ((key, value) in variableMap) {
-            if (key == expression.getName()) {
-                return IdentifierResult(key, value.first)
-            }
+        val name = expression.getName()
+        if (variableMap.containsKey(name)) {
+            return IdentifierResult(name, variableMap[name]!!.first)
         }
         throw InterpreterException("Variable not found")
     }
