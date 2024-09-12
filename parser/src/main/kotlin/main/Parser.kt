@@ -10,6 +10,7 @@ class Parser(private val tokens: Iterator<Token>) {
     private val infixParsers = mutableMapOf<TokenType, Infix>()
 
     private var currentToken: Token = tokens.next()
+    private var prevToken: Token = currentToken
 
     internal fun registerPrefix(tokenType: TokenType, parser: Prefix) {
         prefixParsers[tokenType] = parser
@@ -48,25 +49,13 @@ class Parser(private val tokens: Iterator<Token>) {
                     yield(ParsingResult(result, null))
                 } else {
                     yield(ParsingResult(null, ParseException(checkExpressions(result)[0].message!!)))
-                    while (
-                        currentToken.getType() != TokenType.SEMICOLON &&
-                        currentToken.getType() != TokenType.RIGHT_BRACE &&
-                        hasNextToken()
-                        ) consume()
+                    while (sentenceNotConsumed()) consume()
                 }
             } catch (e: ParseException) {
                 yield(ParsingResult(null, e))
-                while (
-                    currentToken.getType() != TokenType.SEMICOLON &&
-                    currentToken.getType() != TokenType.RIGHT_BRACE &&
-                    hasNextToken()
-                    ) consume()
+                while (sentenceNotConsumed()) consume()
             }
-            if ((
-                    currentToken.getType() != TokenType.SEMICOLON &&
-                        currentToken.getType() != TokenType.RIGHT_BRACE
-                    ) && hasNextToken()
-            ) {
+            if (hasNotClosingChar() && hasNextToken()) {
                 yield(
                     ParsingResult(
                         null,
@@ -77,15 +66,25 @@ class Parser(private val tokens: Iterator<Token>) {
                     ),
                 )
             }
-            if ((
-                    currentToken.getType() == TokenType.SEMICOLON ||
-                        currentToken.getType() == TokenType.RIGHT_BRACE
-                    ) && hasNextToken()
-            ) {
+            if (hasClosingChar() && hasNextToken()) {
                 consume()
             }
         }
     }
+
+    private fun hasClosingChar() = (
+        currentToken.getType() == TokenType.SEMICOLON ||
+            currentToken.getType() == TokenType.RIGHT_BRACE
+        )
+
+    private fun hasNotClosingChar() = (
+        currentToken.getType() != TokenType.SEMICOLON &&
+            currentToken.getType() != TokenType.RIGHT_BRACE
+        ) && prevToken.getType() != TokenType.RIGHT_BRACE
+
+    private fun sentenceNotConsumed() = currentToken.getType() != TokenType.SEMICOLON &&
+        currentToken.getType() != TokenType.RIGHT_BRACE &&
+        hasNextToken()
 
     fun hasNextToken(): Boolean = tokens.hasNext()
 
@@ -96,6 +95,7 @@ class Parser(private val tokens: Iterator<Token>) {
 
     fun consume(): Token {
         try {
+            prevToken = currentToken
             currentToken = tokens.next()
         } catch (e: NoSuchElementException) {
             throw ParseException("Unexpected end of input")

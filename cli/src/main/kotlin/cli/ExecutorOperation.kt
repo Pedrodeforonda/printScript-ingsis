@@ -32,59 +32,46 @@ class ExecutorOperation : CliktCommand(
             envMap,
             false,
         )
-        clearTerminal()
 
         var currentPercentage = 0.0
         for (result in results) {
             val output = StringBuilder()
 
             if (result.hasException()) {
-                output.append(result.getException().message)
+                output.append("\u001B[31m") // Set text color to red
+                output.append(result.getException().message + " Fix errors to execute")
+                output.append("\u001b[32m") // Set text color to green
+                output.append(" -> ")
+                output.append(runner.getPercentage().coerceAtMost(100.0).let { "%.2f".format(it) })
+                output.append("\u001B[0m") // Reset text color to default
+                println(output.toString())
+                break
             }
             if (result.hasPrintln()) {
-                output.append(result.getPrintln())
+                if (result.getPrintln().isNotEmpty()) {
+                    output.append(result.getPrintln().trim())
+                }
             }
             val newPercentage = round(runner.getPercentage() * 100) / 100.0
             if (newPercentage - currentPercentage >= 5) {
                 currentPercentage = newPercentage
                 val percentageText = "percentage: %.2f%%".format(currentPercentage)
                 val arrow = " -> "
-                if (output.isEmpty()) {
-                    print("\u001b[32m")
-                    print(percentageText)
-                    print("\u001b[0m") // Reset text color to default
+                if (!result.hasPrintln()) {
+                    output.append("\u001b[32m")
+                    output.append(percentageText)
+                    output.append("\u001b[0m") // Reset text color to default
                 } else {
-                    val n = 80 - output.length - percentageText.length - arrow.length
-                    if (n > 0) {
-                        val padding = " ".repeat(n)
-                        output.append(padding)
-                        output.append("\u001b[32m") // Set text color to green
-                        output.append(arrow)
-                        output.append(percentageText)
-                        output.append("\u001b[0m") // Reset text color to default
-                    } else {
-                        output.append(" ".repeat(20))
-                        output.append("\u001b[32m") // Set text color to green
-                        output.append(arrow)
-                        output.append(percentageText)
-                        output.append("\u001b[0m") // Reset text color to default
-                    }
+                    output.append("\u001b[32m") // Set text color to green
+                    output.append(arrow)
+                    output.append(percentageText)
+                    output.append("\u001b[0m") // Reset text color to default
                 }
             }
-            println(output.toString())
+            if (output.isNotEmpty()) {
+                println(output.toString())
+            }
         }
-        clearBelow()
-    }
-
-    private fun clearTerminal() {
-        print("\u001b[H\u001b[2J")
-        print("\u001b[3J")
-        System.out.flush()
-    }
-
-    private fun clearBelow() {
-        print("\u001b[J")
-        System.out.flush()
     }
 
     private fun fileToMap(file: File): Map<String, String> {

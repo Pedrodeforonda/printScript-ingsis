@@ -7,4 +7,43 @@ if ( c ) {
     println(readEnv("var"));
 }
 
-println(b + "Es un puto");
+println(b + " es un crack");
+let a: string = 12 + " hola";
+println("vamos sanlo");
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola"
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";
+let a: string = 12 + " hola";

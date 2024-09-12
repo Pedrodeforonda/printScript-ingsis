@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
 import factories.LinterFactory
+import utils.PercentageCollector
 import java.io.File
 
 class AnalyzerOperation : CliktCommand(
@@ -19,14 +20,29 @@ class AnalyzerOperation : CliktCommand(
     private val version: String by argument(help = "Version of the language.")
 
     override fun run() {
-        val errors = LinterFactory().lintCode(sourceFile.inputStream(), version, configFile.inputStream())
+        val collector = PercentageCollector()
+        val errors = LinterFactory().lintCode(sourceFile.inputStream(), version, configFile.inputStream(), collector)
         var acc = 0
+        var percentage = 0.0
+
         for (error in errors) {
-            println(error.getMessage())
+            val currentPercentage = collector.getPercentage().coerceAtMost(100.0)
+            val percentageString = currentPercentage.let { "%.2f".format(it) }
+            println("\u001B[31m${error.getMessage()}\u001B[0m \u001B[32m($percentageString%)\u001B[0m")
             acc++
+            if (currentPercentage - percentage > 10) {
+                percentage = currentPercentage
+            }
         }
+
         if (acc == 0) {
-            println("No linting errors found.")
+            println("\u001B[32mNo linting errors found.\u001B[0m")
         }
+
+        // Print the percentage of tokens processed in green color at the top
+        println(
+            "\u001B[32mProcessed ${collector.getPercentage().coerceAtMost(100.0)
+                .let { "%.2f".format(it) }}% of tokens\u001B[0m",
+        )
     }
 }

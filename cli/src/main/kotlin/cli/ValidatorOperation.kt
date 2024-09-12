@@ -25,15 +25,35 @@ class ValidatorOperation : CliktCommand(
         val parser = ParserFactory().createParser(version, tokens.iterator())
         val result = parser.parseExpressions().iterator()
         var acc = 0
+        var percentage = 0.0
         while (result.hasNext()) {
             val ast = result.next()
             if (ast.hasError()) {
-                println(ast.getError().message)
+                val currentPercentage = collector.getPercentage().coerceAtMost(100.0)
+                val percentageString = collector.getPercentage().coerceAtMost(100.0).let { "%.2f".format(it) }
+                println("\u001B[31m${ast.getError().message}\u001B[0m \u001B[32m($percentageString%)\u001B[0m")
                 acc++
+                if (currentPercentage - percentage > 10) {
+                    percentage = currentPercentage
+                }
+            } else {
+                val currentPercentage = collector.getPercentage().coerceAtMost(100.0)
+                val percentageString = collector.getPercentage().coerceAtMost(100.0).let { "%.2f".format(it) }
+                if (currentPercentage - percentage > 10) {
+                    println("\u001B[32m($percentageString%)\u001B[0m")
+                    percentage = currentPercentage
+                }
             }
         }
+
         if (acc == 0) {
-            println("No parsing errors found.")
+            println("\u001B[32mNo parsing errors found.\u001B[0m")
         }
+
+        // Print the percentage of tokens processed in green color at the top
+        println(
+            "\u001B[32mProcessed ${collector.getPercentage().coerceAtMost(100.0)
+                .let { "%.2f".format(it) }}% of tokens\u001B[0m",
+        )
     }
 }
