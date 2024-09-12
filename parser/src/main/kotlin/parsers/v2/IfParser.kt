@@ -15,8 +15,8 @@ class IfParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         if (parser.consume().getType() != TokenType.LEFT_PAREN) {
             throw ParseException(
-                "Expected LEFT_PARENTHESIS, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
+                "Expected LEFT_PARENTHESIS, got ${parser.getCurrentToken().getType()} at line ${
+                    parser.getCurrentToken().getPosition().getLine()
                 }, column ${token.getPosition().getColumn()}",
             )
         }
@@ -27,8 +27,8 @@ class IfParser : Prefix {
                 if (condition.getType() != TokenType.BOOLEAN_LITERAL) {
                     throw ParseException(
                         "Expected BOOLEAN_LITERAL, got ${condition.getType()} at line ${
-                            token.getPosition().getLine()
-                        }, column ${token.getPosition().getColumn()}",
+                            parser.getCurrentToken().getPosition().getLine()
+                        }, column ${parser.getCurrentToken().getPosition().getColumn()}",
                     )
                 }
             }
@@ -38,14 +38,14 @@ class IfParser : Prefix {
                 throw ParseException(
                     "Expected BOOLEAN_LITERAL, got ${condition.javaClass} at line ${
                         token.getPosition().getLine()
-                    }, column ${token.getPosition().getColumn()}",
+                    }, column ${parser.getCurrentToken().getPosition().getColumn()}",
                 )
             }
         }
         if (parser.getCurrentToken().getType() != TokenType.RIGHT_PAREN) {
             throw ParseException(
-                "Expected RIGHT_PARENTHESIS, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
+                "Expected RIGHT_PARENTHESIS,got ${parser.getCurrentToken().getType()} at line ${
+                    parser.getCurrentToken().getPosition().getLine()
                 }, column ${token.getPosition().getColumn()}",
             )
         }
@@ -67,8 +67,8 @@ class IfParser : Prefix {
     private fun getBody(parser: Parser, token: Token): ArrayList<Node> {
         if (parser.consume().getType() != TokenType.LEFT_BRACE) {
             throw ParseException(
-                "Expected LEFT_BRACE, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
+                "Expected LEFT_BRACE,got ${parser.getCurrentToken().getType()} at line ${
+                    parser.getCurrentToken().getPosition().getLine()
                 }, column ${token.getPosition().getColumn()}",
             )
         }
@@ -92,8 +92,8 @@ class IfParser : Prefix {
 
         if (parser.getCurrentToken().getType() != TokenType.RIGHT_BRACE) {
             throw ParseException(
-                "Expected RIGHT_BRACE, got ${token.getType()} at line ${
-                    token.getPosition().getLine()
+                "Expected RIGHT_BRACE,got ${parser.getCurrentToken().getType()} at line ${
+                    parser.getCurrentToken().getPosition().getLine()
                 }, column ${token.getPosition().getColumn()}",
             )
         }
