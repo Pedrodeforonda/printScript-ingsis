@@ -13,7 +13,7 @@ class Interpreter(
     private val canPrint: Boolean = true,
 ) {
 
-    private var variableMap = mutableMapOf<Triple<String, String, Boolean>, Any>()
+    private var variableMap = mutableMapOf<String, Triple<Any, String, Boolean>>()
     private val printlnCollector = PrintlnCollector()
 
     fun interpret(astNodes: Sequence<ParsingResult>): Sequence<InterpreterResult> = sequence {
@@ -41,15 +41,7 @@ class Interpreter(
         }
     }
 
-    fun getVariableMap(): Map<Triple<String, String, Boolean>, Any> {
+    fun getVariableMap(): Map<String, Triple<Any, String, Boolean>> {
         return variableMap
-    }
-
-    fun getInputValues(): StringInputProvider {
-        return inputValues
-    }
-
-    fun getEnvVariables(): Map<String, String> {
-        return envVariables
     }
 }

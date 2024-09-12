@@ -30,6 +30,7 @@ class ExecutorOperation : CliktCommand(
             version,
             InteractiveInputProvider(),
             envMap,
+            false,
         )
         clearTerminal()
 
@@ -53,12 +54,21 @@ class ExecutorOperation : CliktCommand(
                     print(percentageText)
                     print("\u001b[0m") // Reset text color to default
                 } else {
-                    val padding = " ".repeat(80 - output.length - percentageText.length - arrow.length)
-                    output.append(padding)
-                    output.append("\u001b[32m") // Set text color to green
-                    output.append(arrow)
-                    output.append(percentageText)
-                    output.append("\u001b[0m") // Reset text color to default
+                    val n = 80 - output.length - percentageText.length - arrow.length
+                    if (n > 0) {
+                        val padding = " ".repeat(n)
+                        output.append(padding)
+                        output.append("\u001b[32m") // Set text color to green
+                        output.append(arrow)
+                        output.append(percentageText)
+                        output.append("\u001b[0m") // Reset text color to default
+                    } else {
+                        output.append(" ".repeat(20))
+                        output.append("\u001b[32m") // Set text color to green
+                        output.append(arrow)
+                        output.append(percentageText)
+                        output.append("\u001b[0m") // Reset text color to default
+                    }
                 }
             }
             println(output.toString())

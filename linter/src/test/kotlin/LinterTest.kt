@@ -159,6 +159,7 @@ class LinterTest {
         val errors2 = Linter().lint(astNodes2, config).toList()
 
         errors2.forEach { println(it.getMessage()) }
-        // assertTrue(errors2.size == 7)
+        println(errors2.size)
+        assertTrue(errors2.size == 4)
     }
 }

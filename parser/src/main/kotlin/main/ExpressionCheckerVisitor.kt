@@ -91,7 +91,9 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         val rightResult = right.accept(this) as CheckAstResult
         val operator = expression.getOperator()
         if (operator.getType() != TokenType.PLUS) {
-            if (leftResult.getResultType() != rightResult.getResultType()) {
+            if (leftResult.getResultType() != rightResult.getResultType() &&
+                leftResult.getResultType() != "Identifier" && rightResult.getResultType() != "Identifier"
+            ) {
                 return CheckAstResult(false, "Binary operation not supported", "invalid")
             }
         }
