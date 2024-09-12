@@ -26,3 +26,9 @@ tasks.named<Wrapper>("wrapper") {
     gradleVersion = "7.3.3"
     distributionType = Wrapper.DistributionType.ALL
 }
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "main.AppKt"
+    }
+}
