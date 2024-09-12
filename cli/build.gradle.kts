@@ -24,6 +24,7 @@ application {
 tasks.withType<JavaExec> {
     jvmArgs = listOf("-Dorg.gradle.warning.mode=none")
     standardInput = System.`in`
+    standardOutput = System.`out`
 }
 
 gradle.projectsEvaluated {

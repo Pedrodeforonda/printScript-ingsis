@@ -54,7 +54,6 @@ class MainFormatter {
     ): FormatterResult {
         var lastTokenWasNewline = true
         var lastTokenWasOperator = false
-        var isEnforceSpacing = false
         var openBraceQty = 0
         if (config.enforceSpacingBetweenTokens) {
             tokens.forEach {

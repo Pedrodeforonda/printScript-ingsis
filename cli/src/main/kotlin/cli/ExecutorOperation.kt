@@ -31,6 +31,7 @@ class ExecutorOperation : CliktCommand(
             InteractiveInputProvider(),
             envMap,
         )
+        clearTerminal()
 
         var currentPercentage = 0.0
         for (result in results) {
@@ -38,6 +39,9 @@ class ExecutorOperation : CliktCommand(
 
             if (result.hasException()) {
                 output.append(result.getException().message)
+            }
+            if (result.hasPrintln()) {
+                output.append(result.getPrintln())
             }
             val newPercentage = round(runner.getPercentage() * 100) / 100.0
             if (newPercentage - currentPercentage >= 5) {
@@ -60,6 +64,12 @@ class ExecutorOperation : CliktCommand(
             println(output.toString())
         }
         clearBelow()
+    }
+
+    private fun clearTerminal() {
+        print("\u001b[H\u001b[2J")
+        print("\u001b[3J")
+        System.out.flush()
     }
 
     private fun clearBelow() {
