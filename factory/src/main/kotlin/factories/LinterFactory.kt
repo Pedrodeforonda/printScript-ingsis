@@ -1,9 +1,9 @@
 package factories
 
+import dataObjects.LinterResult
 import main.ConfigParser
+import main.Linter
 import main.ParserFactory
-import main.kotlin.main.Linter
-import utils.LinterResult
 import utils.PercentageCollector
 import java.io.InputStream
 

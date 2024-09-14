@@ -1,10 +1,10 @@
 import factories.LexerFactory
 import main.ConfigParser
+import main.Linter
 import main.LinterConfig
 import main.Parser
 import main.ParserFactory
 import main.Token
-import main.kotlin.main.Linter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

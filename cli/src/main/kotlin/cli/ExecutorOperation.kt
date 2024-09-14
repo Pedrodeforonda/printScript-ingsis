@@ -3,7 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import main.Runner
+import factories.Runner
 import utils.InteractiveInputProvider
 import utils.InterpreterResult
 import java.io.File
@@ -72,6 +72,7 @@ class ExecutorOperation : CliktCommand(
                 println(output.toString())
             }
         }
+        println("\u001b[32m" + "parsing completed\u001b[0m")
     }
 
     private fun fileToMap(file: File): Map<String, String> {

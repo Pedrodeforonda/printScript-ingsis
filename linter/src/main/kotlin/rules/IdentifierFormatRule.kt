@@ -1,9 +1,9 @@
 package rules
 
+import dataObjects.LinterResult
 import identifierFormatStrategies.IdentifierFormatStrategy
 import nodes.Identifier
 import nodes.Node
-import utils.LinterResult
 
 class IdentifierFormatRule(private val identifierFormat: IdentifierFormatStrategy) : LinterRule {
 

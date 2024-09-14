@@ -1,24 +1,29 @@
 package nodes
 
-import main.Position
-import main.TokenType
-import utils.ExpressionVisitor
+import types.LiteralType
+import visitors.ExpressionVisitor
+
+sealed class LiteralValue {
+    data class StringValue(val value: String) : LiteralValue()
+    data class NumberValue(val value: Number) : LiteralValue()
+    data class BooleanValue(val value: Boolean) : LiteralValue()
+}
 
 class Literal private constructor(
-    private val value: Any,
+    private val value: LiteralValue,
     private val pos: Position,
-    private val type: TokenType,
+    private val type: LiteralType,
 ) : Node {
 
-    constructor(value: String, pos: Position, type: TokenType) : this(value as Any, pos, type)
-    constructor(value: Number, pos: Position, type: TokenType) : this(value as Any, pos, type)
-    constructor(value: Boolean, pos: Position, type: TokenType) : this(value as Any, pos, type)
+    constructor(value: String, pos: Position, type: LiteralType) : this(LiteralValue.StringValue(value), pos, type)
+    constructor(value: Number, pos: Position, type: LiteralType) : this(LiteralValue.NumberValue(value), pos, type)
+    constructor(value: Boolean, pos: Position, type: LiteralType) : this(LiteralValue.BooleanValue(value), pos, type)
 
     override fun accept(visitor: ExpressionVisitor): Any {
         return visitor.visitLiteral(this)
     }
 
-    fun getValue(): Any {
+    fun getValue(): LiteralValue {
         return value
     }
 
@@ -26,8 +31,20 @@ class Literal private constructor(
         return pos
     }
 
-    fun getType(): TokenType {
+    fun getType(): LiteralType {
         return type
+    }
+
+    fun isString(): Boolean {
+        return value is LiteralValue.StringValue
+    }
+
+    fun isNumber(): Boolean {
+        return value is LiteralValue.NumberValue
+    }
+
+    fun isBoolean(): Boolean {
+        return value is LiteralValue.BooleanValue
     }
 
     override fun equals(other: Any?): Boolean {

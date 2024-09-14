@@ -11,7 +11,7 @@ import nodes.Node
 class FunCallParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
         val arguments = mutableListOf<Node>()
-        val function = CallNode(token.getText(), arguments, token.getPosition())
+        val function = CallNode(token.getText(), arguments, parser.adaptPos(token.getPosition()))
         val leftParen: Token = parser.consume()
         if (leftParen.getType() != TokenType.LEFT_PAREN) {
             throw ParseException(

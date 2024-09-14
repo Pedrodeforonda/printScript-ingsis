@@ -1,4 +1,4 @@
-package utils
+package dataObjects
 
 import nodes.Node
 

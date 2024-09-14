@@ -7,12 +7,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":ast"))
-    implementation(project(":token"))
-    implementation(project(":lexer"))
-    implementation(project(":parser"))
-    implementation(project(":runner"))
-    implementation(project(":interpreter"))
+    implementation(project(":common"))
+    implementation(project(":libs"))
     implementation(project(":factory"))
     implementation("com.github.ajalt.clikt:clikt:4.4.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.50")
@@ -39,7 +35,6 @@ tasks.withType<Jar> {
     dependsOn(":token:jar")
     dependsOn(":lexer:jar")
     dependsOn(":parser:jar")
-    dependsOn(":runner:jar")
     dependsOn(":interpreter:jar")
     dependsOn(":factory:jar")
     dependsOn(":linter:jar")

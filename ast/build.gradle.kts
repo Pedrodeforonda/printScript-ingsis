@@ -8,5 +8,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":token"))
+    implementation(project(":libs"))
+    implementation(project(":common"))
 }

@@ -24,7 +24,7 @@ class IfParser : Prefix {
         val condition = parser.parseExpression()
         when (condition) {
             is Literal -> {
-                if (condition.getType() != TokenType.BOOLEAN_LITERAL) {
+                if (!condition.isBoolean()) {
                     throw ParseException(
                         "Expected BOOLEAN_LITERAL, got ${condition.getType()} at line ${
                             parser.getCurrentToken().getPosition().getLine()
@@ -52,16 +52,16 @@ class IfParser : Prefix {
         val ifBody: ArrayList<Node> = getBody(parser, token)
 
         if (!parser.hasNextToken()) {
-            return IfNode(condition, ifBody, ArrayList(), token.getPosition())
+            return IfNode(condition, ifBody, ArrayList(), parser.adaptPos(token.getPosition()))
         }
 
         if (parser.consume().getType() != TokenType.ELSE_KEYWORD) {
-            return IfNode(condition, ifBody, ArrayList(), token.getPosition())
+            return IfNode(condition, ifBody, ArrayList(), parser.adaptPos(token.getPosition()))
         }
 
         val elseBody: ArrayList<Node> = getBody(parser, token)
 
-        return IfNode(condition, ifBody, elseBody, token.getPosition())
+        return IfNode(condition, ifBody, elseBody, parser.adaptPos(token.getPosition()))
     }
 
     private fun getBody(parser: Parser, token: Token): ArrayList<Node> {

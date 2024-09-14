@@ -11,4 +11,5 @@ repositories {
 dependencies {
     implementation(project(":token"))
     implementation(project(":ast"))
+    implementation(project(":common"))
 }

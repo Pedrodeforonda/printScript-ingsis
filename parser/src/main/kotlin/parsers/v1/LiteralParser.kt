@@ -7,6 +7,7 @@ import main.Token
 import main.TokenType
 import nodes.Literal
 import nodes.Node
+import types.LiteralType
 
 class LiteralParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
@@ -30,13 +31,21 @@ class LiteralParser : Prefix {
         }
 
         stringValue?.let {
-            return Literal(it, token.getPosition(), token.getType())
+            return Literal(it, parser.adaptPos(token.getPosition()), tokenTypeToLiteralType(token.getType()))
         }
 
         numberValue?.let {
-            return Literal(it, token.getPosition(), token.getType())
+            return Literal(it, parser.adaptPos(token.getPosition()), tokenTypeToLiteralType(token.getType()))
         }
 
         throw ParseException("Invalid literal type")
+    }
+
+    private fun tokenTypeToLiteralType(tokenType: TokenType): LiteralType {
+        return when (tokenType) {
+            TokenType.NUMBER_LITERAL -> LiteralType.NUMBER
+            TokenType.STRING_LITERAL -> LiteralType.STRING
+            else -> throw ParseException("Invalid literal type")
+        }
     }
 }

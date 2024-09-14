@@ -1,5 +1,6 @@
 package main
 
+import dataObjects.CheckAstResult
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
@@ -7,21 +8,23 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
+import nodes.Node
 import nodes.ReadEnv
 import nodes.ReadInput
-import utils.CheckAstResult
-import utils.ExpressionVisitor
-import utils.Result
+import visitors.ExpressionVisitor
 
 class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, String>) : ExpressionVisitor {
-    override fun visitReadEnv(expression: ReadEnv): CheckAstResult {
+    override fun visitReadEnv(expression: Node): CheckAstResult {
+        isValidType(expression, ReadEnv::class.java)
         return CheckAstResult(true, "", "ReadEnv")
     }
 
-    override fun visitIf(expression: IfNode): CheckAstResult {
-        val condition = expression.getCondition()
-        val body = expression.getThenBlock()
-        val elseBody = expression.getElseBlock()
+    override fun visitIf(expression: Node): CheckAstResult {
+        val ifExpression = isValidType(expression, IfNode::class.java)
+
+        val condition = ifExpression.getCondition()
+        val body = ifExpression.getThenBlock()
+        val elseBody = ifExpression.getElseBlock()
         val conditionResult = condition.accept(this) as CheckAstResult
         if (!conditionResult.isPass()) {
             return CheckAstResult(
@@ -63,34 +66,38 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         }
         return CheckAstResult(true, "", "If")
     }
-    override fun visitDeclaration(expression: Declaration): Result {
-        val variableName = expression.getName()
-        val variableType = expression.getType()
+    override fun visitDeclaration(expression: Node): CheckAstResult {
+        val declarationExpression = isValidType(expression, Declaration::class.java)
+
+        val variableName = declarationExpression.getName()
+        val variableType = declarationExpression.getType()
         variableTypeMap[variableName] = variableType
         return CheckAstResult(true, "", "Declaration")
     }
 
-    override fun visitLiteral(expression: Literal): CheckAstResult {
-        val value = expression.getValue()
-        if (value is String) {
+    override fun visitLiteral(expression: Node): CheckAstResult {
+        val literalExpression = isValidType(expression, Literal::class.java)
+        if (literalExpression.isString()) {
             return CheckAstResult(true, "", "string")
         }
-        if (value is Int || value is Double) {
+        if (literalExpression.isNumber()) {
             return CheckAstResult(true, "", "number")
         }
-        if (value is Boolean) {
+        if (literalExpression.isBoolean()) {
             return CheckAstResult(true, "", "boolean")
         }
         return CheckAstResult(false, "Invalid literal", "Literal")
     }
 
-    override fun visitBinaryExp(expression: BinaryNode): CheckAstResult {
-        val left = expression.getLeft()
-        val right = expression.getRight()
+    override fun visitBinaryExp(expression: Node): CheckAstResult {
+        val binaryExpression = isValidType(expression, BinaryNode::class.java)
+
+        val left = binaryExpression.getLeft()
+        val right = binaryExpression.getRight()
         val leftResult = left.accept(this) as CheckAstResult
         val rightResult = right.accept(this) as CheckAstResult
-        val operator = expression.getOperator()
-        if (operator.getType() != TokenType.PLUS) {
+        val operator = binaryExpression.getOperator()
+        if (!operator.isSum()) {
             if (leftResult.getResultType() != rightResult.getResultType() &&
                 leftResult.getResultType() != "Identifier" && rightResult.getResultType() != "Identifier"
             ) {
@@ -112,17 +119,19 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         return CheckAstResult(true, "", "number")
     }
 
-    override fun visitAssignment(expression: Assignation): CheckAstResult {
-        if (expression.getDeclaration() is Identifier) {
+    override fun visitAssignment(expression: Node): CheckAstResult {
+        val assignationExpression = isValidType(expression, Assignation::class.java)
+
+        if (assignationExpression.getDeclaration() is Identifier) {
             return CheckAstResult(true, "", "Identifier")
         }
-        val declaration = expression.getDeclaration() as Declaration
+        val declaration = assignationExpression.getDeclaration() as Declaration
         val isError: CheckAstResult = declaration.accept(this) as CheckAstResult
         if (!isError.isPass()) {
             return CheckAstResult(false, isError.getMessage(), "Declaration")
         }
         Pair(declaration.getName(), declaration.getType())
-        val value = expression.getValue()
+        val value = assignationExpression.getValue()
         val type = declaration.getType()
         val name = declaration.getName()
         val valueResult = value.accept(this) as CheckAstResult
@@ -151,16 +160,19 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 false,
                 "Invalid type: expected $type on variable $name," +
                     " but got ${valueResult.getResultType()} at" +
-                    " line ${expression.getPos().getLine()}: column ${expression.getPos().getColumn()}",
+                    " line ${assignationExpression.getPos().getLine()}: " +
+                    "column ${assignationExpression.getPos().getColumn()}",
                 "Assignation",
             )
         }
         return CheckAstResult(true, "", valueResult.getResultType())
     }
 
-    override fun visitCallExp(expression: CallNode): CheckAstResult {
-        val functionName = expression.getFunc()
-        val arguments = expression.getArguments()
+    override fun visitCallExp(expression: Node): CheckAstResult {
+        val callExpression = isValidType(expression, CallNode::class.java)
+
+        val functionName = callExpression.getFunc()
+        val arguments = callExpression.getArguments()
         if (functionName != "println") {
             return CheckAstResult(false, "Function $functionName is not defined", "Print")
         }
@@ -170,14 +182,17 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
         return CheckAstResult(true, "", "Print")
     }
 
-    override fun visitIdentifier(expression: Identifier): CheckAstResult {
+    override fun visitIdentifier(expression: Node): CheckAstResult {
+        isValidType(expression, Identifier::class.java)
         return CheckAstResult(true, "", "Identifier")
     }
 
-    override fun visitReadInput(expression: ReadInput): CheckAstResult {
-        when (val message = expression.getArgument()) {
+    override fun visitReadInput(expression: Node): CheckAstResult {
+        val readInputExpression = isValidType(expression, ReadInput::class.java)
+
+        when (val message = readInputExpression.getArgument()) {
             is Literal -> {
-                if (message.getType() != TokenType.STRING_LITERAL) {
+                if (!message.isString()) {
                     return CheckAstResult(false, "Expected STRING_LITERAL", "ReadInput")
                 }
                 return CheckAstResult(true, "", "ReadInput")
@@ -196,5 +211,14 @@ class ExpressionCheckerVisitor(private val variableTypeMap: MutableMap<String, S
                 return CheckAstResult(false, "Expected STRING_LITERAL", "ReadInput")
             }
         }
+    }
+
+    private fun <T : Node> isValidType(expression: Node, expectedType: Class<T>): T {
+        if (!expectedType.isInstance(expression)) {
+            throw Exception(
+                "Invalid type: expected ${expectedType.simpleName}, but got ${expression::class.simpleName}",
+            )
+        }
+        return expectedType.cast(expression)
     }
 }

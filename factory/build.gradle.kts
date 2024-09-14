@@ -14,4 +14,7 @@ dependencies {
     implementation(project(":parser"))
     implementation(project(":formatter"))
     implementation(project(":linter"))
+    implementation(project(":interpreter"))
+    implementation(project(":libs"))
+    implementation(project(":common"))
 }

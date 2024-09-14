@@ -2,22 +2,26 @@ package parsers.v1
 
 import main.Infix
 import main.Parser
-import main.Position
 import main.Token
-import main.TokenType
 import nodes.BinaryNode
 import nodes.Node
+import types.BinaryOperatorType
 
 class BinaryOperationParser(private val precedence: Int) : Infix {
-    private var myToken: Token = Token("+", TokenType.PLUS, Position(0, 0))
+    private var operator: BinaryOperatorType? = null
 
     override fun parse(parser: Parser, left: Node, token: Token): Node {
         val right = parser.parseExpression(precedence)
-        return BinaryNode(left, myToken, right, myToken.getPosition())
+        return BinaryNode(
+            left,
+            operator!!,
+            right,
+            parser.adaptPos(token.getPosition()),
+        )
     }
 
-    fun updateToken(type: Token) {
-        this.myToken = type
+    fun updateToken(type: BinaryOperatorType) {
+        this.operator = type
     }
 
     override fun getPrecedence(): Int = precedence

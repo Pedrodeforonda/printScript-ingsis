@@ -1,7 +1,7 @@
 package rules
 
+import dataObjects.LinterResult
 import nodes.Node
-import utils.LinterResult
 
 interface LinterRule {
     fun lintCode(node: Node): LinterResult

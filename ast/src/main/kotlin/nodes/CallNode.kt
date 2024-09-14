@@ -1,7 +1,6 @@
 package nodes
 
-import main.Position
-import utils.ExpressionVisitor
+import visitors.ExpressionVisitor
 
 class CallNode(private val func: String, private val arguments: List<Node>, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
@@ -28,5 +27,12 @@ class CallNode(private val func: String, private val arguments: List<Node>, priv
         if (arguments != other.arguments) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = func.hashCode()
+        result = 31 * result + arguments.hashCode()
+        result = 31 * result + pos.hashCode()
+        return result
     }
 }

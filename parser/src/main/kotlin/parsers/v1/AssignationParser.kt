@@ -10,7 +10,7 @@ import nodes.Node
 class AssignationParser : Infix {
     override fun parse(parser: Parser, left: Node, token: Token): Node {
         val right = parser.parseExpression()
-        return Assignation(left, right, token.getPosition())
+        return Assignation(left, right, parser.adaptPos(token.getPosition()))
     }
 
     override fun getPrecedence(): Int {

@@ -12,6 +12,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
     implementation(project(":token"))
     implementation(project(":ast"))
+    implementation(project(":common"))
+    implementation(project(":libs"))
     testImplementation(project(":factory"))
     testImplementation(project(":lexer"))
     testImplementation(project(":parser"))

@@ -1,10 +1,10 @@
 package rules
 
+import dataObjects.LinterResult
+import dataObjects.StringResult
 import nodes.CallNode
 import nodes.Node
-import utils.GetStringVisitor
-import utils.LinterResult
-import utils.StringResult
+import visitors.GetStringVisitor
 
 class PrintlnRestrictionRule(private val insideResult: LinterResult) : LinterRule {
     override fun lintCode(node: Node): LinterResult {
