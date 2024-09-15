@@ -1,16 +1,13 @@
 package factories
 
-import interpreter.Interpreter
-import main.ParserFactory
+import runners.Runner
 import utils.InterpreterResult
-import utils.PercentageCollector
 import utils.StringInputProvider
 import java.io.InputStream
 
 class Runner {
 
-    private val percentageCollector = PercentageCollector()
-
+    private val runner: Runner = Runner()
     fun run(
         src: InputStream,
         version: String,
@@ -18,12 +15,8 @@ class Runner {
         envMap: Map<String, String>,
         canPrint: Boolean = true,
     ): Sequence<InterpreterResult> = sequence {
-        val lexer = LexerFactory().createLexer(src, version, percentageCollector)
-        val parser = ParserFactory().createParser(version, lexer.tokenize().iterator())
-        val interpreter = Interpreter(percentageCollector, inputProvider, envMap, canPrint)
-        val results = interpreter.interpret(parser.parseExpressions())
-        results.forEach { yield(it) }
+        runner.run(src, version, inputProvider, envMap, canPrint).forEach { yield(it) }
     }
 
-    fun getPercentage() = percentageCollector.getPercentage()
+    fun getPercentage() = runner.getPercentage()
 }

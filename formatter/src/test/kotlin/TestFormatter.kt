@@ -1,10 +1,10 @@
-import factories.LexerFactory
 import lexer.Lexer
 import main.ConfigLoader
 import main.FormatterConfigReader
 import main.MainFormatter
 import org.example.lexer.ClassicTokenStrategies
 import org.junit.jupiter.api.BeforeEach
+import runners.LexerFactory
 import utils.PercentageCollector
 import java.io.BufferedWriter
 import java.io.File
@@ -85,9 +85,9 @@ class TestFormatter {
         val standardConfig = configLoader.loadConfig<FormatterConfigReader>(
             File("src/test/resources/rulesIfBracing.json").inputStream(),
         )
-        val lexer = LexerFactory().createLexer(File(inputPath).inputStream(), "1.1", percentageCollector)
+        val tokens = LexerFactory().lex(File(inputPath).inputStream(), "1.1", percentageCollector)
         val formattedText = formatter.formatCode(
-            lexer.tokenize(),
+            tokens,
             standardConfig,
             outputWriter,
         )
