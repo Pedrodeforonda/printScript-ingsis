@@ -257,7 +257,7 @@ class EvalVisitor(
             throw InterpreterException("ReadInput argument must be a string")
         }
 
-        println(message)
+        printlnCollector.addPrint(message)
         val input = inputValues.input(message)
         if (canPrint) println(input)
 
