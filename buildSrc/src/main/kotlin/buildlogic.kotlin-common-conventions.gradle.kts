@@ -70,6 +70,11 @@ tasks.named("check") {
     dependsOn("ktlintCheck")
 }
 
+tasks.named("build") {
+    setDependsOn(dependsOn.filter { it != "check" })
+    dependsOn("ktlintCheck")
+}
+
 
 
 

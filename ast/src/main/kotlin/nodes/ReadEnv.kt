@@ -1,7 +1,6 @@
 package nodes
 
-import main.Position
-import utils.ExpressionVisitor
+import visitors.ExpressionVisitor
 
 class ReadEnv(private val name: String, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {

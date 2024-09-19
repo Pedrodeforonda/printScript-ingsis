@@ -1,6 +1,6 @@
 let a: string = 12 + " hola";
 let b: string = readInput("Escribe tu Nombre: ");
-const c: boolean = true;
+const c: boolean = false;
 if ( c ) {
     println("Hello " + a);
 } else {
@@ -22,7 +22,7 @@ let a: string = 12 + " hola";
 let a: string = 12 + " hola";
 let a: string = 12 + " hola";
 let a: string = 12 + " hola";
-let a: string = 12 + " hola"
+let a: string = 12 + " hola";
 let a: string = 12 + " hola";
 let a: string = 12 + " hola";
 let a: string = 12 + " hola";

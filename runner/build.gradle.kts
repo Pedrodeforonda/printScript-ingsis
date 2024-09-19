@@ -12,5 +12,6 @@ dependencies {
     implementation(project(":lexer"))
     implementation(project(":parser"))
     implementation(project(":interpreter"))
-    implementation(project(":factory"))
+    implementation(project(":libs"))
+    implementation(project(":common"))
 }

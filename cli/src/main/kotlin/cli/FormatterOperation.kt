@@ -16,13 +16,15 @@ class FormatterOperation : CliktCommand(
     private val configFile: File by argument(help = "Config file to use.")
         .file(mustExist = true)
 
+    private val outputFile: File by argument(help = "Output file to write the formatted code.")
+        .file()
+
     private val version: String by argument(help = "Version of the language.")
 
     override fun run() {
-        val outputPath = "src/main/resources/formattedCode.txt"
-        val outputWriter = File(outputPath).bufferedWriter()
+        val outputWriter = outputFile.bufferedWriter()
         FormatterFactory().format(sourceFile.inputStream(), configFile.inputStream(), version, outputWriter)
         outputWriter.close()
-        println("Formatted code written to $outputPath")
+        println("Formatted code written to ${outputFile.absolutePath}")
     }
 }

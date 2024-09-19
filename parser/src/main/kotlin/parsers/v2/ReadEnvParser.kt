@@ -36,6 +36,6 @@ class ReadEnvParser : Prefix {
         }
         parser.consume()
 
-        return nodes.ReadEnv(name, token.getPosition())
+        return nodes.ReadEnv(name, parser.adaptPos(token.getPosition()))
     }
 }

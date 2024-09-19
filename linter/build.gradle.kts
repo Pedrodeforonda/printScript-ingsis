@@ -15,10 +15,13 @@ tasks.test {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.8.9")
-    implementation(project(":token"))
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation(project(":ast"))
+    implementation(project(":common"))
+    implementation(project(":libs"))
+    testImplementation(project(":token"))
     testImplementation(project(":factory"))
     testImplementation(project(":lexer"))
+    testImplementation(project(":runner"))
     testImplementation(project(":parser"))
 }

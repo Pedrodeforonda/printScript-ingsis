@@ -3,9 +3,7 @@ package cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
-import factories.LexerFactory
-import main.ParserFactory
-import main.Token
+import factories.ValidatorFactory
 import utils.PercentageCollector
 import java.io.File
 
@@ -20,10 +18,7 @@ class ValidatorOperation : CliktCommand(
 
     override fun run() {
         val collector = PercentageCollector()
-        val lexer = LexerFactory().createLexer(sourceFile.inputStream(), version, collector)
-        val tokens: Sequence<Token> = lexer.tokenize()
-        val parser = ParserFactory().createParser(version, tokens.iterator())
-        val result = parser.parseExpressions().iterator()
+        val result = ValidatorFactory().validate(sourceFile.inputStream(), version, collector).iterator()
         var acc = 0
         var percentage = 0.0
         while (result.hasNext()) {
@@ -50,7 +45,6 @@ class ValidatorOperation : CliktCommand(
             println("\u001B[32mNo parsing errors found.\u001B[0m")
         }
 
-        // Print the percentage of tokens processed in green color at the top
         println(
             "\u001B[32mProcessed ${collector.getPercentage().coerceAtMost(100.0)
                 .let { "%.2f".format(it) }}% of tokens\u001B[0m",

@@ -1,7 +1,7 @@
 package interpreter
 
+import dataObjects.ParsingResult
 import utils.InterpreterResult
-import utils.ParsingResult
 import utils.PercentageCollector
 import utils.PrintlnCollector
 import utils.StringInputProvider
@@ -21,8 +21,7 @@ class Interpreter(
         val evalVisitor = EvalVisitor(variableMap, printlnCollector, inputValues, envVariables, canPrint)
         while (iterator.hasNext()) {
             val exp = iterator.next()
-            // check interpreter errors
-            if (!exp.hasError()) {
+            if (!parsingError(exp)) {
                 try {
                     exp.getAst().accept(evalVisitor)
                 } catch (e: Exception) {
@@ -34,14 +33,15 @@ class Interpreter(
                     yield(InterpreterResult(it, null, percentageCollector.getPercentage()))
                 }
                 printlnCollector.clearPrints()
-                // check parser errors
-            } else if (exp.hasError()) {
+            } else if (parsingError(exp)) {
                 yield(InterpreterResult(null, exp.getError(), percentageCollector.getPercentage()))
             } else {
                 yield(InterpreterResult(null, null, percentageCollector.getPercentage()))
             }
         }
     }
+
+    private fun parsingError(exp: ParsingResult) = exp.hasError()
 
     fun getVariableMap(): Map<String, Triple<Any, String, Boolean>> {
         return variableMap

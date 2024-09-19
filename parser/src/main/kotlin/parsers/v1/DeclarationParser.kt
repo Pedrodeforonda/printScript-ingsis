@@ -7,7 +7,7 @@ import main.Token
 import main.TokenType
 import nodes.Declaration
 import nodes.Node
-import utils.DeclarationKeyWord
+import types.DeclarationType
 
 class DeclarationParser : Prefix {
     override fun parse(parser: Parser, token: Token): Node {
@@ -34,12 +34,12 @@ class DeclarationParser : Prefix {
             )
         }
         parser.consume()
-        val letKeword: DeclarationKeyWord = DeclarationKeyWord.LET_KEYWORD
+        val letKeword: DeclarationType = DeclarationType.LET_KEYWORD
         return Declaration(
             identifierToken.getText(),
             type.getText(),
             letKeword,
-            letToken.getPosition(),
+            parser.adaptPos(letToken.getPosition()),
         )
     }
 }

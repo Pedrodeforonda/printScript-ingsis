@@ -1,12 +1,11 @@
 package nodes
 
-import main.Position
-import main.Token
-import utils.ExpressionVisitor
+import types.BinaryOperatorType
+import visitors.ExpressionVisitor
 
 class BinaryNode(
     private val left: Node,
-    private val operator: Token,
+    private val operator: BinaryOperatorType,
     private val right: Node,
     private val pos: Position,
 ) : Node {
@@ -18,7 +17,7 @@ class BinaryNode(
         return left
     }
 
-    fun getOperator(): Token {
+    fun getOperator(): BinaryOperatorType {
         return operator
     }
 

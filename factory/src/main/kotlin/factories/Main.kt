@@ -1,4 +1,4 @@
-package main
+package factories
 
 import utils.MainStringInputProvider
 import java.io.File

@@ -1,9 +1,10 @@
 package main
 
+import dataObjects.CheckAstResult
+import dataObjects.ParsingResult
 import nodes.Node
 import parsers.v1.BinaryOperationParser
-import utils.CheckAstResult
-import utils.ParsingResult
+import types.BinaryOperatorType
 
 class Parser(private val tokens: Iterator<Token>) {
     private val prefixParsers = mutableMapOf<TokenType, Prefix>()
@@ -32,7 +33,7 @@ class Parser(private val tokens: Iterator<Token>) {
         while (precedence < getPrecedence()) {
             val infixParser = infixParsers[currentToken.getType()] ?: break
             if (infixParser is BinaryOperationParser) {
-                infixParser.updateToken(currentToken)
+                infixParser.updateToken(operatorAdapt(currentToken.getType()))
             }
             consume()
             left = infixParser.parse(this, left, currentToken)
@@ -118,6 +119,20 @@ class Parser(private val tokens: Iterator<Token>) {
             }
         }
         return result
+    }
+
+    internal fun adaptPos(pos: Position): nodes.Position {
+        return nodes.Position(pos.getLine(), pos.getColumn())
+    }
+
+    private fun operatorAdapt(tokenType: TokenType): BinaryOperatorType {
+        return when (tokenType) {
+            TokenType.PLUS -> BinaryOperatorType.PLUS
+            TokenType.MINUS -> BinaryOperatorType.MINUS
+            TokenType.SLASH -> BinaryOperatorType.SLASH
+            TokenType.ASTERISK -> BinaryOperatorType.ASTERISK
+            else -> throw ParseException("Invalid operator")
+        }
     }
 }
 

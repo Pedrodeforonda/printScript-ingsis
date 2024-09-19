@@ -1,7 +1,6 @@
 package nodes
 
-import main.Position
-import utils.ExpressionVisitor
+import visitors.ExpressionVisitor
 
 class IfNode(
     private val condition: Node,

@@ -1,7 +1,6 @@
 package nodes
 
-import main.Position
-import utils.ExpressionVisitor
+import visitors.ExpressionVisitor
 
 class Assignation(private val declaration: Node, private val value: Node, private val pos: Position) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
@@ -28,5 +27,12 @@ class Assignation(private val declaration: Node, private val value: Node, privat
         if (value != other.value) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = declaration.hashCode()
+        result = 31 * result + value.hashCode()
+        result = 31 * result + pos.hashCode()
+        return result
     }
 }

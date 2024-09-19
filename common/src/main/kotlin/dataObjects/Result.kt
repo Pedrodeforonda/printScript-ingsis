@@ -1,4 +1,4 @@
-package utils
+package dataObjects
 
 sealed interface Result
 

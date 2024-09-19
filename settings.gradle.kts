@@ -22,8 +22,6 @@ include(":parser")
 findProject(":parser")?.name = "parser"
 include(":lexer")
 findProject(":lexer")?.name = "lexer"
-include(":runner")
-findProject(":runner")?.name = "runner"
 include("formatter")
 findProject(":formatter")?.name = "formatter"
 include(":linter")
@@ -32,4 +30,6 @@ include(":cli")
 findProject(":cli")?.name = "cli"
 include("factories")
 include("factory")
-include("results")
+include("libs")
+include("common")
+include("runner")

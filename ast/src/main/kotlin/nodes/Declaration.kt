@@ -1,13 +1,12 @@
 package nodes
 
-import main.Position
-import utils.DeclarationKeyWord
-import utils.ExpressionVisitor
+import types.DeclarationType
+import visitors.ExpressionVisitor
 
 class Declaration(
     private val name: String,
     private val type: String,
-    private val declarationKeyWord: DeclarationKeyWord,
+    private val declarationKeyWord: DeclarationType,
     private val pos: Position,
 ) : Node {
     override fun accept(visitor: ExpressionVisitor): Any {
@@ -22,7 +21,7 @@ class Declaration(
         return type
     }
 
-    fun getDeclarationKeyWord(): DeclarationKeyWord {
+    fun getDeclarationKeyWord(): DeclarationType {
         return declarationKeyWord
     }
 
@@ -41,5 +40,13 @@ class Declaration(
         if (declarationKeyWord != other.declarationKeyWord) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + declarationKeyWord.hashCode()
+        result = 31 * result + pos.hashCode()
+        return result
     }
 }

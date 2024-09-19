@@ -23,12 +23,12 @@ class ReadInputParser : Prefix {
 
         parser.consume()
         val message = parser.parseExpression()
-        var type: String? = null
+        val type: String?
 
         when (message) {
-            is nodes.Literal -> {
+            is Literal -> {
                 type = "Literal"
-                if (message.getType() != TokenType.STRING_LITERAL) {
+                if (!message.isString()) {
                     throw ParseException(
                         "Syntax Error at ${parser.getCurrentToken().getPosition().getLine()}," +
                             " ${parser.getCurrentToken().getPosition().getColumn()}" +
@@ -38,10 +38,10 @@ class ReadInputParser : Prefix {
             }
             // identifier continues
             // does not have a message: ignore
-            is nodes.Identifier -> {
+            is Identifier -> {
                 type = "Identifier"
             }
-            is nodes.BinaryNode -> {
+            is BinaryNode -> {
                 type = "BinaryNode"
             }
             else -> {
@@ -63,9 +63,9 @@ class ReadInputParser : Prefix {
         parser.consume()
 
         return when (type) {
-            "Literal" -> ReadInput(message as Literal, token.getPosition())
-            "Identifier" -> ReadInput(message as Identifier, token.getPosition())
-            "BinaryNode" -> ReadInput(message as BinaryNode, token.getPosition())
+            "Literal" -> ReadInput(message as Literal, parser.adaptPos(token.getPosition()))
+            "Identifier" -> ReadInput(message as Identifier, parser.adaptPos(token.getPosition()))
+            "BinaryNode" -> ReadInput(message as BinaryNode, parser.adaptPos(token.getPosition()))
             else -> throw ParseException(
                 "Syntax Error at ${parser.getCurrentToken().getPosition().getLine()}, " +
                     "${parser.getCurrentToken().getPosition().getColumn()}" +

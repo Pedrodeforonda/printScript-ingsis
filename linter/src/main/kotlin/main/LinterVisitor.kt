@@ -1,5 +1,6 @@
 package main
 
+import dataObjects.LinterResult
 import nodes.Assignation
 import nodes.BinaryNode
 import nodes.CallNode
@@ -7,23 +8,27 @@ import nodes.Declaration
 import nodes.Identifier
 import nodes.IfNode
 import nodes.Literal
+import nodes.Node
+import nodes.Position
 import nodes.ReadEnv
 import nodes.ReadInput
 import rules.IdentifierFormatRule
 import rules.PrintlnRestrictionRule
 import rules.ReadInputRestrictionRule
-import utils.ExpressionVisitor
-import utils.LinterResult
+import visitors.ExpressionVisitor
 
 class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
-    override fun visitReadEnv(expression: ReadEnv): LinterResult {
+    override fun visitReadEnv(expression: Node): LinterResult {
+        isValidType(expression, ReadEnv::class.java)
         return LinterResult(null, false)
     }
 
-    override fun visitIf(expression: IfNode): LinterResult {
-        val conditionResult = expression.getCondition().accept(this) as LinterResult
-        val thenBlockResult = expression.getThenBlock()?.map { it.accept(this) as LinterResult }
-        val elseBlockResult = expression.getElseBlock()?.map { it.accept(this) as LinterResult }
+    override fun visitIf(expression: Node): LinterResult {
+        val ifExpression = isValidType(expression, IfNode::class.java)
+
+        val conditionResult = ifExpression.getCondition().accept(this) as LinterResult
+        val thenBlockResult = ifExpression.getThenBlock()?.map { it.accept(this) as LinterResult }
+        val elseBlockResult = ifExpression.getElseBlock()?.map { it.accept(this) as LinterResult }
         val errorMessages = mutableListOf<String>()
 
         if (conditionResult.hasError()) {
@@ -43,52 +48,66 @@ class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
         }
     }
 
-    override fun visitDeclaration(expression: Declaration): LinterResult {
+    override fun visitDeclaration(expression: Node): LinterResult {
+        val declarationExpression = isValidType(expression, Declaration::class.java)
+
         val identifier = Identifier(
-            expression.getName(),
-            Position(expression.getPos().getLine(), expression.getPos().getColumn() + 3),
+            declarationExpression.getName(),
+            Position(declarationExpression.getPos().getLine(), declarationExpression.getPos().getColumn() + 3),
         )
         return identifier.accept(this) as LinterResult
     }
 
-    override fun visitLiteral(expression: Literal): LinterResult {
+    override fun visitLiteral(expression: Node): LinterResult {
+        isValidType(expression, Literal::class.java)
+
         return LinterResult(null, false)
     }
 
-    override fun visitBinaryExp(expression: BinaryNode): LinterResult {
-        val leftResult = expression.getLeft().accept(this) as LinterResult
-        val rightResult = expression.getRight().accept(this) as LinterResult
+    override fun visitBinaryExp(expression: Node): LinterResult {
+        val binaryExp = isValidType(expression, BinaryNode::class.java)
+
+        val leftResult = binaryExp.getLeft().accept(this) as LinterResult
+        val rightResult = binaryExp.getRight().accept(this) as LinterResult
         return checkErrors(leftResult, rightResult)
     }
 
-    override fun visitAssignment(expression: Assignation): LinterResult {
-        val leftResult = expression.getDeclaration().accept(this) as LinterResult
-        val rightResult = expression.getValue().accept(this) as LinterResult
+    override fun visitAssignment(expression: Node): LinterResult {
+        val assignmentExp = isValidType(expression, Assignation::class.java)
+
+        val leftResult = assignmentExp.getDeclaration().accept(this) as LinterResult
+        val rightResult = assignmentExp.getValue().accept(this) as LinterResult
         return checkErrors(leftResult, rightResult)
     }
 
-    override fun visitCallExp(expression: CallNode): LinterResult {
-        val insideResult = expression.getArguments().first().accept(this) as LinterResult
+    override fun visitCallExp(expression: Node): LinterResult {
+        val callExp = isValidType(expression, CallNode::class.java)
+
+        val insideResult = callExp.getArguments().first().accept(this) as LinterResult
         if (config.restrictPrintln) {
-            if (expression.getFunc() == "println") {
-                return PrintlnRestrictionRule(insideResult).lintCode(expression)
+            if (callExp.getFunc() == "println") {
+                return PrintlnRestrictionRule(insideResult).lintCode(callExp)
             }
         }
         return LinterResult(insideResult.getMessage(), insideResult.hasError())
     }
 
-    override fun visitIdentifier(expression: Identifier): LinterResult {
+    override fun visitIdentifier(expression: Node): LinterResult {
+        val identifierExp = isValidType(expression, Identifier::class.java)
+
         val identifierFormat = IdentifierFormats().formats.find { it.getFormat() == config.identifier_format }
         if (identifierFormat != null) {
-            return IdentifierFormatRule(identifierFormat).lintCode(expression)
+            return IdentifierFormatRule(identifierFormat).lintCode(identifierExp)
         }
         return LinterResult(null, false)
     }
 
-    override fun visitReadInput(expression: ReadInput): LinterResult {
-        val argumentResult = expression.getArgument().accept(this) as LinterResult
+    override fun visitReadInput(expression: Node): LinterResult {
+        val readInputExp = isValidType(expression, ReadInput::class.java)
+
+        val argumentResult = readInputExp.getArgument().accept(this) as LinterResult
         if (config.restrictReadInput) {
-            return ReadInputRestrictionRule(argumentResult).lintCode(expression)
+            return ReadInputRestrictionRule(argumentResult).lintCode(readInputExp)
         }
         return LinterResult(argumentResult.getMessage(), argumentResult.hasError())
     }
@@ -100,5 +119,14 @@ class LinterVisitor(private val config: LinterConfig) : ExpressionVisitor {
             left.hasError() && right.hasError() -> LinterResult(left.getMessage() + "\n" + right.getMessage(), true)
             else -> LinterResult(null, false)
         }
+    }
+
+    private fun <T : Node> isValidType(expression: Node, expectedType: Class<T>): T {
+        if (!expectedType.isInstance(expression)) {
+            throw Exception(
+                "Invalid type: expected ${expectedType.simpleName}, but got ${expression::class.simpleName}",
+            )
+        }
+        return expectedType.cast(expression)
     }
 }

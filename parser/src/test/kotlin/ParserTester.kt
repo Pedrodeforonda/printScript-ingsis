@@ -16,16 +16,19 @@ import nodes.ReadEnv
 import nodes.ReadInput
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import utils.DeclarationKeyWord
+import types.BinaryOperatorType
+import types.DeclarationType
+import types.LiteralType
 import kotlin.test.assertTrue
+import nodes.Position as PositionNode
 
 public class ParserTester {
 
-    fun createParser1(tokens: List<Token>): Parser {
+    private fun createParser1(tokens: List<Token>): Parser {
         return ParserFactory().createParser("1.0", tokens.listIterator())
     }
 
-    fun createParser2(tokens: List<Token>): Parser {
+    private fun createParser2(tokens: List<Token>): Parser {
         return ParserFactory().createParser("1.1", tokens.listIterator())
     }
 
@@ -46,7 +49,7 @@ public class ParserTester {
             if (!results.hasError()) result.add(results.getAst())
         }
         val expected = sequenceOf(
-            Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+            Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
         ).toList()
         assertEquals(expected, result)
     }
@@ -72,11 +75,11 @@ public class ParserTester {
             if (!results.hasError()) result.add(results.getAst())
         }
         val expected = listOf(
-            Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+            Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
             Assignation(
-                Identifier("a", Position(1, 5)),
-                Literal(1, Position(2, 1), TokenType.NUMBER_LITERAL),
-                Position(2, 3),
+                Identifier("a", PositionNode(1, 5)),
+                Literal(1, PositionNode(2, 1), LiteralType.NUMBER),
+                PositionNode(2, 3),
             ),
         )
         assertEquals(expected, result)
@@ -102,9 +105,9 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
-                Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                Position(1, 14),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
+                Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                PositionNode(1, 14),
             ),
         )
         assertEquals(expected, result)
@@ -135,11 +138,11 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
-                Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                Position(1, 14),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
+                Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                PositionNode(1, 14),
             ),
-            CallNode("println", listOf(Identifier("a", Position(2, 9))), Position(2, 1)),
+            CallNode("println", listOf(Identifier("a", PositionNode(2, 9))), PositionNode(2, 1)),
         )
         assertEquals(expected, result)
     }
@@ -166,14 +169,14 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
                 BinaryNode(
-                    Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                    Token("+", TokenType.PLUS, Position(1, 17)),
-                    Literal(2, Position(1, 19), TokenType.NUMBER_LITERAL),
-                    Position(1, 17),
+                    Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                    BinaryOperatorType.PLUS,
+                    Literal(2, PositionNode(1, 19), LiteralType.NUMBER),
+                    PositionNode(1, 17),
                 ),
-                Position(1, 14),
+                PositionNode(1, 14),
             ),
         )
         assertEquals(expected, result)
@@ -201,14 +204,14 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
                 BinaryNode(
-                    Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                    Token("*", TokenType.ASTERISK, Position(1, 17)),
-                    Literal(2, Position(1, 19), TokenType.NUMBER_LITERAL),
-                    Position(1, 17),
+                    Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                    BinaryOperatorType.ASTERISK,
+                    Literal(2, PositionNode(1, 19), LiteralType.NUMBER),
+                    PositionNode(1, 17),
                 ),
-                Position(1, 14),
+                PositionNode(1, 14),
             ),
         )
         assertEquals(expected, result)
@@ -238,19 +241,19 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
                 BinaryNode(
                     BinaryNode(
-                        Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                        Token("*", TokenType.ASTERISK, Position(1, 17)),
-                        Literal(2, Position(1, 19), TokenType.NUMBER_LITERAL),
-                        Position(1, 17),
+                        Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                        BinaryOperatorType.ASTERISK,
+                        Literal(2, PositionNode(1, 19), LiteralType.NUMBER),
+                        PositionNode(1, 17),
                     ),
-                    Token("+", TokenType.PLUS, Position(1, 20)),
-                    Literal(3, Position(1, 22), TokenType.NUMBER_LITERAL),
-                    Position(1, 20),
+                    BinaryOperatorType.PLUS,
+                    Literal(3, PositionNode(1, 22), LiteralType.NUMBER),
+                    PositionNode(1, 20),
                 ),
-                Position(1, 14),
+                PositionNode(1, 14),
             ),
         )
         assertEquals(expected, result)
@@ -280,19 +283,19 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
                 BinaryNode(
-                    Literal(1, Position(1, 16), TokenType.NUMBER_LITERAL),
-                    Token("+", TokenType.PLUS, Position(1, 17)),
+                    Literal(1, PositionNode(1, 16), LiteralType.NUMBER),
+                    BinaryOperatorType.PLUS,
                     BinaryNode(
-                        Literal(2, Position(1, 19), TokenType.NUMBER_LITERAL),
-                        Token("*", TokenType.ASTERISK, Position(1, 20)),
-                        Literal(3, Position(1, 22), TokenType.NUMBER_LITERAL),
-                        Position(1, 20),
+                        Literal(2, PositionNode(1, 19), LiteralType.NUMBER),
+                        BinaryOperatorType.ASTERISK,
+                        Literal(3, PositionNode(1, 22), LiteralType.NUMBER),
+                        PositionNode(1, 20),
                     ),
-                    Position(1, 17),
+                    PositionNode(1, 17),
                 ),
-                Position(1, 14),
+                PositionNode(1, 14),
             ),
         )
         assertEquals(expected, result)
@@ -344,7 +347,7 @@ public class ParserTester {
             if (!results.hasError()) result.add(results.getAst())
         }
         val expected = listOf(
-            CallNode("println", listOf(Identifier("a", Position(1, 9))), Position(1, 1)),
+            CallNode("println", listOf(Identifier("a", PositionNode(1, 9))), PositionNode(1, 1)),
         )
         assertEquals(expected, result)
     }
@@ -423,9 +426,9 @@ public class ParserTester {
         }
         val expected = listOf(
             Assignation(
-                Declaration("a", "boolean", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
-                Literal(true, Position(1, 18), TokenType.BOOLEAN_LITERAL),
-                Position(1, 18),
+                Declaration("a", "boolean", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
+                Literal(true, PositionNode(1, 18), LiteralType.BOOLEAN),
+                PositionNode(1, 18),
             ),
         )
         assertEquals(expected, result)
@@ -460,16 +463,16 @@ public class ParserTester {
 
         val expected = listOf(
             IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
+                Literal(true, PositionNode(1, 4), LiteralType.BOOLEAN),
                 listOf(
                     Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
+                        Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(2, 2)),
+                        Literal(1, PositionNode(2, 17), LiteralType.NUMBER),
+                        PositionNode(2, 17),
                     ),
                 ),
                 listOf(),
-                Position(1, 1),
+                PositionNode(1, 1),
             ),
         )
 
@@ -505,16 +508,16 @@ public class ParserTester {
 
         val expected = listOf(
             IfNode(
-                Literal(false, Position(1, 4), TokenType.BOOLEAN_LITERAL),
+                Literal(false, PositionNode(1, 4), LiteralType.BOOLEAN),
                 listOf(
                     Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
+                        Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(2, 2)),
+                        Literal(1, PositionNode(2, 17), LiteralType.NUMBER),
+                        PositionNode(2, 17),
                     ),
                 ),
                 listOf(),
-                Position(1, 1),
+                PositionNode(1, 1),
             ),
         )
 
@@ -565,23 +568,23 @@ public class ParserTester {
 
         val expected = listOf(
             IfNode(
-                Literal(true, Position(1, 4), TokenType.BOOLEAN_LITERAL),
+                Literal(true, PositionNode(1, 4), LiteralType.BOOLEAN),
                 listOf(
                     Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(2, 2)),
-                        Literal(1, Position(2, 17), TokenType.NUMBER_LITERAL),
-                        Position(2, 17),
+                        Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(2, 2)),
+                        Literal(1, PositionNode(2, 17), LiteralType.NUMBER),
+                        PositionNode(2, 17),
                     ),
                 ),
                 listOf(
                     Assignation(
-                        Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(4, 2)),
-                        Literal(2, Position(4, 17), TokenType.NUMBER_LITERAL),
-                        Position(4, 17),
+                        Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(4, 2)),
+                        Literal(2, PositionNode(4, 17), LiteralType.NUMBER),
+                        PositionNode(4, 17),
                     ),
-                    CallNode("println", listOf(Identifier("a", Position(5, 10))), Position(5, 2)),
+                    CallNode("println", listOf(Identifier("a", PositionNode(5, 10))), PositionNode(5, 2)),
                 ),
-                Position(1, 1),
+                PositionNode(1, 1),
             ),
         )
 
@@ -864,7 +867,7 @@ public class ParserTester {
         }
 
         val expected = listOf(
-            ReadEnv("DB_USER", Position(1, 1)),
+            ReadEnv("DB_USER", PositionNode(1, 1)),
         )
 
         assertEquals(expected, result)
@@ -891,7 +894,7 @@ public class ParserTester {
         }
 
         val expected = listOf(
-            ReadInput(Literal("insert Your Name", Position(1, 12), TokenType.STRING_LITERAL), Position(1, 1)),
+            ReadInput(Literal("insert Your Name", PositionNode(1, 12), LiteralType.STRING), PositionNode(1, 1)),
         )
 
         assertEquals(expected, result)
@@ -918,7 +921,7 @@ public class ParserTester {
         }
 
         listOf(
-            ReadInput(Literal("insert Your Name", Position(1, 12), TokenType.STRING_LITERAL), Position(1, 1)),
+            ReadInput(Literal("insert Your Name", PositionNode(1, 12), LiteralType.STRING), PositionNode(1, 1)),
         )
 
         assertTrue { errors.size > 0 }
@@ -1087,17 +1090,17 @@ public class ParserTester {
 
         val expected = listOf(
             Assignation(
-                Declaration("a", "number", DeclarationKeyWord.LET_KEYWORD, Position(1, 1)),
+                Declaration("a", "number", DeclarationType.LET_KEYWORD, PositionNode(1, 1)),
                 ReadInput(
                     BinaryNode(
-                        Literal("Escribe tu", Position(1, 30), TokenType.STRING_LITERAL),
-                        Token("+", TokenType.PLUS, Position(1, 31)),
-                        Literal("Nombre", Position(1, 32), TokenType.STRING_LITERAL),
-                        Position(1, 31),
+                        Literal("Escribe tu", PositionNode(1, 30), LiteralType.STRING),
+                        BinaryOperatorType.PLUS,
+                        Literal("Nombre", PositionNode(1, 32), LiteralType.STRING),
+                        PositionNode(1, 31),
                     ),
-                    Position(1, 18),
+                    PositionNode(1, 18),
                 ),
-                Position(1, 1),
+                PositionNode(1, 1),
             ),
         )
 
