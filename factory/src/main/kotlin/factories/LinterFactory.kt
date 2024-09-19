@@ -16,7 +16,7 @@ class LinterFactory {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val linterConfig = ConfigParser.parseConfig(config)
+        val linterConfig = ConfigParser.parseConfigToMap(config)
         val lexer = LexerFactory().createLexer(src, version, collector)
         val tokens = lexer.tokenize()
         val parser = ParserFactory().createParser(version, tokens.iterator())

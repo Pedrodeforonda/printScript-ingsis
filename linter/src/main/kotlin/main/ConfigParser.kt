@@ -1,14 +1,15 @@
 package main
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.Gson
 import java.io.InputStream
+import java.io.InputStreamReader
 
 class ConfigParser {
     companion object {
-        fun parseConfig(input: InputStream): LinterConfig {
-            val mapper = jacksonObjectMapper()
-            return mapper.readValue(input)
+        fun parseConfigToMap(input: InputStream): LinterConfig {
+            val gson = Gson()
+            val reader = InputStreamReader(input)
+            return gson.fromJson(reader, LinterConfig::class.java)
         }
     }
 }

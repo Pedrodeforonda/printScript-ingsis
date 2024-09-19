@@ -32,22 +32,22 @@ class LinterTest {
     @Test
     fun testConfigParser() {
         val input = Files.newInputStream(Path("src/test/resources/linterRulesTest.json"))
-        val config = ConfigParser.parseConfig(input)
+        val config = ConfigParser.parseConfigToMap(input)
 
         assertTrue(config.identifier_format == "" && !config.restrictPrintln && !config.restrictReadInput)
 
         val input2 = Files.newInputStream(Path("src/test/resources/linterRulesTest2.json"))
-        val config2 = ConfigParser.parseConfig(input2)
+        val config2 = ConfigParser.parseConfigToMap(input2)
 
         assertTrue(config2.identifier_format == "camel case" && !config2.restrictPrintln && !config2.restrictReadInput)
 
         val input3 = Files.newInputStream(Path("src/test/resources/linterRulesTest3.json"))
-        val config3 = ConfigParser.parseConfig(input3)
+        val config3 = ConfigParser.parseConfigToMap(input3)
 
         assertTrue(config3.identifier_format == "snake case" && config3.restrictPrintln && config3.restrictReadInput)
 
         val input4 = Files.newInputStream(Path("src/test/resources/linterRulesTest4.json"))
-        val config4 = ConfigParser.parseConfig(input4)
+        val config4 = ConfigParser.parseConfigToMap(input4)
 
         assertTrue(config4.identifier_format == "" && config4.restrictPrintln && !config4.restrictReadInput)
     }

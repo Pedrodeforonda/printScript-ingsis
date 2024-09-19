@@ -8,8 +8,14 @@ repositories {
     mavenCentral()
 }
 
+tasks.test {
+    useJUnitPlatform()
+    minHeapSize = "5m"
+    maxHeapSize = "7m"
+}
+
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation(project(":token"))
     implementation(project(":ast"))
     testImplementation(project(":factory"))

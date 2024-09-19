@@ -53,7 +53,7 @@ class InterpreterTest {
         val interpreterResult = interpreter.interpret(sequenceOf(result))
         interpreterResult.toList()
 
-        assertEquals(Triple("Pedro", "string", true), interpreter.getVariableMap()["nam"])
+        assertEquals(Triple("Pedro", "string", true), interpreter.getVariableMap()["name"])
 
         val numberAssignation = Assignation(
             Declaration("num", "number", DeclarationKeyWord.LET_KEYWORD, Position(0, 0)),
