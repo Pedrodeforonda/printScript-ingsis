@@ -1,16 +1,12 @@
-if(a)
-{
+if(a) {
     println(a);
-    if(c)
-    {
+    if(c) {
         println(c);
     }
-    else
-    {
+    else {
         println(d);
     }
 }
-else
-{
+else {
     println(b);
 }

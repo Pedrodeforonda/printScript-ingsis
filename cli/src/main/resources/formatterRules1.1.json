@@ -4,5 +4,5 @@
   "mandatory-space-surrounding-operations": true,
   "mandatory-line-break-after-statement": true,
   "indent-inside-braces": 4,
-  "if-brace-below-line": true
+  "if-brace-below-line": false
 }

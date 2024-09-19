@@ -72,7 +72,7 @@ class ExecutorOperation : CliktCommand(
                 println(output.toString())
             }
         }
-        println("\u001b[32m" + "parsing completed\u001b[0m")
+        println("\u001b[32m" + "execution completed\u001b[0m")
     }
 
     private fun fileToMap(file: File): Map<String, String> {
