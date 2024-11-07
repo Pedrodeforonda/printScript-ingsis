@@ -1,12 +1,5 @@
-if(a) {
-    println(a);
-    if(c) {
-        println(c);
-    }
-    else {
-        println(d);
-    }
-}
-else {
-    println(b);
-}
+let a: string = "hola";
+let b: number = 4;
+a = 3+84;
+
+println("Result: "+a);

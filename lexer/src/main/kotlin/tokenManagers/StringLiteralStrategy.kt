@@ -10,7 +10,7 @@ class StringLiteralStrategy : TokenStrategy {
     override fun buildToken(lexer: Lexer, result: String, initialPosition: Position): Token? {
         val currentChar = lexer.getChar() ?: return null
 
-        if (currentChar == '"') {
+        if (currentChar == '"' || currentChar == '\'') { //accept single or double quotes
             lexer.goToNextPos()
             return buildStringLiteral(lexer, "", initialPosition)
         }
@@ -20,7 +20,7 @@ class StringLiteralStrategy : TokenStrategy {
     private fun buildStringLiteral(lexer: Lexer, result: String, initialPosition: Position): Token? {
         val currentChar = lexer.getChar() ?: return null
 
-        return if (currentChar == '"') {
+        return if (currentChar == '"' || currentChar == '\'') {
             lexer.goToNextPos()
             Token(result, TokenType.STRING_LITERAL, initialPosition)
         } else {

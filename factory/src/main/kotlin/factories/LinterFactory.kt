@@ -16,8 +16,7 @@ class LinterFactory {
         return Linter().lint(nodes, linterConfig)
     }
 
-    fun lintCode(src: InputStream, version: String, config: LinterConfig):
-        Sequence<LinterResult> {
+    fun lintCode(src: InputStream, version: String, config: LinterConfig): Sequence<LinterResult> {
         val collector = PercentageCollector()
         val nodes = ValidatorFactory().validate(src, version, collector)
         return Linter().lint(nodes, config)
